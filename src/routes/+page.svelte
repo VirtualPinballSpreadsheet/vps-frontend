@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import HorizontalSlider from '$lib/components/HorizontalSlider.svelte';
 	import B2sCard from '$lib/components/cards/B2sCard.svelte';
 	import FileCard from '$lib/components/cards/FileCard.svelte';
@@ -12,7 +13,7 @@
 
 	$: tables = (($sortedFilesStore?.tableFiles || []) as TableFile[])
 		.slice(0, slides)
-		.map((t) => ({ table: t, href: `tables/${t.game?.id}/` }));
+		.map((t) => ({ table: t, href: `${base}/tables/${t.game?.id}/` }));
 	$: b2ss = (($sortedFilesStore?.b2sFiles || []) as B2SFile[])
 		.slice(0, slides)
 		.map((b2s) => ({ b2s }));
@@ -28,11 +29,12 @@
 </script>
 
 <div class="h-full flex flex-col p-10 gap-20">
-	<HorizontalSlider title="Tables" component={TableCard} data={tables} href="tables/" />
-	<HorizontalSlider title="Backglasses" component={B2sCard} data={b2ss} size={8} />
-	<HorizontalSlider title="PuP Packs" component={FileCard} data={pupPacks} size={8} />
-	<HorizontalSlider title="Roms" component={FileCard} data={roms} size={8} />
-	<HorizontalSlider title="Topper" component={FileCard} data={toppers} size={8} />
+	<!-- <div class="h-96 bg-surface-600 -m-10" /> -->
+	<HorizontalSlider title="Tables" component={TableCard} data={tables} href="{base}/tables/" />
+	<HorizontalSlider title="Backglasses" component={B2sCard} data={b2ss} size={250} />
+	<HorizontalSlider title="PuP Packs" component={FileCard} data={pupPacks} size={250} />
+	<HorizontalSlider title="Roms" component={FileCard} data={roms} size={250} />
+	<HorizontalSlider title="Topper" component={FileCard} data={toppers} size={250} />
 </div>
 
 <style>

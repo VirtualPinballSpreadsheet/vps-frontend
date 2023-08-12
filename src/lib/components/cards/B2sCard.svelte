@@ -5,8 +5,8 @@
 	export let b2s = EmptyB2sFile;
 </script>
 
-<div class="card overflow-hidden flex flex-col">
-	<img src={b2s.imgUrl || Placeholder} alt={b2s.id} class="aspectTable" />
+<div class="overflow-hidden flex flex-col">
+	<img src={b2s.imgUrl || Placeholder} alt={b2s.id} class="card aspectTable" />
 	<hr />
 
 	<div class="flex flex-col p-4">

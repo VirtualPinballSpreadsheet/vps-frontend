@@ -3,7 +3,7 @@
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
-	import { faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 	const { userStore } = User;
 
@@ -18,7 +18,7 @@
 	<svelte:fragment slot="lead">
 		<img src={Logo} alt="VPS" width="36px" class="ml-4" />
 	</svelte:fragment>
-	<div class="px-4">
+	<div class="px-4 flex items-center gap-4">
 		<div class="input-group grid-cols-[auto_1fr_auto] border-none">
 			<div><Fa icon={faSearch} /></div>
 			<input type="search" placeholder="Search..." />
@@ -32,6 +32,9 @@
 				<option value="5">Toppefffffffffr</option>
 			</select>
 		</div>
+		<button>
+			<Fa icon={faFilter} />
+		</button>
 	</div>
 
 	<div slot="trail" class="mr-4">

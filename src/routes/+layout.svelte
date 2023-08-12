@@ -1,4 +1,5 @@
 <script lang="ts">
+	import '../app.scss';
 	// Your custom Skeleton theme:
 	import '../theme.postcss';
 	// The ordering of these imports is critical to your app working properly

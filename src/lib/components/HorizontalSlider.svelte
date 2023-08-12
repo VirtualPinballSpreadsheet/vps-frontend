@@ -1,17 +1,37 @@
 <script lang="ts">
 	import Fa from 'svelte-fa';
 	import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+	import { onMount } from 'svelte';
 
 	export let title = '';
 	export let data: Object[] = [];
 	export let component: ConstructorOfATypedSvelteComponent;
 	export let href = '';
-	export let size = 5;
+	export let size = 400;
 	export let overflow = 4;
 
-	$: pages = new Array(Math.ceil(data.length / size)).fill('');
-
+	let scrollerWidth = window.innerWidth;
+	let scroller: Element;
 	let page = 0;
+
+	$: count = Math.ceil(scrollerWidth / size);
+	$: _size = scrollerWidth / count < size ? count : count + 1;
+	$: console.log(page);
+	$: pages = new Array(Math.ceil(data.length / _size)).fill('');
+
+	onMount(() => {
+		const resizeObserver = new ResizeObserver((entries) => {
+			const entry = entries.at(0);
+			if (!entry) return;
+			const newSize = entry.contentBoxSize[0].inlineSize;
+			if (newSize === scrollerWidth) return;
+			scrollerWidth = newSize;
+		});
+
+		resizeObserver.observe(scroller);
+
+		return () => resizeObserver.unobserve(scroller);
+	});
 
 	const scrollTo = (i: number) => {
 		const el = document.getElementById(title + i);
@@ -20,7 +40,11 @@
 	};
 </script>
 
-<div class="flex flex-col gap-4 items-start -mx-10" style="width:calc(100% + 5rem)">
+<div
+	class="flex flex-col gap-4 items-start -mx-10"
+	style="width:calc(100% + 5rem)"
+	bind:this={scroller}
+>
 	<!-- HEADER -->
 	<a
 		{href}
@@ -47,13 +71,13 @@
 			class="scroller grid grid-flow-col gap-2 overflow-x-hidden w-full"
 		>
 			{#each pages as _, i}
-				{@const items = data.slice(i * size, (i + 1) * size)}
+				{@const items = data.slice(i * _size, (i + 1) * _size)}
 				<div class="grid grid-flow-col auto-cols-fr gap-2" id={title + i}>
 					{#each items as d}
 						<svelte:component this={component} {...d} />
 					{/each}
-					{#if items.length < size}
-						{#each new Array(size - items.length).fill('') as d}
+					{#if items.length < _size}
+						{#each new Array(_size - items.length).fill('') as d}
 							<div />
 						{/each}
 					{/if}
