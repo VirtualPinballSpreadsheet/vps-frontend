@@ -1,0 +1,1 @@
+import{s as o,n as a}from"../chunks/scheduler.53b6a842.js";import{S as i,i as r,m as c,n as l,a as m,f as p}from"../chunks/index.87a2390f.js";function f(s){let t;return{c(){t=c("WIP Tables view")},l(e){t=l(e,"WIP Tables view")},m(e,n){m(e,t,n)},p:a,i:a,o:a,d(e){e&&p(t)}}}class _ extends i{constructor(t){super(),r(this,t,null,f,o,{})}}export{_ as component};
