@@ -2,20 +2,21 @@
 	import { EmptyB2sFile } from '$lib/types/VPin';
 	import Placeholder from '$lib/assets/img/bgPlaceholder.jpg';
 
-	export let b2s = EmptyB2sFile;
+	export let file = EmptyB2sFile;
+	export let href = '';
 </script>
 
-<div class="overflow-hidden flex flex-col">
-	<img src={b2s.imgUrl || Placeholder} alt={b2s.id} class="card aspectTable" />
+<a {href} class="overflow-hidden flex flex-col">
+	<img src={file.imgUrl || Placeholder} alt={file.id} class="card aspectTable" />
 	<hr />
 
-	<div class="flex flex-col p-4">
-		<h4 class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{b2s.game?.name}</h4>
-		<h4 class="opacity-40 text-ellipsis whitespace-nowrap overflow-hidden">
-			{b2s.authors?.join(', ')}
+	<div class="flex flex-col py-4">
+		<h4 class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.game?.name}</h4>
+		<h4 class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
+			{file.authors?.join(', ')}
 		</h4>
 	</div>
-</div>
+</a>
 
 <style>
 	.aspectTable {

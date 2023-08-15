@@ -4,8 +4,22 @@
 	import B2sCard from '$lib/components/cards/B2sCard.svelte';
 	import FileCard from '$lib/components/cards/FileCard.svelte';
 	import TableCard from '$lib/components/cards/TableCard.svelte';
+	import { modeMapping } from '$lib/helper/modeMapping';
 	import { Search } from '$lib/stores/SearchStore';
-	import type { B2SFile, PuPPackFile, RomFile, TableFile, TopperFile } from '$lib/types/VPin';
+	import type {
+		AltColorFile,
+		AltSoundFile,
+		B2SFile,
+		MediaPackFile,
+		POVFile,
+		PuPPackFile,
+		RomFile,
+		RuleFile,
+		SoundFile,
+		TableFile,
+		TopperFile,
+		WheelArtFile
+	} from '$lib/types/VPin';
 
 	const { sortedFilesStore } = Search;
 
@@ -13,28 +27,35 @@
 
 	$: tables = (($sortedFilesStore?.tableFiles || []) as TableFile[])
 		.slice(0, slides)
-		.map((t) => ({ table: t, href: `${base}/tables/${t.game?.id}/` }));
-	$: b2ss = (($sortedFilesStore?.b2sFiles || []) as B2SFile[])
-		.slice(0, slides)
-		.map((b2s) => ({ b2s }));
-	$: pupPacks = (($sortedFilesStore?.pupPackFiles || []) as PuPPackFile[])
-		.slice(0, slides)
-		.map((file) => ({ file }));
-	$: roms = (($sortedFilesStore?.romFiles || []) as RomFile[])
-		.slice(0, slides)
-		.map((file) => ({ file }));
-	$: toppers = (($sortedFilesStore?.topperFiles || []) as TopperFile[])
-		.slice(0, slides)
-		.map((file) => ({ file }));
+		.map((t) => ({ file: t, href: `?game=${t.game?.id}&table=${t.id}` }));
 </script>
 
-<div class="h-full flex flex-col p-10 gap-20">
+<div class="h-full flex flex-col p-10 gap-20 relative z-0">
 	<!-- <div class="h-96 bg-surface-600 -m-10" /> -->
-	<HorizontalSlider title="Tables" component={TableCard} data={tables} href="{base}/tables/" />
-	<HorizontalSlider title="Backglasses" component={B2sCard} data={b2ss} size={250} />
-	<HorizontalSlider title="PuP Packs" component={FileCard} data={pupPacks} size={250} />
-	<HorizontalSlider title="Roms" component={FileCard} data={roms} size={250} />
-	<HorizontalSlider title="Topper" component={FileCard} data={toppers} size={250} />
+	<HorizontalSlider
+		title="Tables"
+		component={TableCard}
+		data={tables}
+		size={400}
+		gap={2.5}
+		num={($sortedFilesStore?.tableFiles || []).length}
+		href="{base}/tables/"
+	/>
+
+	{#each Object.entries(modeMapping) as [key, val]}
+		{@const data = ($sortedFilesStore?.[key] || [])
+			.slice(0, slides)
+			.map((file) => ({ file, href: `?game=${file.game?.id}&${key}=${file.id}` }))}
+		{#if !['tableFiles', 'game'].includes(key)}
+			<HorizontalSlider
+				href="{base}/{val.route}/"
+				title={val.name}
+				component={val.component}
+				num={($sortedFilesStore?.[key] || []).length}
+				{data}
+			/>
+		{/if}
+	{/each}
 </div>
 
 <style>

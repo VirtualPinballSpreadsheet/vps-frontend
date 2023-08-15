@@ -1,14 +1,15 @@
 <script lang="ts">
-	import { EmptyGame, EmptyTableFile } from '$lib/types/VPin';
-	import Placeholder from '$lib/assets/img/tablePlaceholder.jpg';
-	import TableCardHover from './TableCardHover.svelte';
-	import { DB } from '$lib/stores/DbStore';
-	const { dbStore } = DB;
+	import { EmptyGame } from '$lib/types/VPin';
+	import { getBackglassUrl } from '$lib/helper/getBackglassUrl';
+	import GameCardHover from './GameCardHover.svelte';
 
-	export let file = EmptyTableFile;
+	export let file = EmptyGame;
 
-	$: game = file?.game?.id ? $dbStore[file.game.id] : EmptyGame;
 	export let href = '';
+
+	$: formats = Array.from(
+		new Set((file.tableFiles || []).map((t) => t.tableFormat).filter((f) => !!f))
+	);
 
 	let el: Element;
 
@@ -50,33 +51,35 @@
 
 <a class="wrapper relative z-0" {href} on:mouseenter={onMouseEnter} on:mouseleave={onMouseLeave}>
 	{#if hovered}
-		<TableCardHover table={file} {left} {top} {width} {height} onEnd={() => (fadeOut = false)} />
+		<GameCardHover game={file} {left} {top} {width} {height} onEnd={() => (fadeOut = false)} />
 	{/if}
 
 	<img
-		src={file.imgUrl || Placeholder}
-		alt={file.id}
+		src={getBackglassUrl(file)}
+		alt={file.name}
 		class:hide={hovered || fadeOut}
 		bind:this={el}
 		class="card pinImage bg-surface-300-600-token"
 	/>
 	<div class="flex flex-col py-4">
 		<div class="flex gap-2">
-			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.game?.name}</p>
-			<div class="badge badge-glass my-auto py-0.5 px-1">
-				{file.tableFormat}
-			</div>
+			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.name}</p>
+			{#each formats as format}
+				<div class="badge badge-glass my-auto py-0.5 px-1">
+					{format}
+				</div>
+			{/each}
 		</div>
-		<p>{game.manufacturer} ({game.year})</p>
+		<p>{file.manufacturer} ({file.year})</p>
 		<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full">
-			{file.authors?.join(', ')}
+			{file.designers?.join(', ')}
 		</p>
 	</div>
 </a>
 
 <style lang="scss">
 	.pinImage {
-		aspect-ratio: 9/16;
+		aspect-ratio: 4/3;
 		object-fit: cover;
 		width: 100%;
 		z-index: 100;

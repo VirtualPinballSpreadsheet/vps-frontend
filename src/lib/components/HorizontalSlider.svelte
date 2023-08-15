@@ -7,16 +7,18 @@
 	export let data: Object[] = [];
 	export let component: ConstructorOfATypedSvelteComponent;
 	export let href = '';
-	export let size = 400;
+	export let size = 250;
 	export let overflow = 4;
+	export let gap = 1.5;
+	export let num: number | undefined = undefined;
 
 	let scrollerWidth = window.innerWidth;
 	let scroller: Element;
 	let page = 0;
+	let blocked = false;
 
 	$: count = Math.ceil(scrollerWidth / size);
 	$: _size = scrollerWidth / count < size ? count : count + 1;
-	$: console.log(page);
 	$: pages = new Array(Math.ceil(data.length / _size)).fill('');
 
 	onMount(() => {
@@ -35,44 +37,58 @@
 
 	const scrollTo = (i: number) => {
 		const el = document.getElementById(title + i);
+		blocked = true;
 		el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		page = i;
+		setTimeout(() => (blocked = false), 1000);
 	};
 </script>
 
 <div
-	class="flex flex-col gap-4 items-start -mx-10"
+	class="flex flex-col gap-4 items-start -mx-10 wrapper"
 	style="width:calc(100% + 5rem)"
+	class:pointer-events-none={blocked}
 	bind:this={scroller}
 >
 	<!-- HEADER -->
-	<a
-		{href}
-		class="flex items-center gap-2 transition-colors group"
-		style="margin-left:{overflow}rem;"
-	>
-		<h4 class="h4">{title}</h4>
-		<div class="flex items-center">
-			<p
-				class="text-primary-500 transition-all opacity-0 font-bold text-sm -translate-x-4 group-hover:opacity-100 group-hover:text-primary-500 group-hover:translate-x-0"
-			>
-				Show All
-			</p>
-			<Fa
-				icon={faChevronRight}
-				class="-translate-x-14 transition-transform group-hover:translate-x-2 group-hover:text-primary-500 text-sm"
-			/>
+	<div class="flex justify-between items-center w-full">
+		<a
+			{href}
+			class="flex items-center gap-2 transition-colors group"
+			style="margin-left:{overflow}rem;"
+		>
+			<h4 class="h4">{title}</h4>
+			{#if num !== undefined}
+				<h4 class="opacity-40">{num}</h4>
+			{/if}
+			<div class="flex items-center">
+				<p
+					class="text-primary-500 transition-all opacity-0 font-bold text-sm -translate-x-4 group-hover:opacity-100 group-hover:text-primary-500 group-hover:translate-x-0"
+				>
+					Show All
+				</p>
+				<Fa
+					icon={faChevronRight}
+					class="-translate-x-14 transition-transform group-hover:translate-x-2 group-hover:text-primary-500 text-sm"
+				/>
+			</div>
+		</a>
+
+		<div class="flex gap-px opacity-0 dots transition-opacity" style="margin-right:{overflow}rem;">
+			{#each pages as _, i}
+				<div class="h-0.5 bg-surface-900-50-token w-6 {page === i ? '' : 'opacity-20'}" />
+			{/each}
 		</div>
-	</a>
+	</div>
 	<!-- SCROLLER -->
 	<div class="relative w-full">
 		<div
-			style="scroll-padding-inline:{overflow}rem; padding:0 {overflow}rem"
-			class="scroller grid grid-flow-col gap-2 overflow-x-hidden w-full"
+			style="scroll-padding-inline:{overflow}rem; padding:0 {overflow}rem; gap:{gap}rem;"
+			class="scroller grid grid-flow-col overflow-x-hidden w-full"
 		>
 			{#each pages as _, i}
 				{@const items = data.slice(i * _size, (i + 1) * _size)}
-				<div class="grid grid-flow-col auto-cols-fr gap-2" id={title + i}>
+				<div class="grid grid-flow-col auto-cols-fr" style="gap:{gap}rem;" id={title + i}>
 					{#each items as d}
 						<svelte:component this={component} {...d} />
 					{/each}
@@ -88,7 +104,7 @@
 		{#if page < pages.length - 1}
 			<button
 				style="width:{overflow}rem;"
-				class="absolute right-0 top-0 h-full grid place-items-center text-xl bg-gradient-to-l from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
+				class="absolute right-0 top-0 h-full grid place-items-center text-xl bg-gradient-to-l from-slate-100 dark:from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
 				on:click={() => scrollTo(page + 1)}
 			>
 				<Fa icon={faChevronRight} size="lg" />
@@ -97,17 +113,20 @@
 		{#if page > 0}
 			<button
 				style="width:{overflow}rem;"
-				class="absolute left-0 top-0 h-full grid place-items-center text-xl bg-gradient-to-r from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
+				class="absolute left-0 top-0 h-full grid place-items-center text-xl bg-gradient-to-r from-slate-100 dark:from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
 				on:click={() => scrollTo(page - 1)}
 			>
 				<Fa icon={faChevronLeft} size="lg" />
 			</button>
 		{/if}
 		<!-- Overhang -->
-		<div style="width:{overflow}rem;" class="absolute left-0 top-0 h-full bg-surface-900/60 z-10" />
 		<div
-			style="width:{overflow}rem;"
-			class="absolute right-0 top-0 h-full bg-surface-900/60 z-10"
+			style="width:{overflow - gap}rem;"
+			class="absolute left-0 top-0 h-full bg-surface-50-900-token opacity-60 z-10"
+		/>
+		<div
+			style="width:{overflow - gap}rem;"
+			class="absolute right-0 top-0 h-full bg-surface-50-900-token opacity-60 z-10"
 		/>
 	</div>
 </div>
@@ -115,5 +134,9 @@
 <style>
 	.scroller {
 		grid-auto-columns: 100%;
+	}
+
+	.wrapper:hover .dots {
+		opacity: 1;
 	}
 </style>

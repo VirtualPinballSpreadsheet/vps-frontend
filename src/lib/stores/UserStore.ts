@@ -19,9 +19,7 @@ const triggerLoginPopup = () => {
 		.then(async (result) => {
 			const credential = GithubAuthProvider.credentialFromResult(result);
 			const user = result.user;
-			console.log(result);
-			console.log(credential);
-			console.log(user);
+
 			//@ts-ignore not given by firebase somehow....
 			user.displayName = result._tokenResponse.screenName;
 			if (!credential?.accessToken) throw new Error();

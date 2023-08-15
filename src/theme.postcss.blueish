@@ -1,8 +1,8 @@
-
 :root {
 	/* =~= Theme Properties =~= */
 	--theme-font-family-base: system-ui;
-	--theme-font-family-heading: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+	--theme-font-family-heading: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+		'Liberation Mono', 'Courier New', monospace;
 	--theme-font-color-base: 0 0 0;
 	--theme-font-color-dark: 255 255 255;
 	--theme-rounded-base: 4px;
@@ -83,16 +83,15 @@
 	--color-error-700: 158 19 79; /* ⬅ #9e134f */
 	--color-error-800: 126 15 63; /* ⬅ #7e0f3f */
 	--color-error-900: 103 12 51; /* ⬅ #670c33 */
-	/* surface | #141b1f */
-	--color-surface-50: 220 221 221; /* ⬅ #dcdddd */
-	--color-surface-100: 208 209 210; /* ⬅ #d0d1d2 */
-	--color-surface-200: 196 198 199; /* ⬅ #c4c6c7 */
-	--color-surface-300: 161 164 165; /* ⬅ #a1a4a5 */
-	--color-surface-400: 91 95 98; /* ⬅ #5b5f62 */
-	--color-surface-500: 20 27 31; /* ⬅ #141b1f */
-	--color-surface-600: 18 24 28; /* ⬅ #12181c */
-	--color-surface-700: 15 20 23; /* ⬅ #0f1417 */
-	--color-surface-800: 12 16 19; /* ⬅ #0c1013 */
-	--color-surface-900: 10 13 15; /* ⬅ #0a0d0f */
-	
+	/* surface | #19253C */
+	--color-surface-50: 221 222 226; /* ⬅ #dddee2 */
+	--color-surface-100: 209 211 216; /* ⬅ #d1d3d8 */
+	--color-surface-200: 198 201 206; /* ⬅ #c6c9ce */
+	--color-surface-300: 163 168 177; /* ⬅ #a3a8b1 */
+	--color-surface-400: 94 102 119; /* ⬅ #5e6677 */
+	--color-surface-500: 25 37 60; /* ⬅ #19253C */
+	--color-surface-600: 23 33 54; /* ⬅ #172136 */
+	--color-surface-700: 19 28 45; /* ⬅ #131c2d */
+	--color-surface-800: 15 22 36; /* ⬅ #0f1624 */
+	--color-surface-900: 12 18 29; /* ⬅ #0c121d */
 }

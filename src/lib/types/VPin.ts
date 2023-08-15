@@ -56,6 +56,7 @@ export interface FileUpload {
 	broken?: boolean;
 	id: string;
 	version?: string;
+	// For internal search only
 	game?: {
 		id: string;
 		name: string;
@@ -73,6 +74,7 @@ export interface TableFile extends FileUpload {
 	theme?: string[];
 	comment?: string;
 	gameFileName?: string;
+	romId?: string;
 }
 
 export interface B2SFile extends FileUpload {
