@@ -22,7 +22,10 @@
 	transformData={(t) => {
 		return {
 			file: t,
-			href: data.mode === 'game' ? `?game=${t.id}` : `?game=${t.game?.id}&${data.route}=${t.id}`
+			href:
+				data.mode === 'game'
+					? `?game=${t.id}`
+					: `?game=${t.game?.id}&fileType=${data.route}&fileId=${t.id}`
 		};
 	}}
 />

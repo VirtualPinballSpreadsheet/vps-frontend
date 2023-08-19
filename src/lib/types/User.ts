@@ -5,4 +5,5 @@ export interface UserStore {
 	permission?: string;
 	avatar?: string;
 	token?: string;
+	admin?: boolean;
 }

@@ -27,11 +27,10 @@
 
 	$: tables = (($sortedFilesStore?.tableFiles || []) as TableFile[])
 		.slice(0, slides)
-		.map((t) => ({ file: t, href: `?game=${t.game?.id}&table=${t.id}` }));
+		.map((t) => ({ file: t, href: `?game=${t.game?.id}&fileType=table&fileId=${t.id}` }));
 </script>
 
 <div class="h-full flex flex-col p-10 gap-20 relative z-0">
-	<!-- <div class="h-96 bg-surface-600 -m-10" /> -->
 	<HorizontalSlider
 		title="Tables"
 		component={TableCard}
@@ -45,7 +44,7 @@
 	{#each Object.entries(modeMapping) as [key, val]}
 		{@const data = ($sortedFilesStore?.[key] || [])
 			.slice(0, slides)
-			.map((file) => ({ file, href: `?game=${file.game?.id}&${key}=${file.id}` }))}
+			.map((file) => ({ file, href: `?game=${file.game?.id}&fileType=${key}&fileId=${file.id}` }))}
 		{#if !['tableFiles', 'game'].includes(key)}
 			<HorizontalSlider
 				href="{base}/{val.route}/"
@@ -56,6 +55,7 @@
 			/>
 		{/if}
 	{/each}
+	<div class="h-96 bg-surface-600 -m-10" />
 </div>
 
 <style>

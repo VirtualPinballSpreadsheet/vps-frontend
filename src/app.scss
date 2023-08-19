@@ -3,3 +3,16 @@
 .popup {
 	z-index: 999;
 }
+
+.snackbar-wrapper {
+	z-index: 999;
+}
+
+body {
+	background-image: radial-gradient(
+			at 0% 99%,
+			rgba(var(--color-tertiary-500) / 0.1) 0px,
+			transparent 50%
+		),
+		radial-gradient(at 98% 1%, rgba(var(--color-primary-500) / 0.1) 0px, transparent 50%);
+}

@@ -5,6 +5,9 @@ import { page } from '$app/stores';
 import { modeMapping } from '$lib/helper/modeMapping';
 
 Search.finalResultsStore.subscribe(() => {
+	const q = get(Search.query);
+	const fa = get(Search.filterActive);
+	if (!q && !fa) return;
 	const _page = get(page);
 	const path = _page?.url?.pathname;
 	if (!path) return;
@@ -12,5 +15,6 @@ Search.finalResultsStore.subscribe(() => {
 	const mode = get(Search.mode);
 	const route = modeMapping[mode].route;
 	if (path?.includes(route)) return;
+	console.log(_page, path, mode, route);
 	goto('/' + route, { keepFocus: true });
 });

@@ -1,0 +1,37 @@
+<script lang="ts">
+	import { page } from '$app/stores';
+	import { getUrl } from '$lib/helper/getUrl';
+	import type { TableFile } from '$lib/types/VPin';
+	import TableDetailCard from '../../cards/TableDetailCard.svelte';
+	import HeaderInfo from '../../HeaderInfo.svelte';
+
+	export let tables: TableFile[] = [];
+
+	$: fileId = $page.url.searchParams.get('fileId');
+</script>
+
+{#if tables?.length}
+	<div class="flex flex-col gap-4">
+		<HeaderInfo title="Tables">
+			<div class="w-60">
+				<p>Add tables to your Tables folder.</p>
+				<p class="pre p-2 my-2">C:/PATH_TO_VPX/tables</p>
+				<p>
+					If you're using Popper, don't forget to add them to you Popper library and possibly a
+					playlist!
+				</p>
+			</div>
+		</HeaderInfo>
+		<div class="grid layout gap-y-10 gap-x-4">
+			{#each tables as table}
+				<TableDetailCard file={table} href={getUrl(table.urls)} active={fileId === table.id} />
+			{/each}
+		</div>
+	</div>
+{/if}
+
+<style>
+	.layout {
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+	}
+</style>

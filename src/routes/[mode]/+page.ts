@@ -14,6 +14,4 @@ export const load: PageLoad = ({ params }) => {
 		mode: entry[0] as keyof typeof modeMapping,
 		...entry[1]
 	};
-
-	throw error(404, 'Not found');
 };

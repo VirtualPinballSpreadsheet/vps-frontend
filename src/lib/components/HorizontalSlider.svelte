@@ -54,14 +54,14 @@
 	<div class="flex justify-between items-center w-full">
 		<a
 			{href}
-			class="flex items-center gap-2 transition-colors group"
+			class="flex items-end gap-2 transition-colors group"
 			style="margin-left:{overflow}rem;"
 		>
 			<h4 class="h4">{title}</h4>
 			{#if num !== undefined}
 				<h4 class="opacity-40">{num}</h4>
 			{/if}
-			<div class="flex items-center">
+			<div class="flex items-center mb-0.5">
 				<p
 					class="text-primary-500 transition-all opacity-0 font-bold text-sm -translate-x-4 group-hover:opacity-100 group-hover:text-primary-500 group-hover:translate-x-0"
 				>
@@ -121,12 +121,19 @@
 		{/if}
 		<!-- Overhang -->
 		<div
-			style="width:{overflow - gap}rem;"
-			class="absolute left-0 top-0 h-full bg-surface-50-900-token opacity-60 z-10"
+			style="width:{overflow - gap + 2.5}rem;"
+			class=" blur-lg absolute -left-10 -top-4 h-full bg-surface-50-900-token transition-opacity opacity-{page ===
+			0
+				? 0
+				: 60} z-10"
 		/>
+
 		<div
-			style="width:{overflow - gap}rem;"
-			class="absolute right-0 top-0 h-full bg-surface-50-900-token opacity-60 z-10"
+			style="width:{overflow - gap + 2.5}rem;"
+			class=" blur-lg absolute -right-10 -top-4 h-full bg-surface-50-900-token opacity-{page <
+			pages.length - 1
+				? 60
+				: 0} transition-opacity z-10"
 		/>
 	</div>
 </div>

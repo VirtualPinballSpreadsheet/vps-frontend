@@ -6,12 +6,23 @@
 	export let href = '';
 </script>
 
-<a {href} class="overflow-hidden flex flex-col">
-	<img src={file.imgUrl || Placeholder} alt={file.id} class="card aspectTable" />
+<a {href} class="flex flex-col">
+	<img
+		src={file.imgUrl || Placeholder}
+		alt={file.id}
+		class="card aspectTable overflow-hidden hover:brightness-125 hover:scale-110 transition-all"
+	/>
 	<hr />
 
 	<div class="flex flex-col py-4">
-		<h4 class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.game?.name}</h4>
+		<div class="flex gap-2">
+			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.game?.name}</p>
+			{#each file.features || [] as feature}
+				<div class="badge badge-glass my-auto py-0.5 px-1">
+					{feature}
+				</div>
+			{/each}
+		</div>
 		<h4 class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
 			{file.authors?.join(', ')}
 		</h4>

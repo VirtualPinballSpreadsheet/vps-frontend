@@ -4,6 +4,9 @@
 	import { quadInOut } from 'svelte/easing';
 	import { formatDate } from '$lib/helper/formatDate';
 	import { DB } from '$lib/stores/DbStore';
+	import { FastAverageColor } from 'fast-average-color';
+	import { modeCurrent } from '@skeletonlabs/skeleton';
+	import FeatureBlock from '../FeatureBlock.svelte';
 	const { dbStore } = DB;
 
 	export let table = EmptyTableFile;
@@ -17,6 +20,18 @@
 	export let onEnd = () => {};
 
 	const duration = 100;
+
+	const fac = new FastAverageColor();
+
+	let color = '';
+
+	$: {
+		if (table.imgUrl) {
+			fac.getColorAsync(table.imgUrl).then((_color) => {
+				if (_color) color = _color.rgb;
+			});
+		}
+	}
 
 	const img = (node: Element, { duration, delay }: any) => {
 		return {
@@ -58,6 +73,10 @@
 		class="card pinImage bg-surface-100 dark:bg-surface-600 z-10 absolute top-0 left-0 right-0 bottom-0 shadow-lg shadow-black"
 	/>
 	<div
+		style="background: color-mix(in lch, rgb(var(--color-surface-{$modeCurrent
+			? 100
+			: 900})) {$modeCurrent ? 80 : 60}%, {color ||
+			`rgb(var(--color-surface-${$modeCurrent ? 100 : 600})`}) !important;"
 		transition:card={{ duration }}
 		class="card !bg-surface-100 dark:!bg-surface-600 shadow-2xl shadow-black absolute top-0 -left-4 -right-4 -bottom-24 -z-1 flex flex-col p-4 gap-0.5 items-center"
 	>
@@ -84,14 +103,12 @@
 				<p>({game.year})</p>
 			</div>
 
-			<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full">
+			<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full mb-4">
 				{table.authors.join(', ')}
 			</p>
-			<div class="flex gap-2 mt-4 flex-wrap">
-				{#each table.features || [] as feature}
-					<div class="badge variant-filled-surface">{feature.toUpperCase()}</div>
-				{/each}
-			</div>
+
+			<FeatureBlock data={table.features} />
+
 			<div class="flex mt-auto w-full">
 				<div class="flex flex-col items-center justify-center flex-1 gap-1">
 					<p class="text-xs font-bold uppercase opacity-40">Updated at</p>

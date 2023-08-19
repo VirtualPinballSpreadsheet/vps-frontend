@@ -49,7 +49,13 @@
 	};
 </script>
 
-<a class="wrapper relative z-0" {href} on:mouseenter={onMouseEnter} on:mouseleave={onMouseLeave}>
+<a
+	class="wrapper relative z-0"
+	{href}
+	on:mouseenter={onMouseEnter}
+	on:mouseleave={onMouseLeave}
+	id={file.id}
+>
 	{#if hovered}
 		<GameCardHover game={file} {left} {top} {width} {height} onEnd={() => (fadeOut = false)} />
 	{/if}

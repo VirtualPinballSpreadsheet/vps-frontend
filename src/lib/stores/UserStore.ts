@@ -1,6 +1,6 @@
 import { firebaseAuth } from './FirebaseStore';
 import { GithubAuthProvider, signInWithPopup, signOut, type User as FBUser } from 'firebase/auth';
-import { localStorageStore, toastStore } from '@skeletonlabs/skeleton';
+import { localStorageStore, getToastStore } from '@skeletonlabs/skeleton';
 import type { Writable } from 'svelte/store';
 import type { UserStore } from '../types/User';
 import { DB_OWNER, DB_REPO } from '../../env';
@@ -57,7 +57,7 @@ const login = async (token: string, user: FBUser) => {
 			location.hostname === '127.0.0.1';
 
 		if (!admin) {
-			toastStore.trigger({
+			getToastStore().trigger({
 				message: "You don't have permission to edit on VPS.",
 				background: 'variant-filled-error'
 			});
@@ -68,15 +68,16 @@ const login = async (token: string, user: FBUser) => {
 		userStore.set({
 			user,
 			permission,
-			token
+			token,
+			admin
 		});
-		toastStore.trigger({
+		getToastStore().trigger({
 			message: 'Login successfull',
 			background: 'variant-filled-success'
 		});
 	} catch (e) {
 		console.log(e);
-		toastStore.trigger({
+		getToastStore().trigger({
 			message: 'Login was unsuccessfull.',
 			background: 'variant-filled-error'
 		});
@@ -86,7 +87,7 @@ const login = async (token: string, user: FBUser) => {
 const logout = () => {
 	signOut(firebaseAuth).then(() => {
 		userStore.set({});
-		toastStore.trigger({
+		getToastStore().trigger({
 			message: 'Logout successfull',
 			background: 'variant-filled-success'
 		});
