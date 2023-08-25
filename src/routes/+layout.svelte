@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { initializeStores } from '@skeletonlabs/skeleton';
+	initializeStores();
 	import '../app.scss';
 	import '../app.postcss';
 	import '@fontsource/jost';
 	import '@fontsource/tomorrow';
-	import { initializeStores } from '@skeletonlabs/skeleton';
-	initializeStores();
 
 	// Popups
 	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
@@ -21,10 +21,14 @@
 	import ModalStore from '$lib/stores/ModalStore.svelte';
 	import Filter from '$lib/components/Filter.svelte';
 	import { Search } from '$lib/stores/SearchStore';
+	import SidebarLeft from '$lib/layout/SidebarLeft.svelte';
+	import Drawer from '$lib/layout/Drawer.svelte';
+	import { User } from '$lib/stores/UserStore';
 
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	const { filterActive } = Search;
+	const { userStore } = User;
 
 	onMount(() => {
 		DB.fetchDb();
@@ -35,7 +39,8 @@
 <Modal />
 <Toast zIndex="1000" />
 <ModalStore />
-<AppShell>
+<Drawer />
+<AppShell slotSidebarLeft={$userStore.admin ? 'bg-surface-500/5 w-0 lg:w-64' : ''}>
 	<svelte:fragment slot="header">
 		<AppBar />
 	</svelte:fragment>
@@ -44,8 +49,12 @@
 			<Filter />
 		{/if}
 	</svelte:fragment>
-	<!-- <svelte:fragment slot="sidebarLeft"><SidebarLeft /></svelte:fragment>
-		<svelte:fragment slot="sidebarRight"><SideBarRight /></svelte:fragment> -->
+	<svelte:fragment slot="sidebarLeft">
+		{#if $userStore.admin}
+			<SidebarLeft />
+		{/if}
+	</svelte:fragment>
+	<!-- <svelte:fragment slot="sidebarRight"><SideBarRight /></svelte:fragment> -->
 
 	<!-- Page Route Content -->
 	<slot />

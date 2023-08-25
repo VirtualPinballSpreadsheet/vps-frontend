@@ -52,7 +52,7 @@
 
 				<label class="label flex-1">
 					<span>Players</span>
-					<input class="input" type="number" title="Players" bind:value={game.year} />
+					<input class="input" type="number" title="Players" bind:value={game.players} />
 				</label>
 			</div>
 			<div class="flex flex-col md:flex-row gap-4">

@@ -7,22 +7,20 @@
 	import { onDestroy } from 'svelte';
 	import { FastAverageColor } from 'fast-average-color';
 	import View from './view/View.svelte';
-	import Edit from './edit/Edit.svelte';
+	import Edit from './edit/EditView.svelte';
 
 	const { dbStore } = DB;
 	const modalStore = getModalStore();
 
-	let editMode = false;
-
-	$: id = $modalStore[0]?.meta?.game;
+	$: id = $page?.url?.searchParams?.get('game');
+	$: fileId = $page.url.searchParams.get('fileId');
+	$: editMode = $page.url.searchParams.get('edit');
 	$: game = ((id ? $dbStore[id] : EmptyGame) || EmptyGame) as Game;
 
 	$: {
-		const fileId = $page.url.searchParams.get('fileId');
-		console.log(fileId);
 		if (!fileId) break $;
 		setTimeout(() => {
-			const el = document.getElementById(fileId);
+			const el = document.getElementById(fileId!);
 			console.log(el);
 			el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 		}, 100);
@@ -44,6 +42,7 @@
 	}
 
 	onDestroy(() => {
+		modalStore.clear();
 		goto($page.url.pathname);
 	});
 </script>
@@ -58,8 +57,8 @@
 radial-gradient(at 98% -40%, {color2} 0px, transparent 50%);"
 >
 	{#if editMode}
-		<Edit {game} />
+		<Edit />
 	{:else}
-		<View {game} onEdit={() => (editMode = true)} />
+		<View {game} />
 	{/if}
 </div>

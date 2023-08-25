@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { AppBar, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import { AppBar, getDrawerStore, popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
@@ -11,37 +11,41 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
+	import Navigation from './Navigation.svelte';
 
 	const { userStore } = User;
 	const { query, mode, filterActive } = Search;
 
 	const modes = Object.entries(modeMapping);
-
-	const popupUser: PopupSettings = {
-		event: 'click',
-		target: 'popupUser',
-		placement: 'bottom'
-	};
-
-	const popupSettings: PopupSettings = {
-		event: 'focus-click',
-		target: 'popupSettings',
-		placement: 'bottom',
-		closeQuery: '.listbox-item'
+	const drawerStore = getDrawerStore();
+	const onOpenDrawer = () => {
+		drawerStore?.open();
 	};
 </script>
 
 <AppBar>
 	<svelte:fragment slot="lead">
-		<a href="/" class="ml-4 rounded-full logo transition-shadow">
-			<img src={Logo} alt="VPS" width="36px" />
-		</a>
+		<div class="flex items-center">
+			<button class="lg:hidden btn btn-sm" on:click={onOpenDrawer}>
+				<span>
+					<svg viewBox="0 0 100 80" class="fill-token w-4 h-4">
+						<rect width="100" height="20" />
+						<rect y="30" width="100" height="20" />
+						<rect y="60" width="100" height="20" />
+					</svg>
+				</span>
+			</button>
+
+			<a href="/" class="hidden md:flex ml-4 rounded-full logo transition-shadow">
+				<img src={Logo} alt="VPS" width="36px" />
+			</a>
+		</div>
 	</svelte:fragment>
-	<div class="px-4 flex items-center gap-4">
-		<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
-			<div class="input-group-shim"><Fa icon={faSearch} /></div>
+	<div class="md:px-4 flex items-center gap-4 text-xs md:text-sm">
+		<div class="input-group input-group-divider grid-cols-[1fr_auto] md:grid-cols-[auto_1fr_auto]">
+			<div class="input-group-shim !hidden md:!flex"><Fa icon={faSearch} /></div>
 			<input type="search" placeholder="Search..." bind:value={$query} />
-			<select class="select rounded-l-none" bind:value={$mode}>
+			<select class="select rounded-l-none text-xs md:text-sm" bind:value={$mode}>
 				{#each modes as mode}
 					<option value={mode[0]}>{mode[1].name}</option>
 				{/each}
@@ -49,7 +53,7 @@
 		</div>
 
 		<button
-			class="btn hover:variant-soft-primary btn-icon"
+			class="hidden md:flex btn hover:variant-soft-primary btn-icon"
 			class:variant-filled-primary={$filterActive}
 			on:click={() => ($filterActive = !$filterActive)}
 		>
@@ -57,21 +61,8 @@
 		</button>
 	</div>
 
-	<div slot="trail" class="mr-4 flex items-center gap-4">
-		{#if $userStore.admin}
-			<a href="apps/" class="btn btn-sm variant-soft-primary hover:variant-filled-primary">
-				Admin
-			</a>
-		{/if}
-		<a href="apps/" class="btn btn-sm hover:variant-soft-primary"> Apps </a>
-		<a href="links/" class="btn btn-sm hover:variant-soft-primary"> Links </a>
-		<button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSettings}>
-			Settings <Fa icon={faChevronDown} class="ml-2" size="xs" />
-		</button>
-
-		<a href="help/" class="btn hover:variant-soft-primary btn-icon">
-			<Fa icon={faCircleQuestion} />
-		</a>
+	<div slot="trail" class="hidden md:flex mr-4 items-center gap-4">
+		<Navigation />
 	</div>
 </AppBar>
 

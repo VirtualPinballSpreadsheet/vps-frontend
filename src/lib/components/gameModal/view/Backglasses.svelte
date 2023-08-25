@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { getUrl } from '$lib/helper/getUrl';
 	import { EmptyB2sFile } from '$lib/types/VPin';
-	import HeaderInfo from '../../HeaderInfo.svelte';
+	import HeaderInfo from './HeaderInfo.svelte';
 	import B2sDetailCard from '../../cards/B2sDetailCard.svelte';
 
 	export let b2ss = [EmptyB2sFile];

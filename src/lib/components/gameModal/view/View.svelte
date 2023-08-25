@@ -1,16 +1,15 @@
 <script lang="ts">
 	import { EmptyGame, type Game } from '$lib/types/VPin';
-	import HeaderInfo from '../../HeaderInfo.svelte';
+	import HeaderInfo from './HeaderInfo.svelte';
 	import Backglasses from './Backglasses.svelte';
 	import Tables from './Tables.svelte';
 	import Header from './Header.svelte';
 	import FileList from './FileList.svelte';
 
 	export let game: Game = EmptyGame;
-	export let onEdit = () => {};
 </script>
 
-<Header {game} {onEdit} />
+<Header {game} />
 <hr class=" -mx-2 md:-mx-8" />
 
 <Tables tables={game.tableFiles} />

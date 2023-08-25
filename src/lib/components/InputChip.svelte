@@ -25,7 +25,6 @@
 	/** An array of values. */
 	export let value: any[] = [];
 
-	$: console.log(value);
 	/**
 	 * Provide a whitelist of accepted values.
 	 * @type {string[]}

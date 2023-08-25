@@ -7,11 +7,16 @@
 	import Fa from 'svelte-fa';
 	import IdTag from '../../IdTag.svelte';
 	import { User } from '$lib/stores/UserStore';
+	import { Edit } from '$lib/stores/EditStore';
 
 	const { userStore } = User;
+	const { editStore } = Edit;
 
 	export let game = EmptyGame;
-	export let onEdit = () => {};
+
+	let onEdit = () => {
+		$editStore.cache = { id: game?.id, action: 'UPDATE', data: JSON.parse(JSON.stringify(game)) };
+	};
 </script>
 
 <div class="flex gap-8 flex-col md:flex-row">
@@ -31,9 +36,10 @@
 				>
 			{/if}
 			{#if $userStore.admin}
-				<button
+				<a
+					href="?edit=true"
 					class="chip variant-soft-primary hover:variant-filled-primary gap-2"
-					on:click={onEdit}><Fa icon={faEdit} />Edit</button
+					on:click={onEdit}><Fa icon={faEdit} />Edit</a
 				>
 			{/if}
 		</div>

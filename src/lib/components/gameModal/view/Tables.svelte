@@ -3,7 +3,7 @@
 	import { getUrl } from '$lib/helper/getUrl';
 	import type { TableFile } from '$lib/types/VPin';
 	import TableDetailCard from '../../cards/TableDetailCard.svelte';
-	import HeaderInfo from '../../HeaderInfo.svelte';
+	import HeaderInfo from './HeaderInfo.svelte';
 
 	export let tables: TableFile[] = [];
 

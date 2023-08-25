@@ -15,7 +15,7 @@
 	},
 	"devDependencies": {
 		"@floating-ui/dom": "^1.5.1",
-		"@skeletonlabs/skeleton": "^2.0.0-rc.1",
+		"@skeletonlabs/skeleton": "^2.0.0-rc.3",
 		"@skeletonlabs/tw-plugin": "^0.0.1-rc.0",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.3",
@@ -52,8 +52,11 @@
 		"dotenv": "^16.3.1",
 		"fast-average-color": "^9.3.0",
 		"firebase": "^10.1.0",
+		"json-diff": "^1.0.6",
+		"json-diff-ts": "^1.2.6",
 		"minisearch": "^6.1.0",
 		"nano": "^10.1.2",
+		"svelte-easy-crop": "^2.0.1",
 		"svelte-fa": "^3.0.4"
 	}
 }
