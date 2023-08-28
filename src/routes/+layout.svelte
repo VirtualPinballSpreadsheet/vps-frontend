@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { initializeStores } from '@skeletonlabs/skeleton';
+	import { initializeStores, setInitialClassState } from '@skeletonlabs/skeleton';
 	initializeStores();
 	import '../app.scss';
 	import '../app.postcss';
@@ -24,6 +24,8 @@
 	import SidebarLeft from '$lib/layout/SidebarLeft.svelte';
 	import Drawer from '$lib/layout/Drawer.svelte';
 	import { User } from '$lib/stores/UserStore';
+	import ResizeObserver from '$lib/components/resizeObserver.svelte';
+	import ContextMenu from '$lib/components/ContextMenu.svelte';
 
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
@@ -32,9 +34,11 @@
 
 	onMount(() => {
 		DB.fetchDb();
+		setInitialClassState();
 	});
 </script>
 
+<ResizeObserver />
 <Popups />
 <Modal />
 <Toast zIndex="1000" />
@@ -59,3 +63,4 @@
 	<!-- Page Route Content -->
 	<slot />
 </AppShell>
+<ContextMenu />

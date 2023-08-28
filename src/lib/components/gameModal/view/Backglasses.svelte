@@ -4,8 +4,11 @@
 	import { EmptyB2sFile } from '$lib/types/VPin';
 	import HeaderInfo from './HeaderInfo.svelte';
 	import B2sDetailCard from '../../cards/B2sDetailCard.svelte';
+	import { mobile } from '$lib/helper/mobile';
+	import B2sDetailCardMobile from '$lib/components/cards/B2sDetailCardMobile.svelte';
 
 	export let b2ss = [EmptyB2sFile];
+	export let gameId: string;
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>
@@ -22,11 +25,20 @@
 				</p>
 			</div>
 		</HeaderInfo>
-		<div class="grid layout gap-y-10 gap-x-4">
-			{#each b2ss as b2s}
-				<B2sDetailCard file={b2s} href={getUrl(b2s.urls)} active={fileId === b2s.id} />
-			{/each}
-		</div>
+
+		{#if $mobile.mobile}
+			<div class="flex flex-col gap-6">
+				{#each b2ss as b2s}
+					<B2sDetailCardMobile file={b2s} href={getUrl(b2s.urls)} active={fileId === b2s.id} />
+				{/each}
+			</div>
+		{:else}
+			<div class="grid layout gap-y-10 gap-x-4">
+				{#each b2ss as b2s}
+					<B2sDetailCard file={b2s} href={getUrl(b2s.urls)} active={fileId === b2s.id} {gameId} />
+				{/each}
+			</div>
+		{/if}
 	</div>
 {/if}
 

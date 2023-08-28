@@ -1,5 +1,5 @@
 <script>
-	import { Avatar, LightSwitch, getToastStore } from '@skeletonlabs/skeleton';
+	import { Avatar, LightSwitch, ListBox, ListBoxItem, getToastStore } from '@skeletonlabs/skeleton';
 	import { User } from '$lib/stores/UserStore';
 	const toastStore = getToastStore();
 	const { userStore } = User;
@@ -40,6 +40,15 @@
 			Toggle Dark/Light <LightSwitch />
 		</div>
 	</div>
+	<hr />
+	<ul>
+		<li class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm">CSV Export</li>
+		<a href="/list"
+			><li class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm">
+				Bookmarks
+			</li></a
+		>
+	</ul>
 	<hr />
 	<div class="p-4 flex flex-col gap-4">
 		{#if !$userStore.user}

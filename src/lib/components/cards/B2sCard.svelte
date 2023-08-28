@@ -6,7 +6,7 @@
 	export let href = '';
 </script>
 
-<a {href} class="flex flex-col">
+<a {href} class="flex flex-col" id={file.id} data-gameid={file.game?.id} data-filetype="b2sFiles">
 	<img
 		src={file.imgUrl || Placeholder}
 		alt={file.id}

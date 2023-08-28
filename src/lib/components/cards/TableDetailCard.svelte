@@ -1,21 +1,19 @@
 <script lang="ts">
-	import { EmptyGame, EmptyTableFile } from '$lib/types/VPin';
+	import { EmptyTableFile } from '$lib/types/VPin';
 	import Placeholder from '$lib/assets/img/tablePlaceholder.jpg';
-	import { DB } from '$lib/stores/DbStore';
 	import { formatDate } from '$lib/helper/formatDate';
 	import FeatureBlock from '../FeatureBlock.svelte';
 	import { modeCurrent } from '@skeletonlabs/skeleton';
 	import UrlChips from '../URLChips.svelte';
 	import IdTag from '../IdTag.svelte';
-	const { dbStore } = DB;
 
 	export let file = EmptyTableFile;
 	export let active = false;
-	$: game = file?.game?.id ? $dbStore[file.game.id] : EmptyGame;
 	export let href = '';
+	export let gameId: string;
 </script>
 
-<div class="wrapper relative z-0" id={file.id}>
+<div class="wrapper relative z-0" id={file.id} data-gameid={gameId} data-filetype="tableFiles">
 	<a {href} target="_blank" class="relative group">
 		<div
 			style="background:{$modeCurrent ? 'rgba(255,255,255,.4)' : 'rgba(0,0,0,.4)'}!important;"
@@ -24,6 +22,7 @@
 			<p class="font-bold max-h-48 overflow-hidden max-w-full">
 				{file.authors?.join(', ')}
 			</p>
+			<p>{file.version}</p>
 			{#if file.comment}
 				<p>{file.comment}</p>
 			{/if}

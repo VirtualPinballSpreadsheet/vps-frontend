@@ -1,6 +1,11 @@
-export const DB_URL = 'https://fraesh.github.io/vps-db/vpsdb.json';
+// export const DB_URL = 'https://fraesh.github.io/vps-db/vpsdb.json';
+// export const DB_URL = 'https://virtualpinballspreadsheet.github.io/vps-db/db/vpsdb.json';
+export const DB_BASE_URL = 'https://virtualpinballspreadsheet.github.io/vps-db/';
+export const DB_URL = DB_BASE_URL + `db/vpsdb.json`;
+export const DB_LAST_UPDATED = DB_BASE_URL + `lastUpdated.json?ts=${new Date().getTime()}`;
 export const DB_OWNER = 'VirtualPinballSpreadsheet';
 export const DB_REPO = 'vps-db';
 export const DB_IMG_PATH = 'img/';
 export const DB_GAME_PATH = 'games/';
 export const DB_PATH = 'vpsdb.json';
+export const DB_STAGING_BRANCH = 'staging';

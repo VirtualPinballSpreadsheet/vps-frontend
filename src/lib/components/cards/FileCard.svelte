@@ -5,13 +5,14 @@
 
 	export let file = EmptyFile;
 	export let href = '';
+	export let fileType: string;
 
 	$: bgImg = file.game?.id ? getGameImage(file.game.id) : '';
 </script>
 
-<a {href} id={file.id} class="aspect">
+<a {href} id={file.id} data-gameid={file.game?.id} data-filetype={fileType} class="aspect">
 	<div
-		class="card !bg-surface-100 dark:!bg-surface-600 aspect relative overflow-hidden hover:brightness-125 transition-all"
+		class="card !bg-surface-100 dark:!bg-surface-600 aspect relative overflow-hidden hover:brightness-125 transition-all text-xs md:text-base"
 	>
 		<div class="p-4 flex flex-col justify-between absolute top-0 left-0 right-0 bottom-0 z-10">
 			<span class="font-bold">{file.game?.name || '???'}</span>

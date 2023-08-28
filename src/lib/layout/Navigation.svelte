@@ -4,6 +4,8 @@
 	import { faChevronDown, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 
+	export let closeDrawer = () => {};
+
 	const { userStore } = User;
 
 	const popupSettings: PopupSettings = {
@@ -17,12 +19,12 @@
 {#if $userStore.admin}
 	<a href="apps/" class="btn btn-sm variant-soft-primary hover:variant-filled-primary"> Admin </a>
 {/if}
-<a href="apps/" class="btn btn-sm hover:variant-soft-primary"> Apps </a>
-<a href="links/" class="btn btn-sm hover:variant-soft-primary"> Links </a>
+<a href="apps/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Apps </a>
+<a href="links/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Links </a>
 <button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSettings}>
-	Settings <Fa icon={faChevronDown} class="ml-2" size="xs" />
+	Tools <Fa icon={faChevronDown} class="ml-2" size="xs" />
 </button>
 
-<a href="help/" class="btn hover:variant-soft-primary btn-icon">
+<a href="help/" class="btn hover:variant-soft-primary btn-icon" on:click={closeDrawer}>
 	<Fa icon={faCircleQuestion} />
 </a>

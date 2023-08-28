@@ -48,7 +48,7 @@
 </script>
 
 <div
-	class="card p-2 md:p-8 md:py-10 w-full max-w-6xl flex flex-col gap-12 bg-top"
+	class="card rounded-none md:rounded-md p-4 md:p-8 md:py-10 w-full max-w-6xl flex flex-col gap-6 md:gap-12 bg-top"
 	style="background-image: radial-gradient(
 	at 0% -40%,
 	{color1} 0px,

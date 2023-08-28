@@ -1,13 +1,14 @@
 import { firebaseAuth } from './FirebaseStore';
 import { GithubAuthProvider, signInWithPopup, signOut, type User as FBUser } from 'firebase/auth';
 import { localStorageStore } from '@skeletonlabs/skeleton';
-import { get, type Writable } from 'svelte/store';
+import { get, writable, type Writable } from 'svelte/store';
 import type { UserStore } from '../types/User';
-import { DB_GAME_PATH, DB_IMG_PATH, DB_OWNER, DB_REPO } from '../../env';
-import type { RequestInterface } from '@octokit/types';
+import { DB_GAME_PATH, DB_IMG_PATH, DB_OWNER, DB_REPO, DB_STAGING_BRANCH } from '../../env';
 import type { Game } from '$lib/types/VPin';
+import { DB } from './DbStore';
 
 const userStore: Writable<UserStore> = localStorageStore('user', {});
+const unpublishedChanges = writable<{ author: string; id: string; updatedAt: string }[]>([]);
 
 let octokit: any;
 
@@ -68,6 +69,11 @@ const login = async (token: string, user: FBUser) => {
 		octokit = _octokit;
 		if (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
 			window.octokit = _octokit;
+
+		if (admin) {
+			await getUnpublishedChanges();
+		}
+
 		return true;
 	} catch (e) {
 		console.error(e);
@@ -86,7 +92,7 @@ const logout = () => {
 };
 
 const uploadImage = async (file: File, name: string) => {
-	const path = `${DB_IMG_PATH}${name}.webp`;
+	const path = `${DB_IMG_PATH}${name}_${new Date().getTime()}.webp`;
 	const buffer = await toBase64(file);
 	let sha;
 	try {
@@ -121,10 +127,35 @@ const uploadGameFile = async (file: Game) => {
 		const res = await octokit.createOrUpdateTextFile({
 			owner: DB_OWNER,
 			repo: DB_REPO,
+			branch: DB_STAGING_BRANCH,
 			path: `${DB_GAME_PATH}${file.id}.json`,
 			content: JSON.stringify(file),
-
 			message: `GAME:${file.id} - Updated ${file.name}`
+		});
+
+		unpublishedChanges.update((s) => [
+			...s,
+			{
+				author: get(User.userStore).user?.displayName || '???',
+				id: file.id,
+				updatedAt: new Date().toISOString()
+			}
+		]);
+		return true;
+	} catch (e) {
+		console.error(e);
+		return false;
+	}
+};
+
+const updateDb = async () => {
+	try {
+		const res = await octokit.createOrUpdateTextFile({
+			owner: DB_OWNER,
+			repo: DB_REPO,
+			path: `lastUpdated.json`,
+			content: JSON.stringify(new Date().getTime()),
+			message: `UPDATE DB`
 		});
 		return true;
 	} catch (e) {
@@ -133,16 +164,25 @@ const uploadGameFile = async (file: Game) => {
 	}
 };
 
-const toBase64 = (file: File) =>
-	new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onload = function () {
-			const dataUrl = reader.result;
-			const base64 = (dataUrl as string).split(',')[1];
-			resolve(base64);
-		};
-		reader.readAsDataURL(file);
-	});
+const getUnpublishedChanges = async () => {
+	try {
+		await DB.fetchDb();
+		const res = await fetch(
+			`https://api.github.com/repos/${DB_OWNER}/${DB_REPO}/commits?sha=${DB_STAGING_BRANCH}&since=${new Date(
+				get(DB.lastUpdated)
+			)}`
+		);
+		let commits: any[] = await res.json();
+		commits = commits
+			.filter((c) => c?.commit?.message?.includes('GAME:'))
+			.map((c) => ({
+				author: c?.commit?.author?.name,
+				id: c?.commit?.message?.split(' - ')?.[0]?.split(':')?.[1],
+				updatedAt: c?.commit?.author?.date
+			}));
+		unpublishedChanges.set(commits);
+	} catch (e) {}
+};
 
 // Silent login
 (async () => {
@@ -159,5 +199,21 @@ export const User = {
 	triggerLoginPopup,
 	uploadImage,
 	uploadGameFile,
-	userStore
+	updateDb,
+	getUnpublishedChanges,
+	userStore,
+	unpublishedChanges
 };
+
+// HELPER
+
+const toBase64 = (file: File) =>
+	new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = function () {
+			const dataUrl = reader.result;
+			const base64 = (dataUrl as string).split(',')[1];
+			resolve(base64);
+		};
+		reader.readAsDataURL(file);
+	});

@@ -2,9 +2,12 @@
 	import { page } from '$app/stores';
 	import { formatDate } from '$lib/helper/formatDate';
 	import type { FileUpload } from '$lib/types/VPin';
+	import type { Mode } from 'fs';
 	import UrlChips from '../../URLChips.svelte';
 
 	export let title: string = '';
+	export let fileType: Mode;
+	export let gameId: string;
 	export let files: FileUpload[] = [];
 
 	$: fileId = $page.url.searchParams.get('fileId');
@@ -32,7 +35,12 @@
 				</thead>
 				<tbody>
 					{#each files as file, i}
-						<tr id={file.id} class:glow={fileId === file.id}>
+						<tr
+							id={file.id}
+							data-gameid={gameId}
+							data-filetype={fileType}
+							class:glow={fileId === file.id}
+						>
 							<td class="w-20">{file.version || ''}</td>
 							<td class="w-56">{file.authors?.join(', ') || ''}</td>
 							<td>{file.comment || ''}</td>

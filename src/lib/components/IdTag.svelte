@@ -1,5 +1,7 @@
 <script>
+	import { faCopy } from '@fortawesome/free-solid-svg-icons';
 	import { clipboard, getToastStore } from '@skeletonlabs/skeleton';
+	import Fa from 'svelte-fa';
 
 	export let id = '';
 </script>
@@ -12,4 +14,5 @@
 	}}
 >
 	{id}
+	<Fa icon={faCopy} size="8" class="ml-2" />
 </button>

@@ -12,10 +12,12 @@
 	export let onDelete = () => {};
 </script>
 
-<div class="card p-4 flex flex-col md:flex-row gap-8">
+<div
+	class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col md:flex-row gap-8"
+>
 	<div class="w-full md:w-96 flex flex-col gap-10">
 		<ImageUpload name={file.id} imgUrl={file.imgUrl} onChange={(url) => (file.imgUrl = url)} />
-		<div class="flex gap-4 mt-auto">
+		<div class="hidden md:flex gap-4 mt-auto">
 			<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
 			<IdTag id={file.id} />
 		</div>
@@ -62,11 +64,9 @@
 			<span>Theme</span>
 			<AutoCompleteChips value={file.theme || []} options={$theme.options} />
 		</div>
+		<div class="md:hidden flex gap-4 mt-8 justify-between">
+			<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
+			<IdTag id={file.id} />
+		</div>
 	</div>
 </div>
-
-<style>
-	.pinImage {
-		aspect-ratio: 9/16;
-	}
-</style>

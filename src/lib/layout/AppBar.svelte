@@ -3,17 +3,11 @@
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
-	import {
-		faChevronDown,
-		faCircleQuestion,
-		faFilter,
-		faSearch
-	} from '@fortawesome/free-solid-svg-icons';
+	import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import Navigation from './Navigation.svelte';
 
-	const { userStore } = User;
 	const { query, mode, filterActive } = Search;
 
 	const modes = Object.entries(modeMapping);
@@ -23,7 +17,7 @@
 	};
 </script>
 
-<AppBar>
+<AppBar padding="py-4 px-0 pl-2">
 	<svelte:fragment slot="lead">
 		<div class="flex items-center">
 			<button class="lg:hidden btn btn-sm" on:click={onOpenDrawer}>
@@ -61,7 +55,7 @@
 		</button>
 	</div>
 
-	<div slot="trail" class="hidden md:flex mr-4 items-center gap-4">
+	<div slot="trail" class="hidden lg:flex mr-4 items-center gap-4">
 		<Navigation />
 	</div>
 </AppBar>

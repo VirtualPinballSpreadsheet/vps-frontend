@@ -2,6 +2,7 @@
 	import { EmptyGame } from '$lib/types/VPin';
 	import { getBackglassUrl } from '$lib/helper/getBackglassUrl';
 	import GameCardHover from './GameCardHover.svelte';
+	import { mobile } from '$lib/helper/mobile';
 
 	export let file = EmptyGame;
 
@@ -25,6 +26,7 @@
 	let timeout: NodeJS.Timeout | undefined;
 
 	const onMouseEnter = () => {
+		if ($mobile.mobile) return;
 		const rect = el.getBoundingClientRect();
 		left = rect.left;
 		top = rect.top;
@@ -38,6 +40,7 @@
 	};
 
 	const onMouseLeave = () => {
+		if ($mobile.mobile) return;
 		document.getElementById('page')?.removeEventListener('scroll', onMouseLeave);
 		if (timeout) {
 			hovered = false;

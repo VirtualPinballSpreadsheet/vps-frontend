@@ -3,6 +3,7 @@
 	import Placeholder from '$lib/assets/img/tablePlaceholder.jpg';
 	import TableCardHover from './TableCardHover.svelte';
 	import { DB } from '$lib/stores/DbStore';
+	import { mobile } from '$lib/helper/mobile';
 	const { dbStore } = DB;
 
 	export let file = EmptyTableFile;
@@ -24,6 +25,7 @@
 	let timeout: NodeJS.Timeout | undefined;
 
 	const onMouseEnter = () => {
+		if ($mobile.mobile) return;
 		const rect = el.getBoundingClientRect();
 		left = rect.left;
 		top = rect.top;
@@ -37,6 +39,7 @@
 	};
 
 	const onMouseLeave = () => {
+		if ($mobile.mobile) return;
 		document.getElementById('page')?.removeEventListener('scroll', onMouseLeave);
 		if (timeout) {
 			hovered = false;
@@ -54,6 +57,8 @@
 	on:mouseenter={onMouseEnter}
 	on:mouseleave={onMouseLeave}
 	id={file.id}
+	data-gameid={file.game?.id}
+	data-filetype="tableFiles"
 >
 	{#if hovered}
 		<TableCardHover table={file} {left} {top} {width} {height} onEnd={() => (fadeOut = false)} />

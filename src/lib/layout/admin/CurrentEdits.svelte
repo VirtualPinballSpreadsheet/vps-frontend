@@ -34,13 +34,17 @@
 		<hr />
 	{/each}
 
-	<button class="btn variant-filled-secondary" on:click={onSubmit}>
+	<button
+		class="btn variant-filled-secondary"
+		on:click={onSubmit}
+		disabled={loading || !$editStore.edits.length}
+	>
 		{#if loading}
 			<ProgressRadial
 				stroke={60}
 				meter="stroke-tertiary-500"
 				track="stroke-tertiary-500/30"
-				width="w-8"
+				width="w-6"
 			/>
 		{:else}
 			Submit Changes

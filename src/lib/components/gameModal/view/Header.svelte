@@ -19,29 +19,33 @@
 	};
 </script>
 
-<div class="flex gap-8 flex-col md:flex-row">
+<div class="flex gap-4 md:gap-8 flex-col md:flex-row">
 	<img
 		class="rounded-md aspectBG w-96"
 		src={game.imgUrl || getBackglassUrl(game)}
 		alt={game.name}
 	/>
 	<div class="flex flex-col flex-1 gap-2">
-		<div class="flex gap-2">
-			<p class="flex-1 uppercase font-bold text-sm opacity-40">{game.theme?.join(' • ') || ''}</p>
-			{#if game.ipdbUrl}
-				<a
-					class="chip variant-soft-tertiary hover:variant-filled-tertiary gap-2"
-					target="_blank"
-					href={game.ipdbUrl}><Fa icon={faExternalLink} />IPDB</a
-				>
-			{/if}
-			{#if $userStore.admin}
-				<a
-					href="?edit=true"
-					class="chip variant-soft-primary hover:variant-filled-primary gap-2"
-					on:click={onEdit}><Fa icon={faEdit} />Edit</a
-				>
-			{/if}
+		<div class="flex flex-col-reverse md:flex-row gap-4 md:gap-2">
+			<p class="flex-1 uppercase font-bold text-sm opacity-40">
+				{game.theme?.join(' • ') || ''}
+			</p>
+			<div class="flex flex-1 md:flex-initial gap-2">
+				{#if game.ipdbUrl}
+					<a
+						class="chip variant-soft-tertiary hover:variant-filled-tertiary gap-2 flex-1"
+						target="_blank"
+						href={game.ipdbUrl}><Fa icon={faExternalLink} />IPDB</a
+					>
+				{/if}
+				{#if $userStore.admin}
+					<a
+						href="?edit=true"
+						class="chip variant-soft-primary hover:variant-filled-primary gap-2 flex-1"
+						on:click={onEdit}><Fa icon={faEdit} />Edit</a
+					>
+				{/if}
+			</div>
 		</div>
 		<h1 class="h1">{game.name}</h1>
 		<h4 class="h4">{game.manufacturer} ({game.year})</h4>

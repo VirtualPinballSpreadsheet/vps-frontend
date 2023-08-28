@@ -30,7 +30,7 @@
 		.map((t) => ({ file: t, href: `?game=${t.game?.id}&fileType=table&fileId=${t.id}` }));
 </script>
 
-<div class="h-full flex flex-col p-10 gap-20 relative z-0">
+<div class="h-full flex flex-col py-4 md:p-10 gap-10 md:gap-20 relative z-0">
 	<HorizontalSlider
 		title="Tables"
 		component={TableCard}
@@ -44,7 +44,11 @@
 	{#each Object.entries(modeMapping) as [key, val]}
 		{@const data = ($sortedFilesStore?.[key] || [])
 			.slice(0, slides)
-			.map((file) => ({ file, href: `?game=${file.game?.id}&fileType=${key}&fileId=${file.id}` }))}
+			.map((file) => ({
+				file,
+				href: `?game=${file.game?.id}&fileType=${key}&fileId=${file.id}`,
+				fileType: key
+			}))}
 		{#if !['tableFiles', 'game'].includes(key)}
 			<HorizontalSlider
 				href="{base}/{val.route}/"

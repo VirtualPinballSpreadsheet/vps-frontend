@@ -12,10 +12,10 @@
 <Header {game} />
 <hr class=" -mx-2 md:-mx-8" />
 
-<Tables tables={game.tableFiles} />
+<Tables tables={game.tableFiles} gameId={game.id} />
 <hr class=" -mx-2 md:-mx-8" />
-<Backglasses b2ss={game.b2sFiles} />
-<FileList files={game.romFiles}>
+<Backglasses b2ss={game.b2sFiles} gameId={game.id} />
+<FileList files={game.romFiles} gameId={game.id} fileType="romFiles">
 	<HeaderInfo title="Roms">
 		<div class="w-60">
 			<p>Add roms to your rom folder.</p>
@@ -24,10 +24,10 @@
 		</div>
 	</HeaderInfo>
 </FileList>
-<FileList files={game.pupPackFiles} title="PuP Packs" />
-<FileList files={game.altColorFiles} title="Alt. Color" />
-<FileList files={game.altSoundFiles} title="Alt. Sound" />
-<FileList files={game.povFiles}>
+<FileList files={game.pupPackFiles} title="PuP Packs" gameId={game.id} fileType="pupPackFiles" />
+<FileList files={game.altColorFiles} title="Alt. Color" gameId={game.id} fileType="altColorFiles" />
+<FileList files={game.altSoundFiles} title="Alt. Sound" gameId={game.id} fileType="altSoundFiles" />
+<FileList files={game.povFiles} gameId={game.id} fileType="povFiles">
 	<HeaderInfo title="POV">
 		<div class="w-60">
 			<p>Open your table in VPX and go to.</p>
@@ -36,6 +36,11 @@
 		</div>
 	</HeaderInfo>
 </FileList>
-<FileList files={game.wheelArtFiles} title="Wheelart" />
-<FileList files={game.topperFiles} title="Topper" />
-<FileList files={game.mediaPackFiles} title="Media Packs" />
+<FileList files={game.wheelArtFiles} title="Wheelart" gameId={game.id} fileType="wheelArtFiles" />
+<FileList files={game.topperFiles} title="Topper" gameId={game.id} fileType="topperFiles" />
+<FileList
+	files={game.mediaPackFiles}
+	title="Media Packs"
+	gameId={game.id}
+	fileType="mediaPackFiles"
+/>

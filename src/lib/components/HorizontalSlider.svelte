@@ -2,6 +2,7 @@
 	import Fa from 'svelte-fa';
 	import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
+	import { mobile } from '$lib/helper/mobile';
 
 	export let title = '';
 	export let data: Object[] = [];
@@ -45,7 +46,7 @@
 </script>
 
 <div
-	class="flex flex-col gap-4 items-start -mx-10 wrapper"
+	class="flex flex-col items-start -mx-10 wrapper"
 	style="width:calc(100% + 5rem)"
 	class:pointer-events-none={blocked}
 	bind:this={scroller}
@@ -73,22 +74,31 @@
 				/>
 			</div>
 		</a>
-
-		<div class="flex gap-px opacity-0 dots transition-opacity" style="margin-right:{overflow}rem;">
+		<!-- Pagination -->
+		<div
+			class="hidden md:flex gap-px opacity-0 dots transition-opacity w-20"
+			style="margin-right:{overflow}rem;"
+		>
 			{#each pages as _, i}
-				<div class="h-0.5 bg-surface-900-50-token w-6 {page === i ? '' : 'opacity-20'}" />
+				<div class="h-0.5 bg-surface-900-50-token flex-1 {page === i ? '' : 'opacity-20'}" />
 			{/each}
 		</div>
 	</div>
 	<!-- SCROLLER -->
 	<div class="relative w-full">
 		<div
-			style="scroll-padding-inline:{overflow}rem; padding:0 {overflow}rem; gap:{gap}rem;"
-			class="scroller grid grid-flow-col overflow-x-hidden w-full"
+			style="scroll-padding-inline:{overflow}rem; padding:1rem {overflow}rem; gap:{$mobile.mobile
+				? gap / 2
+				: gap}rem;"
+			class="scroller grid grid-flow-col overflow-x-scroll md:overflow-x-hidden w-full hide-scrollbar"
 		>
 			{#each pages as _, i}
 				{@const items = data.slice(i * _size, (i + 1) * _size)}
-				<div class="grid grid-flow-col auto-cols-fr" style="gap:{gap}rem;" id={title + i}>
+				<div
+					class="grid grid-flow-col auto-cols-fr select-none"
+					style="gap:{$mobile.mobile ? gap / 2 : gap}rem;"
+					id={title + i}
+				>
 					{#each items as d}
 						<svelte:component this={component} {...d} />
 					{/each}
@@ -104,7 +114,7 @@
 		{#if page < pages.length - 1}
 			<button
 				style="width:{overflow}rem;"
-				class="absolute right-0 top-0 h-full grid place-items-center text-xl bg-gradient-to-l from-slate-100 dark:from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
+				class=" absolute right-0 top-0 h-full hidden md:grid place-items-center text-xl bg-gradient-to-l from-slate-100 dark:from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
 				on:click={() => scrollTo(page + 1)}
 			>
 				<Fa icon={faChevronRight} size="lg" />
@@ -113,7 +123,7 @@
 		{#if page > 0}
 			<button
 				style="width:{overflow}rem;"
-				class="absolute left-0 top-0 h-full grid place-items-center text-xl bg-gradient-to-r from-slate-100 dark:from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
+				class="absolute left-0 top-0 h-full hidden md:grid place-items-center text-xl bg-gradient-to-r from-slate-100 dark:from-gray-900 z-20 opacity-0 hover:opacity-100 transition-opacity"
 				on:click={() => scrollTo(page - 1)}
 			>
 				<Fa icon={faChevronLeft} size="lg" />
@@ -122,7 +132,7 @@
 		<!-- Overhang -->
 		<div
 			style="width:{overflow - gap + 2.5}rem;"
-			class=" blur-lg absolute -left-10 -top-4 h-full bg-surface-50-900-token transition-opacity opacity-{page ===
+			class="blur-lg absolute -left-10 -top-4 h-full bg-surface-50-900-token transition-opacity opacity-{page ===
 			0
 				? 0
 				: 60} z-10"

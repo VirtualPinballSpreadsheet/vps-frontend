@@ -1,5 +1,4 @@
 <script lang="ts">
-	import GameCard from '$lib/components/cards/GameCard.svelte';
 	import InfiniteScrollPage from '$lib/layout/InfiniteScrollPage.svelte';
 	import { Search } from '$lib/stores/SearchStore';
 	import { onMount } from 'svelte';
@@ -22,6 +21,7 @@
 	transformData={(t) => {
 		return {
 			file: t,
+			fileType: data.mode,
 			href:
 				data.mode === 'game'
 					? `?game=${t.id}`

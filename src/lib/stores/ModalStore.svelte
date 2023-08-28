@@ -22,7 +22,6 @@
 				const modal: ModalSettings = {
 					type: 'component',
 					meta: { game, edit, type: 'gameModal' },
-					// Pass the component directly:
 					component: modalComponent
 				};
 

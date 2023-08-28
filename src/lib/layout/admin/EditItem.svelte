@@ -75,8 +75,6 @@
 					{/each}
 				</div>
 			{/if}
-
-			<div class="arrow variant-filled-surface border-primary-500 border-l border-t" />
 		</div>
 	</div>
 {/if}
