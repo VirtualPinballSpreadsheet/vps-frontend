@@ -6,6 +6,7 @@
 	import { User } from '$lib/stores/UserStore';
 	const toastStore = getToastStore();
 
+	export let placeholder = Placeholder;
 	export let imgUrl = Placeholder;
 	export let name = '';
 	export let onChange = (url: string) => {};
@@ -88,7 +89,7 @@
 		{:else}
 			<img
 				alt="upload preview"
-				src={croppedImage || imgUrl}
+				src={croppedImage || imgUrl || placeholder}
 				class="w-full rounded object-cover"
 				style:aspect-ratio={aspect}
 			/>

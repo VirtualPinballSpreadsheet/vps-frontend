@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AutoCompleteChips from '$lib/components/AutoCompleteChips.svelte';
 	import IdTag from '$lib/components/IdTag.svelte';
-	import { formatDateDashed } from '$lib/helper/formatDate';
+	import { formatDate, formatDateDashed } from '$lib/helper/formatDate';
 	import { Search } from '$lib/stores/SearchStore';
 	import type { FileUpload } from '$lib/types/VPin';
 	import UrlInputs from './URLInputs.svelte';
@@ -15,11 +15,23 @@
 	<div class="flex gap-4 flex-col md:flex-row">
 		<label class="label flex-1">
 			<span>Comment</span>
-			<input class="input" type="text" title="Comment" bind:value={file.comment} />
+			<input
+				class="input"
+				type="text"
+				title="Comment"
+				bind:value={file.comment}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
 		</label>
 		<label class="label">
 			<span>Version</span>
-			<input class="input" type="text" title="Version" bind:value={file.version} />
+			<input
+				class="input"
+				type="text"
+				title="Version"
+				bind:value={file.version}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
 		</label>
 
 		<label class="label">
@@ -36,9 +48,13 @@
 
 	<div class="label">
 		<span>Authors</span>
-		<AutoCompleteChips value={file.authors || []} options={$author.options} />
+		<AutoCompleteChips
+			value={file.authors || []}
+			options={$author.options}
+			on:change={() => (file.updatedAt = new Date().getTime())}
+		/>
 	</div>
-	<UrlInputs urls={file.urls || []} />
+	<UrlInputs urls={file.urls || []} on:blur={() => (file.updatedAt = new Date().getTime())} />
 	<div class="flex gap-4">
 		<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
 		<IdTag id={file.id} />

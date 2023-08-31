@@ -2,6 +2,9 @@
 	import { getURLIcon } from '$lib/helper/getURLIcon';
 	import type { FileUrl } from '$lib/types/VPin';
 	import Fa from 'svelte-fa';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let urls: FileUrl[] = [];
 </script>
@@ -15,6 +18,7 @@
 			<input
 				class="input"
 				value={url.url}
+				on:blur
 				on:change={(e) => {
 					if (!e.target.value) {
 						urls = [...urls.slice(0, i), ...urls.slice(i + 1, urls.length)];
@@ -27,6 +31,7 @@
 			<button
 				class="variant-{url.broken ? 'filled-error' : 'soft-surface'}"
 				on:click={() => {
+					dispatch('blur');
 					url.broken = !url.broken;
 				}}>Broken</button
 			>
@@ -35,6 +40,7 @@
 	<input
 		class="input"
 		value=""
+		on:blur
 		on:change={(e) => {
 			urls.push({ url: e.target.value, broken: false });
 			urls = urls;

@@ -259,6 +259,7 @@ const playerFilterStore = derived(
 const manufacturerFilterStore = derived(
 	[filterActive, manufacturer, playerFilterStore],
 	([$filterActive, $filter, $db]) => {
+		console.log($filter);
 		if (!$filterActive || !$filter.active || !$db?.length || !$filter.value.length) return $db;
 		return genericFilter($db, (game) => $filter.value.includes(game.manufacturer));
 	}
@@ -295,6 +296,7 @@ const featureFilterStore = derived(
 		return $db.filter((item: any) => {
 			if ((item as FileUpload).game) {
 				// FileMode
+				if (item.tableFormat && $filter.value.includes(item.tableFormat)) return true;
 				//@ts-ignore
 				return (item as FileUpload).features?.some((f) => $filter.value.includes(f));
 			} else {

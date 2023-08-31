@@ -19,7 +19,10 @@
 		<ImageUpload
 			name={file.id}
 			imgUrl={file.imgUrl}
-			onChange={(url) => (file.imgUrl = url)}
+			onChange={(url) => {
+				file.imgUrl = url;
+				file.updatedAt = new Date().getTime();
+			}}
 			aspect={4 / 3}
 		/>
 		<div class="hidden md:flex gap-4 mt-auto">
@@ -31,18 +34,36 @@
 	<div class="flex flex-col flex-1 gap-4">
 		<label class="label">
 			<span>Image URL</span>
-			<input class="input" type="text" title="Image URL" bind:value={file.imgUrl} />
+			<input
+				class="input"
+				type="text"
+				title="Image URL"
+				bind:value={file.imgUrl}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
 		</label>
 
 		<label class="label">
 			<span>Comment</span>
-			<input class="input" type="text" title="Comment" bind:value={file.comment} />
+			<input
+				class="input"
+				type="text"
+				title="Comment"
+				bind:value={file.comment}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
 		</label>
 
 		<div class="flex gap-4">
 			<label class="label w-full">
 				<span>Version</span>
-				<input class="input" type="text" title="Version" bind:value={file.version} />
+				<input
+					class="input"
+					type="text"
+					title="Version"
+					bind:value={file.version}
+					on:blur={() => (file.updatedAt = new Date().getTime())}
+				/>
 			</label>
 
 			<label class="label">
@@ -52,18 +73,27 @@
 					type="date"
 					title="Created at"
 					value={formatDateDashed(file.createdAt || '')}
+					on:blur={() => (file.updatedAt = new Date().getTime())}
 					on:change={(e) => (file.createdAt = new Date(e.target.value).getTime())}
 				/>
 			</label>
 		</div>
-		<UrlInputs urls={file.urls || []} />
+		<UrlInputs bind:urls={file.urls} on:blur={() => (file.updatedAt = new Date().getTime())} />
 		<div class="label">
 			<span>Features</span>
-			<AutoCompleteChips value={file.features || []} options={B2SFeatureOptions} />
+			<AutoCompleteChips
+				options={B2SFeatureOptions}
+				bind:value={file.features}
+				on:change={() => (file.updatedAt = new Date().getTime())}
+			/>
 		</div>
 		<div class="label">
 			<span>Authors</span>
-			<AutoCompleteChips value={file.authors || []} options={$author.options} />
+			<AutoCompleteChips
+				options={$author.options}
+				bind:value={file.authors}
+				on:change={() => (file.updatedAt = new Date().getTime())}
+			/>
 		</div>
 		<div class="md:hidden flex gap-4 mt-8 justify-between">
 			<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>

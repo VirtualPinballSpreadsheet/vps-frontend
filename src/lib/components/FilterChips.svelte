@@ -16,6 +16,6 @@
 		>{title}</SlideToggle
 	>
 	{#if $store.active}
-		<AutoCompleteChips value={$store.value} options={$store.options} />
+		<AutoCompleteChips bind:value={$store.value} options={$store.options} />
 	{/if}
 </div>

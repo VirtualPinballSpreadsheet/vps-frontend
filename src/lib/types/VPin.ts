@@ -135,7 +135,7 @@ export const TableFeatures = [
 
 export type B2SFeature = (typeof B2SFeatures)[number];
 
-export const B2SFeatures = ['2Screens', '3Screens', 'FullDMD'] as const;
+export const B2SFeatures = ['2Screens', '3Screens', 'FullDMD', 'incl. Table'] as const;
 
 export const TableFeatureOptions = TableFeatures.map((f) => ({ label: f, value: f }));
 export const B2SFeatureOptions = B2SFeatures.map((f) => ({ label: f, value: f }));

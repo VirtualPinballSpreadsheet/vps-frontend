@@ -2,6 +2,9 @@
 	import { Autocomplete, popup } from '@skeletonlabs/skeleton';
 	import InputChip from '$lib/components/InputChip.svelte';
 	import { nanoid } from 'nanoid';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let value: string[] = [];
 	export let options: { label: string; value: string }[] = [];
@@ -42,6 +45,7 @@
 				value.push(e.detail.value);
 				value = value;
 				inputChip = '';
+				dispatch('change', value);
 			}}
 		/>
 	</div>

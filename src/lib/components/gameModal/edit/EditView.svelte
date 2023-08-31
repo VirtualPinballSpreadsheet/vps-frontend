@@ -23,35 +23,35 @@
 
 {#if cache && loaded}
 	<Header game={cache} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Tables" files={cache.tableFiles || []} component={Table} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Backglasses" files={cache.b2sFiles || []} component={B2s} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Roms" files={cache.romFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="PuP Packs" files={cache.pupPackFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Alt. Color" files={cache.altColorFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Alt. Sound" files={cache.altSoundFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="POV" files={cache.povFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Wheelart" files={cache.wheelArtFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Topper" files={cache.topperFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Pinball X Sound" files={cache.soundFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Media packs" files={cache.mediaPackFiles || []} component={File} />
-	<hr class=" -mx-2 md:-mx-8" />
-	<FileSection title="Rules" files={cache.ruleFiles || []} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Tables" bind:files={cache.tableFiles} component={Table} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Backglasses" bind:files={cache.b2sFiles} component={B2s} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Roms" bind:files={cache.romFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="PuP Packs" bind:files={cache.pupPackFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Alt. Color" bind:files={cache.altColorFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Alt. Sound" bind:files={cache.altSoundFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="POV" bind:files={cache.povFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Wheelart" bind:files={cache.wheelArtFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Topper" bind:files={cache.topperFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Pinball X Sound" bind:files={cache.soundFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Media packs" bind:files={cache.mediaPackFiles} component={File} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Rules" bind:files={cache.ruleFiles} component={File} />
 
-	<hr class=" -mx-2 md:-mx-8" />
+	<hr class="-mx-2 md:-mx-8" />
 
 	<div class="flex justify-end w-full gap-4">
-		<button class="btn variant-ghost-secondary">Cancel</button>
+		<button class="btn variant-ghost-secondary" on:click={() => modalStore.close()}>Cancel</button>
 		<button
 			class="btn variant-filled-primary w-60"
 			on:click={() => {

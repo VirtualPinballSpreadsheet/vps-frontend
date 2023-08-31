@@ -27,7 +27,11 @@
 <div class="flex flex-col">
 	<HelpIcon>
 		<h4 class="h4">Update DB</h4>
-		<p slot="help">Publish the current state of the database.</p>
+		<p slot="help">
+			Publish the current state of the database. All unpublished changes will then be bundled to
+			build a new databse. If it fails, just run in again, nothing is lost. Don't overdo it though.
+			Don't wanna stress github too much.
+		</p>
 	</HelpIcon>
 
 	<p class="flex gap-2 my-2 items-center">

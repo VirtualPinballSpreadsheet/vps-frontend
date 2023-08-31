@@ -42,8 +42,12 @@
 	</div>
 	<hr />
 	<ul>
-		<li class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm">CSV Export</li>
-		<a href="/list"
+		<a href="/export">
+			<li class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm">
+				CSV Export
+			</li>
+		</a>
+		<a href="/bookmarks"
 			><li class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm">
 				Bookmarks
 			</li></a

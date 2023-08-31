@@ -14,10 +14,21 @@
 		placement: 'bottom',
 		closeQuery: '.listbox-item'
 	};
+	const popupAdmin: PopupSettings = {
+		event: 'focus-click',
+		target: 'popupAdmin',
+		placement: 'bottom',
+		closeQuery: '.listbox-item'
+	};
 </script>
 
 {#if $userStore.admin}
-	<a href="apps/" class="btn btn-sm variant-soft-primary hover:variant-filled-primary"> Admin </a>
+	<button
+		class="btn btn-sm variant-soft-primary hover:variant-filled-primary"
+		use:popup={popupAdmin}
+	>
+		Admin
+	</button>
 {/if}
 <a href="apps/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Apps </a>
 <a href="links/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Links </a>
