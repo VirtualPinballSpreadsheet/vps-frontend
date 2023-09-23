@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { initializeStores, setInitialClassState } from '@skeletonlabs/skeleton';
+	import { initializeStores, setInitialClassState, modeCurrent } from '@skeletonlabs/skeleton';
 	initializeStores();
 	import '../app.scss';
 	import '../app.postcss';
@@ -35,6 +35,8 @@
 	onMount(() => {
 		DB.fetchDb();
 		setInitialClassState();
+		const elemHtmlClasses = document.documentElement.classList;
+		$modeCurrent = elemHtmlClasses.contains('dark') ? false : true;
 	});
 </script>
 
@@ -64,3 +66,13 @@
 	<slot />
 </AppShell>
 <ContextMenu />
+
+<!-- Global -->
+
+<svg width="0" height="0">
+	<defs>
+		<clipPath id="myCurve" clipPathUnits="objectBoundingBox">
+			<path d="M 0,1 L 0,0 L 1,0 L 1,1 C .6 .8, .4, 1.2, 0 1 Z" />
+		</clipPath>
+	</defs>
+</svg>

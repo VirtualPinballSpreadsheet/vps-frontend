@@ -12,7 +12,7 @@
 	export let restrict = false;
 
 	let inputChip = '';
-	const id = nanoid();
+	const id = nanoid(10);
 
 	let el: Element;
 
@@ -26,7 +26,7 @@
 <div use:popup={popupSettings} bind:this={el} class="w-full">
 	<InputChip
 		bind:input={inputChip}
-		bind:value
+		value={value || []}
 		name="chips"
 		{placeholder}
 		chips="variant-filled-primary"
@@ -40,8 +40,9 @@
 		<Autocomplete
 			bind:input={inputChip}
 			{options}
-			denylist={value}
+			denylist={value || []}
 			on:selection={(e) => {
+				if (!Array.isArray(value)) value = [];
 				value.push(e.detail.value);
 				value = value;
 				inputChip = '';

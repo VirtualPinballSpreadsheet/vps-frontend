@@ -3,7 +3,7 @@
 	import { nanoid } from 'nanoid';
 	export let content = '';
 
-	const id = nanoid();
+	const id = nanoid(10);
 	const popupHover: PopupSettings = {
 		event: 'hover',
 		target: id,

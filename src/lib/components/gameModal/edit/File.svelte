@@ -49,14 +49,24 @@
 	<div class="label">
 		<span>Authors</span>
 		<AutoCompleteChips
-			value={file.authors || []}
+			value={file.authors}
 			options={$author.options}
-			on:change={() => (file.updatedAt = new Date().getTime())}
+			on:change={(v) => {
+				file.updatedAt = new Date().getTime();
+				file.authors = v.detail;
+			}}
 		/>
 	</div>
-	<UrlInputs urls={file.urls || []} on:blur={() => (file.updatedAt = new Date().getTime())} />
+	<UrlInputs
+		urls={file.urls}
+		on:blur={(v) => {
+			file.updatedAt = new Date().getTime();
+			file.urls = v.detail;
+		}}
+	/>
 	<div class="flex gap-4">
 		<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
 		<IdTag id={file.id} />
 	</div>
+	{JSON.stringify(file)}
 </div>

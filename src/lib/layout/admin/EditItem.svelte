@@ -18,7 +18,7 @@
 
 	$: changes = game ? flattenChangeset(diff(game, edit.data)) : undefined;
 
-	const id = nanoid();
+	const id = nanoid(10);
 	const popupHover: PopupSettings = {
 		event: 'click',
 		target: id,

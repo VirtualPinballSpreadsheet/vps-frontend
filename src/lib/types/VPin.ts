@@ -74,6 +74,7 @@ export interface TableFile extends FileUpload {
 	theme?: string[];
 	comment?: string;
 	gameFileName?: string;
+	edition?: string;
 	romId?: string;
 }
 

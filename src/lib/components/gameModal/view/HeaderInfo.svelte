@@ -4,7 +4,7 @@
 	import { nanoid } from 'nanoid';
 	import { popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import Fa from 'svelte-fa';
-	const id = nanoid();
+	const id = nanoid(10);
 
 	export let title = '???';
 

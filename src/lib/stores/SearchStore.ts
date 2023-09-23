@@ -99,10 +99,12 @@ const debouncedQuery = derived<Writable<string>, string>(query, ($q, set) => {
 });
 
 const isSearchActive = derived(
-	[debouncedQuery, players, manufacturer, features, author, theme],
-	([q, players, manufacturer, features, theme, author]) => {
+	[debouncedQuery, players, manufacturer, features, author, theme, filterActive],
+	([q, players, manufacturer, features, theme, author, filterActive]) => {
 		return (
-			q || players.active || manufacturer.active || features.active || theme.active || author.active
+			q ||
+			(filterActive &&
+				(players.active || manufacturer.active || features.active || theme.active || author.active))
 		);
 	}
 );
@@ -225,6 +227,11 @@ const modeSearchResults = derived(
 	}
 );
 
+const resetFilters = () => {
+	query.set('');
+	filterActive.set(false);
+};
+
 // FILTERS
 const genericFilter = (arr: FileUpload[] | Game[], filter: (game: Game) => boolean) => {
 	if ((arr[0] as FileUpload).game) {
@@ -311,6 +318,7 @@ const featureFilterStore = derived(
 const finalResultsStore = featureFilterStore;
 
 export const Search = {
+	resetFilters,
 	sortedDbStore,
 	sortedFilesStore,
 	finalResultsStore,

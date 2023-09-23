@@ -8,7 +8,7 @@
 	const { editStore } = Edit;
 
 	const addNewGame = () => {
-		const id = nanoid();
+		const id = nanoid(10);
 		$editStore.cache = {
 			id,
 			action: 'CREATE',

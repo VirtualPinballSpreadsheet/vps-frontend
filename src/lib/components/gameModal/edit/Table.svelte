@@ -54,6 +54,17 @@
 				on:blur={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</label>
+		<label class="label">
+			<span>Edition</span>
+			<input
+				class="input"
+				type="text"
+				title="Edition"
+				bind:value={file.edition}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
+			<span class="opacity-60">Optional tag like "B&W"</span>
+		</label>
 
 		<div class="flex gap-4">
 			<label class="label flex-1">

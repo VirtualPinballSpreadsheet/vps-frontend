@@ -13,10 +13,6 @@
 	const { editStore } = Edit;
 
 	export let game = EmptyGame;
-
-	let onEdit = () => {
-		$editStore.cache = { id: game?.id, action: 'UPDATE', data: JSON.parse(JSON.stringify(game)) };
-	};
 </script>
 
 <div class="flex gap-4 md:gap-8 flex-col md:flex-row">
@@ -42,7 +38,13 @@
 					<a
 						href="?edit=true"
 						class="chip variant-soft-primary hover:variant-filled-primary gap-2 flex-1"
-						on:click={onEdit}><Fa icon={faEdit} />Edit</a
+						on:click={() => {
+							$editStore.cache = {
+								id: game?.id,
+								action: 'UPDATE',
+								data: JSON.parse(JSON.stringify(game))
+							};
+						}}><Fa icon={faEdit} />Edit</a
 					>
 				{/if}
 			</div>

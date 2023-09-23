@@ -69,7 +69,6 @@ export const transformPopper = (tables: TableFile[], options: NameOptions) => {
 		res.push({
 			GameFileName: table.gameFileName || GameFileName,
 			GameName,
-			MediaSearch: GameName,
 			Manufact: game.manufacturer || '',
 			GameYear: game.year?.toString() || '',
 			NumPlayers: game.players?.toString() || '',
@@ -142,7 +141,6 @@ export const sanitizeFilename = (input: string) => {
 export const popperHeader = [
 	'GameFileName',
 	'GameName',
-	'MediaSearch',
 	'Manufact',
 	'GameYear',
 	'NumPlayers',

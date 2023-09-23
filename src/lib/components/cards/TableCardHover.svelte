@@ -7,6 +7,11 @@
 	import { FastAverageColor } from 'fast-average-color';
 	import { modeCurrent } from '@skeletonlabs/skeleton';
 	import FeatureBlock from '../FeatureBlock.svelte';
+	import { User } from '$lib/stores/UserStore';
+	import { Edit } from '$lib/stores/EditStore';
+	import { faEdit } from '@fortawesome/free-solid-svg-icons';
+	import Fa from 'svelte-fa';
+	import EditButton from '../EditButton.svelte';
 	const { dbStore } = DB;
 
 	export let table = EmptyTableFile;
@@ -59,6 +64,8 @@
 			}
 		};
 	};
+
+	$: console.log($modeCurrent);
 </script>
 
 <div
@@ -96,6 +103,7 @@
 				<div class="badge badge-glass my-auto py-0.5 px-1">
 					{table.tableFormat}
 				</div>
+				<EditButton {game} />
 			</div>
 
 			<div class="flex gap-1 text-center">

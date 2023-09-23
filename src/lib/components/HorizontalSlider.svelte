@@ -17,6 +17,8 @@
 	let scroller: Element;
 	let page = 0;
 	let blocked = false;
+	let hovered = false;
+	let timeout = 0;
 
 	$: count = Math.ceil(scrollerWidth / size);
 	$: _size = scrollerWidth / count < size ? count : count + 1;
@@ -42,6 +44,16 @@
 		el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		page = i;
 		setTimeout(() => (blocked = false), 1000);
+	};
+
+	const onMouseEnter = () => {
+		clearTimeout(timeout);
+		hovered = true;
+	};
+	const onMouseLeave = () => {
+		timeout = setTimeout(() => {
+			hovered = false;
+		}, 100);
 	};
 </script>
 
@@ -91,6 +103,7 @@
 				? gap / 2
 				: gap}rem;"
 			class="scroller grid grid-flow-col overflow-x-scroll md:overflow-x-hidden w-full hide-scrollbar"
+			class:hovered
 		>
 			{#each pages as _, i}
 				{@const items = data.slice(i * _size, (i + 1) * _size)}
@@ -100,7 +113,9 @@
 					id={title + i}
 				>
 					{#each items as d}
-						<svelte:component this={component} {...d} />
+						<div on:mouseenter={onMouseEnter} on:mouseleave={onMouseLeave}>
+							<svelte:component this={component} {...d} />
+						</div>
 					{/each}
 					{#if items.length < _size}
 						{#each new Array(_size - items.length).fill('') as d}
@@ -155,5 +170,12 @@
 
 	.wrapper:hover .dots {
 		opacity: 1;
+	}
+
+	.hovered {
+		margin-top: -30rem;
+		margin-bottom: -30rem;
+		padding-top: 31rem !important;
+		padding-bottom: 31rem !important;
 	}
 </style>

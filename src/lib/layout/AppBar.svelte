@@ -8,7 +8,7 @@
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import Navigation from './Navigation.svelte';
 
-	const { query, mode, filterActive } = Search;
+	const { query, mode, filterActive, resetFilters } = Search;
 
 	const modes = Object.entries(modeMapping);
 	const drawerStore = getDrawerStore();
@@ -30,7 +30,11 @@
 				</span>
 			</button>
 
-			<a href="/" class="hidden md:flex ml-4 rounded-full logo transition-shadow">
+			<a
+				href="/"
+				on:click={resetFilters}
+				class="hidden md:flex ml-4 rounded-full logo transition-shadow"
+			>
 				<img src={Logo} alt="VPS" width="36px" />
 			</a>
 		</div>

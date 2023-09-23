@@ -4,14 +4,16 @@
 	import { Edit } from '$lib/stores/EditStore';
 	import { ProgressRadial, getToastStore } from '@skeletonlabs/skeleton';
 	import EditItem from './EditItem.svelte';
+	import { User } from '$lib/stores/UserStore';
 	const toastStore = getToastStore();
 	const { editStore, submitChanges } = Edit;
-
+	const { updateDb } = User;
 	let loading = false;
 
 	const onSubmit = async () => {
 		loading = true;
 		const res = await submitChanges();
+		await updateDb();
 		toastStore.trigger({
 			message: `${res.uploaded.length} changes submitted. ${res.notUploaded.length} changes not submitted.`,
 			background: 'variant-filled-success'
