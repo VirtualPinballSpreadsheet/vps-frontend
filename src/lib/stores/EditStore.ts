@@ -50,6 +50,7 @@ const submitChanges = async () => {
 		$editStore.edits = $editStore.edits.filter((e) => !uploaded.includes(e.id));
 		return $editStore;
 	});
+
 	return { uploaded, notUploaded: edits.filter((e) => !uploaded.includes(e.id)).map((e) => e.id) };
 };
 

@@ -4,10 +4,10 @@
 	import { DB } from '$lib/stores/DbStore';
 	import { User } from '$lib/stores/UserStore';
 	import { faRefresh } from '@fortawesome/free-solid-svg-icons';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+	import { Accordion, AccordionItem, ProgressRadial } from '@skeletonlabs/skeleton';
 	import Fa from 'svelte-fa';
 	const { lastUpdated } = DB;
-	const { unpublishedChanges } = User;
+	const { unpublishedChanges, pipelineState } = User;
 
 	let loading = false;
 
@@ -20,39 +20,66 @@
 	const onRefresh = async () => {
 		loading = true;
 		await User.getUnpublishedChanges();
+		await User.getPipelineState();
 		loading = false;
 	};
 </script>
 
-<div class="flex flex-col">
-	<HelpIcon>
-		<h4 class="h4">Update DB</h4>
-		<p slot="help">
-			Publish the current state of the database. All unpublished changes will then be bundled to
-			build a new databse. If it fails, just run in again, nothing is lost. Don't overdo it though.
-			Don't wanna stress github too much.
-		</p>
-	</HelpIcon>
+<Accordion>
+	<AccordionItem>
+		<svelte:fragment slot="summary">DB Debug</svelte:fragment>
+		<svelte:fragment slot="content">
+			<div class="flex flex-col">
+				<p class="flex gap-2 items-center pt-2">
+					{$unpublishedChanges.length} unpublished
+					<button class="hover:text-primary-500" on:click={onRefresh}
+						><Fa icon={faRefresh} /></button
+					>
+				</p>
 
-	<p class="flex gap-2 my-2 items-center">
-		{$unpublishedChanges.length} unpublished
-		<button class="hover:text-primary-500" on:click={onRefresh}><Fa icon={faRefresh} /></button>
-	</p>
-	<p class="opacity-60">Last updated</p>
-	<b>
-		{formatDateTime($lastUpdated)}
-	</b>
+				<div class="flex gap-2 items-center py-2">
+					<HelpIcon>
+						Pipeline {$pipelineState ? 'running' : 'idle'}
+						<div
+							class="div rounded-full w-3 h-3"
+							class:bg-neutral-600={!$pipelineState}
+							class:bg-yellow-600={$pipelineState}
+						/>
+						<p slot="help">
+							If the pipline is running, please let it finish. It is updating the database and
+							retriggering it will only make it take longer. If it is idle and you changes are not
+							integrated yet, you can manually run it again.
+						</p>
+					</HelpIcon>
+				</div>
+				{#if $unpublishedChanges.length}
+					<div class="flex flex-col gap-2 pb-6 pt-2">
+						{#each $unpublishedChanges as change}
+							<div class="rounded p-1 text-xs bg-primary-900">
+								<p>{change.author}</p>
+								<p>{formatDateTime(change.updatedAt)}</p>
+							</div>
+						{/each}
+					</div>
+				{/if}
+				<p class="opacity-60">Last updated</p>
+				<b>
+					{formatDateTime($lastUpdated)}
+				</b>
 
-	<button class="btn variant-filled-primary mt-4" disabled={loading} on:click={onUpdate}>
-		{#if loading}
-			<ProgressRadial
-				stroke={60}
-				meter="stroke-secondary-500"
-				track="stroke-secondary-500/30"
-				width="w-6"
-			/>
-		{:else}
-			Update DB
-		{/if}
-	</button>
-</div>
+				<button class="btn variant-filled-primary mt-4" disabled={loading} on:click={onUpdate}>
+					{#if loading}
+						<ProgressRadial
+							stroke={60}
+							meter="stroke-secondary-500"
+							track="stroke-secondary-500/30"
+							width="w-6"
+						/>
+					{:else}
+						Update DB
+					{/if}
+				</button>
+			</div></svelte:fragment
+		>
+	</AccordionItem>
+</Accordion>

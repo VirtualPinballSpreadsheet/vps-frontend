@@ -9,6 +9,7 @@ import { DB } from './DbStore';
 
 const userStore: Writable<UserStore> = localStorageStore('user', {});
 const unpublishedChanges = writable<{ author: string; id: string; updatedAt: string }[]>([]);
+const pipelineState = writable<boolean>(false);
 
 let octokit: any;
 
@@ -157,6 +158,7 @@ const updateDb = async () => {
 			content: JSON.stringify(new Date().getTime()),
 			message: `UPDATE DB`
 		});
+		await getPipelineState();
 		return true;
 	} catch (e) {
 		console.error(e);
@@ -167,10 +169,11 @@ const updateDb = async () => {
 const getUnpublishedChanges = async () => {
 	try {
 		await DB.fetchDb();
+		const lastUpdated = get(DB.lastUpdated);
+		// + 1 second to avaid sametimestamps
+		const dateString = new Date(lastUpdated + 1000).toISOString();
 		const res = await fetch(
-			`https://api.github.com/repos/${DB_OWNER}/${DB_REPO}/commits?sha=${DB_STAGING_BRANCH}&since=${new Date(
-				get(DB.lastUpdated)
-			)}`
+			`https://api.github.com/repos/${DB_OWNER}/${DB_REPO}/commits?sha=${DB_STAGING_BRANCH}&since=${dateString}`
 		);
 		let commits: any[] = await res.json();
 		commits = commits
@@ -181,6 +184,21 @@ const getUnpublishedChanges = async () => {
 				updatedAt: c?.commit?.author?.date
 			}));
 		unpublishedChanges.set(commits);
+	} catch (e) {}
+};
+
+const getPipelineState = async () => {
+	try {
+		const resS = await fetch(
+			'https://api.github.com/repos/VirtualPinballSpreadsheet/vps-db/actions/runs?status=in_progress'
+		);
+		const dataS = await resS.json();
+		const resQ = await fetch(
+			'https://api.github.com/repos/VirtualPinballSpreadsheet/vps-db/actions/runs?status=queued'
+		);
+		const dataQ = await resQ.json();
+		debugger;
+		pipelineState.set(dataS.total_count > 0 || dataQ.total_count > 0);
 	} catch (e) {}
 };
 
@@ -201,8 +219,10 @@ export const User = {
 	uploadGameFile,
 	updateDb,
 	getUnpublishedChanges,
+	getPipelineState,
 	userStore,
-	unpublishedChanges
+	unpublishedChanges,
+	pipelineState
 };
 
 // HELPER

@@ -4,6 +4,7 @@
 	import Header from './Header.svelte';
 	import FileSection from './FileSection.svelte';
 	import Table from './Table.svelte';
+	import Tutorials from './Tutorials.svelte';
 	import B2s from './B2s.svelte';
 	import File from './File.svelte';
 	import { Edit } from '$lib/stores/EditStore';
@@ -22,11 +23,13 @@
 </script>
 
 {#if cache && loaded}
-	<Header game={cache} />
+	<Header bind:game={cache} />
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="Tables" bind:files={cache.tableFiles} component={Table} />
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="Backglasses" bind:files={cache.b2sFiles} component={B2s} />
+	<hr class="-mx-2 md:-mx-8" />
+	<FileSection title="Tutorials" bind:files={cache.tutorialFiles} component={Tutorials} />
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="Roms" bind:files={cache.romFiles} component={File} />
 	<hr class="-mx-2 md:-mx-8" />

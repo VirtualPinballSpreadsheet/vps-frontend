@@ -45,11 +45,13 @@ const getGameImage = (id: string) => {
 
 const fetchLastUpdatedDb = async () => {
 	try {
-		const res = await fetch(
-			'https://api.github.com/repos/VirtualPinballSpreadsheet/vps-db/commits?path=db/vpsdb.json&per_page=1'
-		);
-		const resJson = await res.json();
-		const date = resJson[0].commit.author.date;
+		// const res = await fetch(
+		// 	'https://api.github.com/repos/VirtualPinballSpreadsheet/vps-db/commits?path=db/vpsdb.json&per_page=1'
+		// );
+		// const resJson = await res.json();
+		// const date = resJson[0].commit.author.date;
+		const res = await fetch('https://virtualpinballspreadsheet.github.io/vps-db/lastUpdated.json');
+		const date = await res.json();
 		return new Date(date).getTime();
 	} catch (e) {
 		return 0;

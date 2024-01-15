@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { EmptyGame, type Game } from '$lib/types/VPin';
 	import HeaderInfo from './HeaderInfo.svelte';
+	import Tutorials from './Tutorials.svelte';
 	import Backglasses from './Backglasses.svelte';
 	import Tables from './Tables.svelte';
 	import Header from './Header.svelte';
@@ -11,10 +12,10 @@
 
 <Header {game} />
 <hr class=" -mx-2 md:-mx-8" />
-
 <Tables tables={game.tableFiles} gameId={game.id} />
 <hr class=" -mx-2 md:-mx-8" />
 <Backglasses b2ss={game.b2sFiles} gameId={game.id} />
+<Tutorials tutorials={game.tutorialFiles} gameId={game.id} />
 <FileList files={game.romFiles} gameId={game.id} fileType="romFiles">
 	<HeaderInfo title="Roms">
 		<div class="w-60">
@@ -44,3 +45,4 @@
 	gameId={game.id}
 	fileType="mediaPackFiles"
 />
+<FileList files={game.ruleFiles} title="Rules" gameId={game.id} fileType="ruleFiles" />

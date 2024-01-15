@@ -7,13 +7,14 @@ export interface Game {
 	name: string;
 	year: number;
 	manufacturer: string;
+	youtubeId?: string;
 	MPU?: string;
 	theme?: string[];
 	players?: number;
 	designers?: string[];
 	ipdbUrl?: string;
 	features?: string[];
-	type?: 'EM' | 'SS' | 'PM';
+	type?: 'EM' | 'SS' | 'PM' | 'DG';
 	updatedAt: number;
 	lastCreatedAt?: number;
 	broken?: boolean;
@@ -29,6 +30,7 @@ export interface Game {
 	mediaPackFiles?: MediaPackFile[];
 	soundFiles?: SoundFile[];
 	ruleFiles?: RuleFile[];
+	tutorialFiles?: TutorialFile[];
 	imgUrl?: string;
 }
 
@@ -69,7 +71,7 @@ export interface FileUrl {
 }
 
 export interface TableFile extends FileUpload {
-	tableFormat: 'VPX' | 'VP9' | 'PM5' | 'FX3' | 'FX2' | 'FX' | 'FP';
+	tableFormat: 'VPX' | 'VP9' | 'PM5' | 'FX3' | 'FX2' | 'FX' | 'FP' | 'M';
 	features?: TableFeature[];
 	theme?: string[];
 	comment?: string;
@@ -84,9 +86,15 @@ export interface B2SFile extends FileUpload {
 }
 export interface RomFile extends FileUpload {
 	colored?: boolean;
+	fileName?: string;
+	comment?: string;
 }
 export interface AltColorFile extends FileUpload {
 	romName?: string;
+	comment?: string;
+	fileName?: string;
+	filder?: string;
+	type?: string;
 }
 
 export interface POVFile extends FileUpload {}
@@ -108,6 +116,15 @@ export interface MediaPackFile extends FileUpload {}
 export interface SoundFile extends FileUpload {}
 
 export type TableFeature = (typeof TableFeatures)[number];
+
+export interface TutorialFile {
+	authors: string[];
+	updatedAt: number;
+	createdAt?: number;
+	id: string;
+	title: string;
+	youtubeId: string;
+}
 
 export const TableFeatures = [
 	'Hybrid',
@@ -161,6 +178,13 @@ export const EmptyB2sFile: B2SFile = {
 	id: '',
 	updatedAt: 0,
 	urls: []
+};
+export const EmptyTutorialFile: TutorialFile = {
+	authors: [],
+	id: '',
+	updatedAt: 0,
+	title: '',
+	youtubeId: 'dQw4w9WgXcQ'
 };
 
 export const EmptyFile: FileUpload = {

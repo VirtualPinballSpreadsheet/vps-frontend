@@ -81,11 +81,11 @@
 	<div class="flex w-full flex-col md:flex-row gap-4">
 		<div class="label flex flex-col flex-1">
 			<span>Designers</span>
-			<AutoCompleteChips options={$designers.options} value={game.designers || []} />
+			<AutoCompleteChips options={$designers.options} bind:value={game.designers} />
 		</div>
 		<div class="label flex flex-col flex-1">
 			<span>Theme</span>
-			<AutoCompleteChips options={$theme.options} value={game.theme || []} />
+			<AutoCompleteChips options={$theme.options} bind:value={game.theme} />
 		</div>
 	</div>
 </div>
