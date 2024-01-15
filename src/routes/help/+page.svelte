@@ -11,8 +11,8 @@
 	</p>
 	<h1 class="text-4xl font-bold pt-8">Search</h1>
 	<p>
-		Use the search to find what you are looking for! On the right side of the searchbar, you can
-		change what type of file you are looking for.
+		Use the search to find stuff! On the right side of the searchbar, you can change what type of
+		file you are looking for.
 	</p>
 	<h1 class="text-xl font-bold pt-4">Filter</h1>
 	<p>
@@ -71,6 +71,8 @@
 		The site is written in svelte and hosted on github pages. The "backend" is one big json file
 		that is generated via a github action.
 	</p>
+	<code>https://github.com/VirtualPinballSpreadsheet/vps-frontend</code>
+	<code>https://github.com/VirtualPinballSpreadsheet/vps-db</code>
 	<p>
 		The goal for this architecture was to be completely free and untied to anybody in particular. We
 		might not be around forever in the scene and it would be shame to let the project die because
