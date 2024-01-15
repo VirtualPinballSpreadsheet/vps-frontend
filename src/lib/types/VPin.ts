@@ -46,7 +46,8 @@ export const fileTypes = [
 	'topperFiles',
 	'mediaPackFiles',
 	'soundFiles',
-	'ruleFiles'
+	'ruleFiles',
+	'tutorialFiles'
 ] as const;
 
 export interface FileUpload {
