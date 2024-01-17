@@ -26,7 +26,12 @@
 	</HeaderInfo>
 </FileList>
 <FileList files={game.pupPackFiles} title="PuP Packs" gameId={game.id} fileType="pupPackFiles" />
-<FileList files={game.altColorFiles} title="Alt. Color" gameId={game.id} fileType="altColorFiles" />
+<FileList
+	files={game.altColorFiles}
+	title="Colored Roms"
+	gameId={game.id}
+	fileType="altColorFiles"
+/>
 <FileList files={game.altSoundFiles} title="Alt. Sound" gameId={game.id} fileType="altSoundFiles" />
 <FileList files={game.povFiles} gameId={game.id} fileType="povFiles">
 	<HeaderInfo title="POV">

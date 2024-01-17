@@ -35,7 +35,7 @@
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="PuP Packs" bind:files={cache.pupPackFiles} component={File} />
 	<hr class="-mx-2 md:-mx-8" />
-	<FileSection title="Alt. Color" bind:files={cache.altColorFiles} component={File} />
+	<FileSection title="Colored Roms" bind:files={cache.altColorFiles} component={File} />
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="Alt. Sound" bind:files={cache.altSoundFiles} component={File} />
 	<hr class="-mx-2 md:-mx-8" />

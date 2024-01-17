@@ -17,7 +17,7 @@
 	};
 </script>
 
-<AppBar padding="py-4 px-0 pl-2">
+<AppBar padding="py-2 md:py-4 px-0 pl-2">
 	<svelte:fragment slot="lead">
 		<div class="flex items-center">
 			<button class="lg:hidden btn btn-sm" on:click={onOpenDrawer}>
@@ -39,7 +39,7 @@
 			</a>
 		</div>
 	</svelte:fragment>
-	<div class="md:px-4 flex items-center gap-4 text-xs md:text-sm">
+	<div class="p-0 md:px-4 flex items-center gap-4 text-xs md:text-sm">
 		<div class="input-group input-group-divider grid-cols-[1fr_auto] md:grid-cols-[auto_1fr_auto]">
 			<div class="input-group-shim !hidden md:!flex"><Fa icon={faSearch} /></div>
 			<input type="search" placeholder="Search..." bind:value={$query} />
@@ -51,7 +51,7 @@
 		</div>
 
 		<button
-			class="hidden md:flex btn hover:variant-soft-primary btn-icon"
+			class="flex btn hover:variant-soft-primary btn-icon"
 			class:variant-filled-primary={$filterActive}
 			on:click={() => ($filterActive = !$filterActive)}
 		>

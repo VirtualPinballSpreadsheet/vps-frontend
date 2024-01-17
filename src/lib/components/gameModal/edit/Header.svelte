@@ -36,6 +36,7 @@
 						<RadioItem bind:group={game.type} name="justify" value="EM">EM</RadioItem>
 						<RadioItem bind:group={game.type} name="justify" value="SS">SS</RadioItem>
 						<RadioItem bind:group={game.type} name="justify" value="PM">PM</RadioItem>
+						<RadioItem bind:group={game.type} name="justify" value="DG">DG</RadioItem>
 					</RadioGroup>
 				</div>
 			</div>

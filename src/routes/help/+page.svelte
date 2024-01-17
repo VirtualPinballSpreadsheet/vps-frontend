@@ -35,7 +35,7 @@
 	<p>The "Format Name" options let you adjust the generated tablesnames to a desired format.</p>
 	<h1 class="text-xl font-bold pt-4">Bookmarks</h1>
 	<p>
-		Maybe you are setting up a new library and want to brwose through all of VPS. Maybe you want to
+		Maybe you are setting up a new library and want to browse through all of VPS. Maybe you want to
 		remember a couple of files to download them later. That is what bookmarks are for.
 	</p>
 	<p>
@@ -57,6 +57,15 @@
 	</p>
 	<code>https://virtualpinballspreadsheet.github.io/vps-db/lastUpdated.json</code>
 	<p>If your version is outdated, you might fetch the latest.</p>
+	<h1 class="text-4xl font-bold pt-8">Contact</h1>
+	<p>
+		You can find us in <a class="text-primary-400 font-bold" href="https://discord.gg/WRhR5v59"
+			>Discord</a
+		>
+		in the VPS channel or on
+		<a class="text-primary-400 font-bold" href="https://www.facebook.com/VPSheet">Facebook</a>. Feel
+		free to contact us if you have troubles or an idea!
+	</p>
 	<h1 class="text-4xl font-bold pt-8">Contribute</h1>
 	<p>
 		If you want to contribute to either the content of the site or actual coding, feel free to
@@ -76,9 +85,9 @@
 	<p>
 		The goal for this architecture was to be completely free and untied to anybody in particular. We
 		might not be around forever in the scene and it would be shame to let the project die because
-		one of us could not maintain it anymore. This software stack runs completely free and is
-		completely transferable, no personal accounts or credit cards involved. There were lots of
-		challanges that could have been prevented easily with a proper backend. This way though the site
-		can continue to run until github closes its doors.
+		one of us could not maintain it anymore (as seen before in the VPin scene...). This software
+		stack runs completely free and is completely transferable, no personal accounts or credit cards
+		involved. There were lots of challanges that could have been prevented easily with a proper
+		backend. This way though the site can continue to run until github closes its doors.
 	</p>
 </div>

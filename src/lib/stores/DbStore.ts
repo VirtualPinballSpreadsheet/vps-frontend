@@ -4,29 +4,29 @@ import { DB_URL } from '../../env';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 
 const dbStore = writable<Database>({});
-const dbStoreCache = localStorageStore<Database>('db', {});
+// const dbStoreCache = localStorageStore<Database>('db', {});
 const lastUpdated = localStorageStore<number>('lastUpdatedDb', 0);
 
 const fetchDb = async () => {
 	try {
 		const _lu = await fetchLastUpdatedDb();
-		let data;
-		let _db: Database = {};
+		// let data;
+		const _db: Database = {};
 
-		if (_lu == get(lastUpdated)) {
-			// No update and already have db;
-			if (Object.keys(get(dbStore)).length > 0) return;
-			_db = get(dbStoreCache);
-		} else {
-			const res = await fetch(DB_URL);
-			data = await res.json();
+		// if (_lu == get(lastUpdated)) {
+		// 	// No update and already have db;
+		// 	if (Object.keys(get(dbStore)).length > 0) return;
+		// 	_db = get(dbStoreCache);
+		// } else {
+		const res = await fetch(DB_URL);
+		const data = await res.json();
 
-			data.forEach((d: Game) => {
-				const id = d.id;
-				_db[id] = d;
-			});
-			dbStoreCache.set(_db);
-		}
+		data.forEach((d: Game) => {
+			const id = d.id;
+			_db[id] = d;
+		});
+		// dbStoreCache.set(_db);
+		// }
 		lastUpdated.set(_lu);
 		dbStore.set(_db);
 	} catch (e) {

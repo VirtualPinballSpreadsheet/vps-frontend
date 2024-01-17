@@ -6,7 +6,7 @@
 </script>
 
 <div class="p-4 flex">
-	<div class="p-4 card w-full border-primary-600 border flex gap-4">
+	<div class="p-4 card w-full border-primary-600 border flex flex-col md:flex-row gap-4">
 		<FilterChips store={features} title="Features" />
 		<FilterChips store={author} title="Author" />
 		<FilterChips store={manufacturer} title="Manufacturer" />

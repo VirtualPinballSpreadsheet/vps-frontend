@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { EmptyTutorialFile } from '$lib/types/VPin';
-	import Placeholder from '$lib/assets/img/bgPlaceholder.jpg';
 	import { formatDate } from '$lib/helper/formatDate';
 	import IdTag from '../IdTag.svelte';
 
@@ -16,13 +15,12 @@
 		class:glow={active}
 		class="card aspectTable"
 		width="352"
-		height="264"
 		src={`https://www.youtube.com/embed/${file.youtubeId}`}
 		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 		allowFullScreen
 	/>
 
-	<div class="flex flex-col py-4">
+	<a {href} class="flex flex-col py-4">
 		<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden leading-4">
 			{file.title}
 		</p>
@@ -36,7 +34,7 @@
 				{formatDate(file.updatedAt) || '???'}
 			</h4>
 		</div>
-	</div>
+	</a>
 </div>
 
 <style>

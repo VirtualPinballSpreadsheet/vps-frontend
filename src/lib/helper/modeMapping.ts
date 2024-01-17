@@ -2,6 +2,7 @@ import B2sCard from '$lib/components/cards/B2sCard.svelte';
 import FileCard from '$lib/components/cards/FileCard.svelte';
 import GameCard from '$lib/components/cards/GameCard.svelte';
 import TableCard from '$lib/components/cards/TableCard.svelte';
+import TutorialCardSmall from '$lib/components/cards/TutorialCardSmall.svelte';
 import type { Mode } from '$lib/types/Filter';
 import {
 	faBox,
@@ -29,7 +30,7 @@ export const modeMapping: {
 	tableFiles: { route: 'tables', name: 'Tables', component: TableCard },
 	b2sFiles: { route: 'b2s', name: 'Backglasses', component: B2sCard },
 	pupPackFiles: { route: 'puppacks', name: 'PuP Packs', component: FileCard, icon: faFilm },
-	altColorFiles: { route: 'altcolors', name: 'Alt. Colors', component: FileCard, icon: faBrush },
+	altColorFiles: { route: 'coloredroms', name: 'Colored Roms', component: FileCard, icon: faBrush },
 	altSoundFiles: { route: 'altsounds', name: 'Alt. Sounds', component: FileCard, icon: faMusic },
 	topperFiles: { route: 'toppers', name: 'Toppers', component: FileCard, icon: faBox },
 	romFiles: { route: 'roms', name: 'Roms', component: FileCard, icon: faSave },
@@ -38,5 +39,10 @@ export const modeMapping: {
 	mediaPackFiles: { route: 'mediapacks', name: 'Media Packs', component: FileCard, icon: faImage },
 	wheelArtFiles: { route: 'wheelart', name: 'Wheelart', component: FileCard, icon: faCircle },
 	ruleFiles: { route: 'rules', name: 'Rules', component: FileCard, icon: faFile },
-	tutorialFiles: { route: 'tutorials', name: 'Tutorials', component: FileCard, icon: faFile }
+	tutorialFiles: {
+		route: 'tutorials',
+		name: 'Tutorials',
+		component: TutorialCardSmall,
+		icon: faFile
+	}
 };
