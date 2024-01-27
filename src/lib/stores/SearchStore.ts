@@ -152,23 +152,33 @@ sortedDbStore.subscribe(($db) => {
 
 	features.update((state) => ({
 		...state,
-		options: Array.from(new Set(_features)).map((value) => ({ label: value, value }))
+		options: Array.from(new Set(_features))
+			.sort((a, b) => (a.trim() > b.trim() ? 1 : -1))
+			.map((value) => ({ label: value, value }))
 	}));
 	theme.update((state) => ({
 		...state,
-		options: Array.from(new Set(_theme)).map((value) => ({ label: value, value }))
+		options: Array.from(new Set(_theme))
+			.sort((a, b) => (a.trim() > b.trim() ? 1 : -1))
+			.map((value) => ({ label: value, value }))
 	}));
 	manufacturer.update((state) => ({
 		...state,
-		options: Array.from(new Set(_manufacturer)).map((value) => ({ label: value, value }))
+		options: Array.from(new Set(_manufacturer))
+			.sort((a, b) => (a.trim() > b.trim() ? 1 : -1))
+			.map((value) => ({ label: value, value }))
 	}));
 	designers.update((state) => ({
 		...state,
-		options: Array.from(new Set(_designers)).map((value) => ({ label: value, value }))
+		options: Array.from(new Set(_designers))
+			.sort((a, b) => (a.trim() > b.trim() ? 1 : -1))
+			.map((value) => ({ label: value, value }))
 	}));
 	author.update((state) => ({
 		...state,
-		options: Array.from(new Set(_authors)).map((value) => ({ label: value, value }))
+		options: Array.from(new Set(_authors))
+			.sort((a, b) => (a.trim() > b.trim() ? 1 : -1))
+			.map((value) => ({ label: value, value }))
 	}));
 });
 

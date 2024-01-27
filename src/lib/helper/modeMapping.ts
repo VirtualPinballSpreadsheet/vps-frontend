@@ -29,20 +29,20 @@ export const modeMapping: {
 	game: { route: 'games', name: 'Games', component: GameCard },
 	tableFiles: { route: 'tables', name: 'Tables', component: TableCard },
 	b2sFiles: { route: 'b2s', name: 'Backglasses', component: B2sCard },
-	pupPackFiles: { route: 'puppacks', name: 'PuP Packs', component: FileCard, icon: faFilm },
-	altColorFiles: { route: 'coloredroms', name: 'Colored Roms', component: FileCard, icon: faBrush },
-	altSoundFiles: { route: 'altsounds', name: 'Alt. Sounds', component: FileCard, icon: faMusic },
-	topperFiles: { route: 'toppers', name: 'Toppers', component: FileCard, icon: faBox },
-	romFiles: { route: 'roms', name: 'Roms', component: FileCard, icon: faSave },
-	povFiles: { route: 'pov', name: 'POVs', component: FileCard, icon: faCamera },
-	soundFiles: { route: 'sounds', name: 'Sounds', component: FileCard, icon: faVolumeControlPhone },
-	mediaPackFiles: { route: 'mediapacks', name: 'Media Packs', component: FileCard, icon: faImage },
-	wheelArtFiles: { route: 'wheelart', name: 'Wheelart', component: FileCard, icon: faCircle },
-	ruleFiles: { route: 'rules', name: 'Rules', component: FileCard, icon: faFile },
 	tutorialFiles: {
 		route: 'tutorials',
 		name: 'Tutorials',
 		component: TutorialCardSmall,
 		icon: faFile
-	}
+	},
+	pupPackFiles: { route: 'puppacks', name: 'PuP Packs', component: FileCard, icon: faFilm },
+	romFiles: { route: 'roms', name: 'Roms', component: FileCard, icon: faSave },
+	altColorFiles: { route: 'coloredroms', name: 'Colored Roms', component: FileCard, icon: faBrush },
+	altSoundFiles: { route: 'altsounds', name: 'Alt. Sounds', component: FileCard, icon: faMusic },
+	topperFiles: { route: 'toppers', name: 'Toppers', component: FileCard, icon: faBox },
+	povFiles: { route: 'pov', name: 'POVs', component: FileCard, icon: faCamera },
+	soundFiles: { route: 'sounds', name: 'Sounds', component: FileCard, icon: faVolumeControlPhone },
+	mediaPackFiles: { route: 'mediapacks', name: 'Media Packs', component: FileCard, icon: faImage },
+	wheelArtFiles: { route: 'wheelart', name: 'Wheelart', component: FileCard, icon: faCircle },
+	ruleFiles: { route: 'rules', name: 'Rules', component: FileCard, icon: faFile }
 };
