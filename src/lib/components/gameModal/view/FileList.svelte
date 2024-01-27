@@ -9,6 +9,7 @@
 	export let fileType: Mode;
 	export let gameId: string;
 	export let files: FileUpload[] = [];
+	$: _files = files.sort((a, b) => b.updatedAt - a.updatedAt);
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>
@@ -34,7 +35,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each files as file, i}
+					{#each _files as file, i}
 						<tr
 							id={file.id}
 							data-gameid={gameId}

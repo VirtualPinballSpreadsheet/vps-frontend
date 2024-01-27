@@ -8,6 +8,7 @@
 	import HeaderInfo from './HeaderInfo.svelte';
 
 	export let tables: TableFile[] = [];
+	$: _tables = tables.sort((a, b) => b.updatedAt - a.updatedAt);
 	export let gameId: string;
 
 	$: fileId = $page.url.searchParams.get('fileId');
@@ -27,13 +28,13 @@
 		</HeaderInfo>
 		{#if $mobile.mobile}
 			<div class="flex flex-col gap-6">
-				{#each tables as table}
+				{#each _tables as table}
 					<TableDetailCardMobile file={table} active={fileId === table.id} />
 				{/each}
 			</div>
 		{:else}
 			<div class="grid layout gap-y-10 gap-x-4">
-				{#each tables as table}
+				{#each _tables as table}
 					<TableDetailCard
 						file={table}
 						href={getUrl(table.urls)}

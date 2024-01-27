@@ -7,6 +7,7 @@
 
 	export let tutorials: TutorialFile[] = [];
 	export let gameId: string;
+	$: _tutorials = tutorials.sort((a, b) => b.updatedAt - a.updatedAt);
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>
@@ -17,13 +18,13 @@
 
 		{#if $mobile.mobile}
 			<div class="flex flex-col gap-6">
-				{#each tutorials as tutorial}
+				{#each _tutorials as tutorial}
 					<TutorialCard file={tutorial} active={fileId === tutorial.id} {gameId} />
 				{/each}
 			</div>
 		{:else}
 			<div class="grid layout gap-y-10 gap-x-4">
-				{#each tutorials as tutorial}
+				{#each _tutorials as tutorial}
 					<TutorialCard file={tutorial} active={fileId === tutorial.id} {gameId} />
 				{/each}
 			</div>

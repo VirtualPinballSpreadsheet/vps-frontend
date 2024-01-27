@@ -9,6 +9,7 @@
 
 	export let b2ss = [EmptyB2sFile];
 	export let gameId: string;
+	$: _b2ss = b2ss.sort((a, b) => b.updatedAt - a.updatedAt);
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>
@@ -28,13 +29,13 @@
 
 		{#if $mobile.mobile}
 			<div class="flex flex-col gap-6">
-				{#each b2ss as b2s}
+				{#each _b2ss as b2s}
 					<B2sDetailCardMobile file={b2s} href={getUrl(b2s.urls)} active={fileId === b2s.id} />
 				{/each}
 			</div>
 		{:else}
 			<div class="grid layout gap-y-10 gap-x-4">
-				{#each b2ss as b2s}
+				{#each _b2ss as b2s}
 					<B2sDetailCard file={b2s} href={getUrl(b2s.urls)} active={fileId === b2s.id} {gameId} />
 				{/each}
 			</div>
