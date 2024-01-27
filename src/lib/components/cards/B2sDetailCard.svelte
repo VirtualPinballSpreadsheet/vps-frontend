@@ -40,7 +40,7 @@
 	<div class="flex flex-col py-4">
 		<div class="flex gap-2">
 			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">
-				{file.authors?.join(', ')}
+				{file.authors?.join(', ') || 'Unknown author'}
 			</p>
 			{#each file.features || [] as feature}
 				<div class="badge badge-glass my-auto py-0.5 px-1">

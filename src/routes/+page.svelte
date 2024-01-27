@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import HorizontalSlider from '$lib/components/HorizontalSlider.svelte';
-	import B2sCard from '$lib/components/cards/B2sCard.svelte';
-	import FileCard from '$lib/components/cards/FileCard.svelte';
+
 	import TableCard from '$lib/components/cards/TableCard.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import { Search } from '$lib/stores/SearchStore';
 	import type {
@@ -42,13 +42,11 @@
 	/>
 
 	{#each Object.entries(modeMapping) as [key, val]}
-		{@const data = ($sortedFilesStore?.[key] || [])
-			.slice(0, slides)
-			.map((file) => ({
-				file,
-				href: `?game=${file.game?.id}&fileType=${key}&fileId=${file.id}`,
-				fileType: key
-			}))}
+		{@const data = ($sortedFilesStore?.[key] || []).slice(0, slides).map((file) => ({
+			file,
+			href: `?game=${file.game?.id}&fileType=${key}&fileId=${file.id}`,
+			fileType: key
+		}))}
 		{#if !['tableFiles', 'game'].includes(key)}
 			<HorizontalSlider
 				href="{base}/{val.route}/"
@@ -59,7 +57,7 @@
 			/>
 		{/if}
 	{/each}
-	<div class="h-96 bg-surface-600 -m-10" />
+	<Footer />
 </div>
 
 <style>

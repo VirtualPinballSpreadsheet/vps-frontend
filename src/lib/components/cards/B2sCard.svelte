@@ -27,7 +27,7 @@
 			<EditButton {file} />
 		</div>
 		<h4 class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
-			{file.authors?.join(', ')}
+			{file.authors?.join(', ') || ''}
 		</h4>
 	</div>
 </a>

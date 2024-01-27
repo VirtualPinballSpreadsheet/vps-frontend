@@ -19,7 +19,7 @@
 			<span class="font-bold">{file.game?.name || '???'} </span>
 			<div class="flex justify-between max-w-full">
 				<span class="opacity-60 whitespace-nowrap text-ellipsis overflow-hidden"
-					>{file.version}</span
+					>{file.version || ''}</span
 				>
 				<div class="flex-1" />
 				<div class="shrink-0">

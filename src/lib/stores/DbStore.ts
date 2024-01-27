@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import type { Database, Game } from '../types/VPin';
+import { EmptyGame, type Database, type Game } from '../types/VPin';
 import { DB_URL } from '../../env';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 
@@ -43,6 +43,27 @@ const getGameImage = (id: string) => {
 	if (game.tableFiles?.length && game.tableFiles[0].imgUrl) return game.tableFiles[0].imgUrl;
 };
 
+export const getGame = (id: string) => {
+	const $db = get(dbStore);
+	if ($db[id]) return $db[id];
+	let res = EmptyGame;
+	Object.values($db).forEach((g) => {
+		if (g.tableFiles?.some((t) => t.id === id)) res = g;
+		if (g.b2sFiles?.some((t) => t.id === id)) res = g;
+		if (g.romFiles?.some((t) => t.id === id)) res = g;
+		if (g.povFiles?.some((t) => t.id === id)) res = g;
+		if (g.altColorFiles?.some((t) => t.id === id)) res = g;
+		if (g.altSoundFiles?.some((t) => t.id === id)) res = g;
+		if (g.pupPackFiles?.some((t) => t.id === id)) res = g;
+		if (g.wheelArtFiles?.some((t) => t.id === id)) res = g;
+		if (g.mediaPackFiles?.some((t) => t.id === id)) res = g;
+		if (g.topperFiles?.some((t) => t.id === id)) res = g;
+		if (g.soundFiles?.some((t) => t.id === id)) res = g;
+		if (g.ruleFiles?.some((t) => t.id === id)) res = g;
+	});
+	return res;
+};
+
 const fetchLastUpdatedDb = async () => {
 	try {
 		// const res = await fetch(
@@ -61,6 +82,7 @@ const fetchLastUpdatedDb = async () => {
 export const DB = {
 	fetchDb,
 	getGameImage,
+	getGame,
 	lastUpdated,
 	dbStore
 };
