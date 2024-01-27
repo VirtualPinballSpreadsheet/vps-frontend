@@ -18,7 +18,7 @@ const fetchDb = async () => {
 		// 	if (Object.keys(get(dbStore)).length > 0) return;
 		// 	_db = get(dbStoreCache);
 		// } else {
-		const res = await fetch(DB_URL);
+		const res = await fetch(DB_URL + `?&ts=${new Date().getTime()}`);
 		const data = await res.json();
 
 		data.forEach((d: Game) => {
@@ -71,7 +71,9 @@ const fetchLastUpdatedDb = async () => {
 		// );
 		// const resJson = await res.json();
 		// const date = resJson[0].commit.author.date;
-		const res = await fetch('https://virtualpinballspreadsheet.github.io/vps-db/lastUpdated.json');
+		const res = await fetch(
+			`https://virtualpinballspreadsheet.github.io/vps-db/lastUpdated.json?&ts=${new Date().getTime()}`
+		);
 		const date = await res.json();
 		return new Date(date).getTime();
 	} catch (e) {

@@ -3,6 +3,7 @@
 	import { formatDateTime } from '$lib/helper/formatDate';
 	import { DB } from '$lib/stores/DbStore';
 	import { User } from '$lib/stores/UserStore';
+	import { faGithub } from '@fortawesome/free-brands-svg-icons';
 	import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 	import { Accordion, AccordionItem, ProgressRadial } from '@skeletonlabs/skeleton';
 	import Fa from 'svelte-fa';
@@ -66,7 +67,24 @@
 				<b>
 					{formatDateTime($lastUpdated)}
 				</b>
-
+				<div class="flex gap-2 pt-2">
+					<a
+						target="_blank"
+						class="chip variant-soft-tertiary hover:variant-filled-tertiary gap-2 flex-1"
+						href="https://github.com/VirtualPinballSpreadsheet/vps-db"
+					>
+						<Fa icon={faGithub} />
+						DB</a
+					>
+					<a
+						target="_blank"
+						class="chip variant-soft-tertiary hover:variant-filled-tertiary gap-2 flex-1"
+						href="https://github.com/VirtualPinballSpreadsheet/vps-frontend"
+					>
+						<Fa icon={faGithub} />
+						Svelte</a
+					>
+				</div>
 				<button class="btn variant-filled-primary mt-4" disabled={loading} on:click={onUpdate}>
 					{#if loading}
 						<ProgressRadial
