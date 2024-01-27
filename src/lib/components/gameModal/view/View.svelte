@@ -6,6 +6,7 @@
 	import Tables from './Tables.svelte';
 	import Header from './Header.svelte';
 	import FileList from './FileList.svelte';
+	import ColoredRomList from './ColoredRomList.svelte';
 
 	export let game: Game = EmptyGame;
 </script>
@@ -26,7 +27,7 @@
 	</HeaderInfo>
 </FileList>
 <FileList files={game.pupPackFiles} title="PuP Packs" gameId={game.id} fileType="pupPackFiles" />
-<FileList
+<ColoredRomList
 	files={game.altColorFiles}
 	title="Colored Roms"
 	gameId={game.id}

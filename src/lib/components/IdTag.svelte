@@ -7,7 +7,7 @@
 </script>
 
 <button
-	class="chip badge-glass py-0.5 px-1"
+	class="chip badge-glass py-0.5 px-1 cursor-pointer"
 	use:clipboard={id}
 	on:click={() => {
 		getToastStore().trigger({ message: `${id} copied to clipboard.` });

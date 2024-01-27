@@ -2,12 +2,13 @@
 	import { formatDate } from '$lib/helper/formatDate';
 	import { getBackglassUrl } from '$lib/helper/getBackglassUrl';
 	import { EmptyGame } from '$lib/types/VPin';
-	import { faEdit, faExternalLink } from '@fortawesome/free-solid-svg-icons';
+	import { faArrowLeft, faEdit, faExternalLink } from '@fortawesome/free-solid-svg-icons';
 	import { modeCurrent } from '@skeletonlabs/skeleton';
 	import Fa from 'svelte-fa';
 	import IdTag from '../../IdTag.svelte';
 	import { User } from '$lib/stores/UserStore';
 	import { Edit } from '$lib/stores/EditStore';
+	import { page } from '$app/stores';
 
 	const { userStore } = User;
 	const { editStore } = Edit;
@@ -16,6 +17,10 @@
 </script>
 
 <div class="flex gap-4 md:gap-8 flex-col md:flex-row">
+	<a
+		class="flex md:hidden chip variant-soft-secondary hover:variant-filled-secondary gap-2 flex-1"
+		href={$page.url.pathname}><Fa icon={faArrowLeft} />Back</a
+	>
 	<img
 		class="rounded-md aspectBG w-96"
 		src={game.imgUrl || getBackglassUrl(game)}

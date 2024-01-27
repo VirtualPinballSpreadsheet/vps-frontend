@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import LinkCard from '$lib/components/cards/LinkCard.svelte';
 	import { Links } from '$lib/stores/LinksStore';
 
@@ -24,4 +24,6 @@
 			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 		}
 	}
-</style>
+</style> -->
+
+<div class="p-10 text-md">Yea yea its still work in progress.... I know...</div>

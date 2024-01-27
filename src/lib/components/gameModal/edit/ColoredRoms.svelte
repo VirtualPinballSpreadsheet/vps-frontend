@@ -3,11 +3,11 @@
 	import IdTag from '$lib/components/IdTag.svelte';
 	import { formatDate, formatDateDashed } from '$lib/helper/formatDate';
 	import { Search } from '$lib/stores/SearchStore';
-	import type { FileUpload } from '$lib/types/VPin';
+	import type { AltColorFile } from '$lib/types/VPin';
 	import UrlInputs from './URLInputs.svelte';
 
 	const { author } = Search;
-	export let file: FileUpload;
+	export let file: AltColorFile;
 	export let onDelete = () => {};
 </script>
 
@@ -42,6 +42,38 @@
 				title="Created at"
 				value={formatDateDashed(file.createdAt || '')}
 				on:change={(e) => (file.createdAt = new Date(e.target.value).getTime())}
+			/>
+		</label>
+	</div>
+	<div class="flex gap-4 flex-col md:flex-row">
+		<label class="label flex-1">
+			<span>Type</span>
+			<input
+				class="input"
+				type="text"
+				title="Type"
+				bind:value={file.type}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
+		</label>
+		<label class="label flex-1">
+			<span>Filename</span>
+			<input
+				class="input"
+				type="text"
+				title="Filename"
+				bind:value={file.fileName}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
+			/>
+		</label>
+		<label class="label">
+			<span>Folder name</span>
+			<input
+				class="input"
+				type="text"
+				title="Version"
+				bind:value={file.folder}
+				on:blur={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</label>
 	</div>

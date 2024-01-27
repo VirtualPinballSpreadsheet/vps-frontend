@@ -91,7 +91,7 @@ export interface RomFile extends FileUpload {
 	comment?: string;
 }
 export interface AltColorFile extends FileUpload {
-	romName?: string;
+	fileName?: string;
 	comment?: string;
 	folder?: string;
 	type?: string;

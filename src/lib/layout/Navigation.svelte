@@ -30,8 +30,8 @@
 		Admin
 	</button>
 {/if}
-<a href="apps/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Apps </a>
-<a href="links/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Links </a>
+<!-- <a href="apps/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Apps </a>
+<a href="links/" class="btn btn-sm hover:variant-soft-primary" on:click={closeDrawer}> Links </a> -->
 <button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSettings}>
 	Tools <Fa icon={faChevronDown} class="ml-2" size="xs" />
 </button>

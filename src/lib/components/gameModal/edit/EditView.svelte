@@ -9,6 +9,7 @@
 	import File from './File.svelte';
 	import { Edit } from '$lib/stores/EditStore';
 	import { ProgressRadial, getModalStore } from '@skeletonlabs/skeleton';
+	import ColoredRoms from './ColoredRoms.svelte';
 	const modalStore = getModalStore();
 	const { saveEdit, editStore } = Edit;
 
@@ -35,7 +36,7 @@
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="PuP Packs" bind:files={cache.pupPackFiles} component={File} />
 	<hr class="-mx-2 md:-mx-8" />
-	<FileSection title="Colored Roms" bind:files={cache.altColorFiles} component={File} />
+	<FileSection title="Colored Roms" bind:files={cache.altColorFiles} component={ColoredRoms} />
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="Alt. Sound" bind:files={cache.altSoundFiles} component={File} />
 	<hr class="-mx-2 md:-mx-8" />
