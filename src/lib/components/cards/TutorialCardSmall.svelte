@@ -9,18 +9,17 @@
 	export let gameId: string;
 </script>
 
-<div class="flex flex-col" id={file.id} data-gameid={gameId} data-filetype="b2sFiles">
-	<iframe
+<a {href} class="flex flex-col" id={file.id} data-gameid={gameId} data-filetype="b2sFiles">
+	<img
+		alt={file.youtubeId}
 		title={file.title}
 		class:glow={active}
-		class="card aspectTable"
+		class="card aspectTable hover:brightness-125 hover:scale-110 transition-all"
 		width="352"
-		src={`https://www.youtube.com/embed/${file.youtubeId}`}
-		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-		allowFullScreen
+		src={`https://img.youtube.com/vi/${file.youtubeId}/0.jpg`}
 	/>
 
-	<a {href} class="flex flex-col py-4">
+	<div class="flex flex-col py-4">
 		<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden leading-4">
 			{file.title}
 		</p>
@@ -34,8 +33,8 @@
 				{formatDate(file.updatedAt) || '???'}
 			</h4>
 		</div>
-	</a>
-</div>
+	</div>
+</a>
 
 <style>
 	.aspectTable {
