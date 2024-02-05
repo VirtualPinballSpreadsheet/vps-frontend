@@ -6,12 +6,13 @@ export interface Tournament {
 	games: TournamentGame[];
 	vpin?: boolean;
 	comment?: string;
+	id: string;
+	scores: number[];
 }
 
 export interface TournamentGame {
 	gameId: string;
 	tableId?: string;
-	scores: { [player: string]: number };
 	points: { [player: string]: number };
 	balls: number;
 	comment?: string;

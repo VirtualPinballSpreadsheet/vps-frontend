@@ -2,6 +2,7 @@ import { localStorageStore } from '@skeletonlabs/skeleton';
 import { get, type Writable } from 'svelte/store';
 import type { GameEdit } from '$lib/types/EditVPin';
 import { User } from './UserStore';
+import { cleanupGame } from '$lib/helper/cleanupGame';
 
 const editStore: Writable<{ edits: GameEdit[]; cache?: GameEdit }> = localStorageStore('edits', {
 	edits: []
@@ -11,7 +12,8 @@ const saveEdit = () => {
 	editStore.update(($editStore) => {
 		const edit = $editStore.cache;
 		if (!edit) return $editStore;
-		edit.data.updatedAt = new Date().getTime();
+		edit.data = cleanupGame(edit.data);
+		// edit.data.updatedAt = new Date().getTime();
 		const i = $editStore.edits.findIndex((g) => g.id === edit.id);
 		if (i <= -1) {
 			$editStore.edits.push(edit);

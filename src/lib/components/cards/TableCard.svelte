@@ -40,7 +40,7 @@
 </script>
 
 <a
-	class="wrapper relative z-0"
+	class="wrapper relative z-0 inline-block max-w-full min-w-0 w-full"
 	{href}
 	on:mouseenter={onMouseEnter}
 	on:mouseleave={onMouseLeave}
@@ -119,7 +119,7 @@
 			</div>
 		</div>
 		<p>{game.manufacturer} ({game.year})</p>
-		<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full">
+		<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
 			{file.authors?.join(', ')}
 		</p>
 	</div>

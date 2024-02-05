@@ -7,7 +7,7 @@
 
 	export let tutorials: TutorialFile[] = [];
 	export let gameId: string;
-	$: _tutorials = tutorials.sort((a, b) => b.updatedAt - a.updatedAt);
+	$: _tutorials = tutorials?.sort((a, b) => b.updatedAt - a.updatedAt);
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>

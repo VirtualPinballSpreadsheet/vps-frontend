@@ -78,7 +78,6 @@
 				/>
 			</label>
 		</div>
-		<UrlInputs bind:urls={file.urls} on:blur={() => (file.updatedAt = new Date().getTime())} />
 		<div class="label">
 			<span>Features</span>
 			<AutoCompleteChips
@@ -95,6 +94,7 @@
 				on:change={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</div>
+		<UrlInputs bind:urls={file.urls} on:blur={() => (file.updatedAt = new Date().getTime())} />
 		<div class="md:hidden flex gap-4 mt-8 justify-between">
 			<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
 			<IdTag id={file.id} />

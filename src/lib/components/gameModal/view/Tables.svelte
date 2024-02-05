@@ -8,7 +8,7 @@
 	import HeaderInfo from './HeaderInfo.svelte';
 
 	export let tables: TableFile[] = [];
-	$: _tables = tables.sort((a, b) => b.updatedAt - a.updatedAt);
+	$: _tables = tables?.sort((a, b) => b.updatedAt - a.updatedAt);
 	export let gameId: string;
 
 	$: fileId = $page.url.searchParams.get('fileId');
