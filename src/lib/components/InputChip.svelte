@@ -37,7 +37,7 @@
 	/** Set the maximum character length. */
 	export let maxlength = -1;
 	/** When enabled, allows for uppercase values. */
-	export let allowUpperCase = false;
+	export let allowUpperCase = true;
 	/** When enabled, allows for duplicate values. */
 	export let allowDuplicates = false;
 	/**

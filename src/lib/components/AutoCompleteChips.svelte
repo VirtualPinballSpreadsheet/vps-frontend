@@ -26,7 +26,7 @@
 <div use:popup={popupSettings} bind:this={el} class="w-full">
 	<InputChip
 		bind:input={inputChip}
-		value={value || []}
+		bind:value
 		name="chips"
 		{placeholder}
 		chips="variant-filled-primary"

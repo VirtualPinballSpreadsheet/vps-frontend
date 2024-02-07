@@ -20,7 +20,7 @@
 		</p>
 	</Tooltip>
 	<div class="flex gap-4" id={file.id}>
-		<a {href} target="_blank" class="flex-1">
+		<a {href} target={href ? '_blank' : ''} class="flex-1">
 			<img
 				src={file.imgUrl || Placeholder}
 				alt={file.id}

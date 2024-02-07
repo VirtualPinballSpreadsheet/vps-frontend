@@ -21,7 +21,7 @@
 		WheelArtFile
 	} from '$lib/types/VPin';
 
-	const { sortedFilesStore } = Search;
+	const { sortedFilesStore, author } = Search;
 
 	const slides = 20;
 

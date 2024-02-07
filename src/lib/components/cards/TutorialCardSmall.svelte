@@ -27,12 +27,6 @@
 		<p class="text-ellipsis whitespace-nowrap overflow-hidden opacity-60 pb-1">
 			{file.authors?.join(', ')}
 		</p>
-		<div class="flex justify-between">
-			<IdTag id={file.id} />
-			<h4 class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
-				{formatDate(file.updatedAt) || '???'}
-			</h4>
-		</div>
 	</div>
 </a>
 

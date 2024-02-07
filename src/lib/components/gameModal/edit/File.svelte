@@ -49,7 +49,7 @@
 	<div class="label">
 		<span>Authors</span>
 		<AutoCompleteChips
-			value={file.authors}
+			bind:value={file.authors}
 			options={$author.options}
 			on:change={(v) => {
 				file.updatedAt = new Date().getTime();
@@ -58,7 +58,7 @@
 		/>
 	</div>
 	<UrlInputs
-		urls={file.urls}
+		bind:urls={file.urls}
 		on:blur={(v) => {
 			file.updatedAt = new Date().getTime();
 			file.urls = v.detail;

@@ -14,7 +14,7 @@
 </script>
 
 <div class="wrapper relative z-0" id={file.id} data-gameid={gameId} data-filetype="tableFiles">
-	<a {href} target="_blank" class="relative group">
+	<a {href} target={href ? '_blank' : ''} class="relative group">
 		<div
 			style="background:{$modeCurrent ? 'rgba(255,255,255,.4)' : 'rgba(0,0,0,.4)'}!important;"
 			class="card absolute top-0 left-0 right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-md p-4 gap-4 flex flex-col items-start"

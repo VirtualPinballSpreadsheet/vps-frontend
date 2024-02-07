@@ -82,7 +82,7 @@
 			</div>
 
 			<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full mb-4">
-				{file.authors?.join(', ')}
+				{file.authors?.join(', ') || '-'}
 			</p>
 
 			<FeatureBlock data={file.features} />

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Game } from '$lib/types/VPin';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Header from './Header.svelte';
 	import FileSection from './FileSection.svelte';
 	import Table from './Table.svelte';
@@ -17,9 +17,15 @@
 	let loaded = false;
 
 	onMount(() => {
+		modalStore._close = modalStore.close;
+		modalStore.close = () => {};
 		setTimeout(() => {
 			loaded = true;
 		}, 100);
+	});
+
+	onDestroy(() => {
+		if (modalStore._close) modalStore.close = modalStore._close;
 	});
 </script>
 
@@ -55,12 +61,17 @@
 	<hr class="-mx-2 md:-mx-8" />
 
 	<div class="flex justify-end w-full gap-4">
-		<button class="btn variant-ghost-secondary" on:click={() => modalStore.close()}>Cancel</button>
+		<button
+			class="btn variant-ghost-secondary"
+			on:click={() => {
+				modalStore._close();
+			}}>Cancel</button
+		>
 		<button
 			class="btn variant-filled-primary w-60"
 			on:click={() => {
 				saveEdit();
-				modalStore.close();
+				modalStore._close();
 			}}>Save</button
 		>
 	</div>
