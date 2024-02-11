@@ -11,7 +11,7 @@
 	export let placeholder = '';
 	export let restrict = false;
 
-	let EditableinputChip = '';
+	let inputChip = '';
 	const id = nanoid(10);
 
 	let el: Element;
@@ -25,7 +25,7 @@
 
 <div use:popup={popupSettings} bind:this={el} class="w-full">
 	<EditableInputChip
-		bind:input={EditableinputChip}
+		bind:input={inputChip}
 		bind:value
 		name="chips"
 		{placeholder}
@@ -38,14 +38,14 @@
 		data-popup={id}
 	>
 		<Autocomplete
-			bind:input={EditableinputChip}
+			bind:input={inputChip}
 			{options}
 			denylist={value || []}
 			on:selection={(e) => {
 				if (!Array.isArray(value)) value = [];
 				value.push(e.detail.value);
 				value = value;
-				EditableinputChip = '';
+				inputChip = '';
 				dispatch('change', value);
 			}}
 		/>

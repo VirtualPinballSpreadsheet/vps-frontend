@@ -168,7 +168,7 @@ const updateDb = async () => {
 
 const getUnpublishedChanges = async () => {
 	try {
-		await DB.fetchDb();
+		// await DB.fetchDb();
 		const lastUpdated = get(DB.lastUpdated);
 		// + 1 second to avaid sametimestamps
 		const dateString = new Date(lastUpdated + 1000).toISOString();

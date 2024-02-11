@@ -14,7 +14,6 @@ const sortedDbStore = derived(DB.dbStore, ($db) => {
 
 const sortedFilesStore = derived(DB.dbStore, ($db) => {
 	const games = Object.values($db);
-
 	const res: { [K in (typeof fileTypes)[number]]?: FileUpload[] } = {};
 	for (const fileType of fileTypes) {
 		res[fileType] = [];
@@ -25,14 +24,17 @@ const sortedFilesStore = derived(DB.dbStore, ($db) => {
 		for (const fileType of fileTypes) {
 			const files = game[fileType];
 			if (Array.isArray(files)) {
-				res[fileType] = (res[fileType] || []).concat(
-					files.map((f) => ({
-						...f,
-						game: {
-							id: game.id,
-							name: game.name
-						}
-					}))
+				files.forEach((f) => {
+					//@ts-ignore
+					f.game = {
+						id: game.id,
+						name: game.name
+					};
+				});
+				//@ts-ignore
+				res[fileType].push(
+					//@ts-ignore
+					...files
 				);
 			}
 		}
@@ -137,17 +139,26 @@ sortedDbStore.subscribe(($db) => {
 	let _authors: string[] = [];
 	const year: [number, number] = [9999, 0];
 
+	let time = performance.now();
+
 	$db.forEach((t) => {
-		if (t.features) _features = _features.concat(t.features);
-		if (t.designers) _designers = _designers.concat(t.designers);
-		if (t.theme) _theme = _theme.concat(t.theme);
-		if (t.manufacturer) _manufacturer = _manufacturer.concat(t.manufacturer);
+		if (t.features) _features.push(...t.features);
+		if (t.designers) _designers.push(...t.designers);
+		if (t.theme) _theme.push(...t.theme);
+		if (t.manufacturer) _manufacturer.push(...t.manufacturer);
 		t.year < year[0] && (year[0] = t.year);
 		t.year > year[1] && (year[1] = t.year);
-		if (t.tableFiles)
-			t.tableFiles.forEach((t) => {
-				_authors = _authors.concat(t.authors);
+		fileTypes.forEach((ft) => {
+			t[ft]?.forEach((file) => {
+				if (!file.authors) return;
+				_authors.push(...file.authors);
 			});
+		});
+		// if (t.tableFiles)
+		// 	t.tableFiles.forEach((t) => {
+		// 		if (!t.authors) return;
+		// 		_authors.push(...t.authors);
+		// 	});
 	});
 
 	features.update((state) => ({
@@ -180,6 +191,8 @@ sortedDbStore.subscribe(($db) => {
 			.sort((a, b) => (a.trim() > b.trim() ? 1 : -1))
 			.map((value) => ({ label: value, value }))
 	}));
+
+	console.log('Assemble autocomplete', performance.now() - time);
 });
 
 // Search results

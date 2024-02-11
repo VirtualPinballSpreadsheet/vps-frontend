@@ -1,10 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
-	import { fly, scale } from 'svelte/transition';
-	import { flip } from 'svelte/animate';
 	import type { CssClasses, SvelteEvent } from '@skeletonlabs/skeleton';
 	import Chip from './Chip.svelte';
-	import id from 'date-fns/locale/id';
 
 	// Types
 

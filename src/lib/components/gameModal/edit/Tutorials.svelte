@@ -38,7 +38,7 @@
 	<div class="label">
 		<span>Authors</span>
 		<EditableAutoCompleteChips
-			value={file.authors}
+			bind:value={file.authors}
 			options={$author.options}
 			on:change={(v) => {
 				file.updatedAt = new Date().getTime();

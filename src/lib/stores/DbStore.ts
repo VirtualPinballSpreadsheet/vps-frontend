@@ -28,6 +28,7 @@ const fetchDb = async () => {
 		// dbStoreCache.set(_db);
 		// }
 		lastUpdated.set(_lu);
+		console.log('SET DB STORE');
 		dbStore.set(_db);
 	} catch (e) {
 		console.log(e);

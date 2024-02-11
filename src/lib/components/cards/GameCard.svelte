@@ -123,7 +123,7 @@
 		</div>
 		<p>{file.manufacturer} ({file.year})</p>
 		<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full">
-			{file.designers?.join(', ')}
+			{file.designers?.join(', ') || ''}
 		</p>
 	</div>
 </a>
