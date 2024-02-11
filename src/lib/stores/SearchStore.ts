@@ -8,7 +8,7 @@ import type { SortBy, Mode } from '$lib/types/Filter';
 
 const sortedDbStore = derived(DB.dbStore, ($db) => {
 	return Object.values($db).sort((a, b) => {
-		return b.updatedAt - a.updatedAt;
+		return (b.lastCreatedAt || b.updatedAt) - (a.lastCreatedAt || a.updatedAt);
 	});
 });
 

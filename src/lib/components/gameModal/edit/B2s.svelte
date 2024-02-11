@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AutoCompleteChips from '$lib/components/AutoCompleteChips.svelte';
+	import EditableAutoCompleteChips from '$lib/components/editableInputChip/EditableAutoCompleteChips.svelte';
 	import IdTag from '$lib/components/IdTag.svelte';
 	import ImageUpload from '$lib/components/ImageUpload.svelte';
 	import { formatDateDashed } from '$lib/helper/formatDate';
@@ -80,7 +80,7 @@
 		</div>
 		<div class="label">
 			<span>Features</span>
-			<AutoCompleteChips
+			<EditableAutoCompleteChips
 				options={B2SFeatureOptions}
 				bind:value={file.features}
 				on:change={() => (file.updatedAt = new Date().getTime())}
@@ -88,7 +88,7 @@
 		</div>
 		<div class="label">
 			<span>Authors</span>
-			<AutoCompleteChips
+			<EditableAutoCompleteChips
 				options={$author.options}
 				bind:value={file.authors}
 				on:change={() => (file.updatedAt = new Date().getTime())}

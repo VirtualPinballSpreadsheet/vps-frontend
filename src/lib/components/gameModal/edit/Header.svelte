@@ -2,7 +2,7 @@
 	import { getBackglassUrl } from '$lib/helper/getBackglassUrl';
 	import { EmptyGame } from '$lib/types/VPin';
 	import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
-	import AutoCompleteChips from '$lib/components/AutoCompleteChips.svelte';
+	import EditableAutoCompleteChips from '$lib/components/editableInputChip/EditableAutoCompleteChips.svelte';
 	import { Search } from '$lib/stores/SearchStore';
 
 	const { designers, theme } = Search;
@@ -82,11 +82,11 @@
 	<div class="flex w-full flex-col md:flex-row gap-4">
 		<div class="label flex flex-col flex-1">
 			<span>Designers</span>
-			<AutoCompleteChips options={$designers.options} bind:value={game.designers} />
+			<EditableAutoCompleteChips options={$designers.options} bind:value={game.designers} />
 		</div>
 		<div class="label flex flex-col flex-1">
 			<span>Theme</span>
-			<AutoCompleteChips options={$theme.options} bind:value={game.theme} />
+			<EditableAutoCompleteChips options={$theme.options} bind:value={game.theme} />
 		</div>
 	</div>
 </div>

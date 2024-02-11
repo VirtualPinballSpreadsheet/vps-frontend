@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AutoCompleteChips from '$lib/components/AutoCompleteChips.svelte';
+	import EditableAutoCompleteChips from '$lib/components/editableInputChip/EditableAutoCompleteChips.svelte';
 	import IdTag from '$lib/components/IdTag.svelte';
 	import { formatDate, formatDateDashed } from '$lib/helper/formatDate';
 	import { Search } from '$lib/stores/SearchStore';
@@ -48,7 +48,7 @@
 
 	<div class="label">
 		<span>Authors</span>
-		<AutoCompleteChips
+		<EditableAutoCompleteChips
 			bind:value={file.authors}
 			options={$author.options}
 			on:change={(v) => {

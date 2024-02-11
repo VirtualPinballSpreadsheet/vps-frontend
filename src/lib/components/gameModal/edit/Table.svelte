@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Placeholder from '$lib/assets/img/tablePlaceholder.jpg';
-	import AutoCompleteChips from '$lib/components/AutoCompleteChips.svelte';
+	import EditableAutoCompleteChips from '$lib/components/editableInputChip/EditableAutoCompleteChips.svelte';
 	import IdTag from '$lib/components/IdTag.svelte';
 	import ImageUpload from '$lib/components/ImageUpload.svelte';
 	import { formatDateDashed } from '$lib/helper/formatDate';
@@ -103,7 +103,7 @@
 		</div>
 		<div class="label">
 			<span>Features</span>
-			<AutoCompleteChips
+			<EditableAutoCompleteChips
 				options={TableFeatureOptions}
 				bind:value={file.features}
 				on:change={() => (file.updatedAt = new Date().getTime())}
@@ -111,7 +111,7 @@
 		</div>
 		<div class="label">
 			<span>Authors</span>
-			<AutoCompleteChips
+			<EditableAutoCompleteChips
 				options={$author.options}
 				bind:value={file.authors}
 				on:change={() => (file.updatedAt = new Date().getTime())}
@@ -120,7 +120,7 @@
 		<UrlInputs bind:urls={file.urls} on:blur={() => (file.updatedAt = new Date().getTime())} />
 		<!-- <div class="label">
 			<span>Theme</span>
-			<AutoCompleteChips value={file.theme || []} options={$theme.options} />
+			<EditableAutoCompleteChips value={file.theme || []} options={$theme.options} />
 		</div> -->
 		<div class="md:hidden flex gap-4 mt-8 justify-between">
 			<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
