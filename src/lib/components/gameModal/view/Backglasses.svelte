@@ -9,7 +9,7 @@
 
 	export let b2ss = [EmptyB2sFile];
 	export let gameId: string;
-	$: _b2ss = b2ss?.sort((a, b) => b.updatedAt - a.updatedAt);
+	$: _b2ss = b2ss?.sort((a, b) => (b.createdAt || b.updatedAt) - (a.createdAt || a.updatedAt));
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>

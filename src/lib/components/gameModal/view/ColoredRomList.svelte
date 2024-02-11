@@ -10,7 +10,7 @@
 	export let fileType: Mode;
 	export let gameId: string;
 	export let files: AltColorFile[] = [];
-	$: _files = files?.sort((a, b) => b.updatedAt - a.updatedAt);
+	$: _files = files?.sort((a, b) => (b.createdAt || b.updatedAt) - (a.createdAt || a.updatedAt));
 
 	$: fileId = $page.url.searchParams.get('fileId');
 </script>
