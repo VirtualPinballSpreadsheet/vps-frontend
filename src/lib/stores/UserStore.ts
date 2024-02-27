@@ -6,6 +6,7 @@ import type { UserStore } from '../types/User';
 import { DB_GAME_PATH, DB_IMG_PATH, DB_OWNER, DB_REPO, DB_STAGING_BRANCH } from '../../env';
 import type { Game } from '$lib/types/VPin';
 import { DB } from './DbStore';
+import { Edit } from './EditStore';
 
 const userStore: Writable<UserStore> = localStorageStore('user', {});
 const unpublishedChanges = writable<{ author: string; id: string; updatedAt: string }[]>([]);
@@ -72,6 +73,7 @@ const login = async (token: string, user: FBUser) => {
 			window.octokit = _octokit;
 
 		if (admin) {
+			Edit.updateEditsToDb();
 			await getUnpublishedChanges();
 		}
 

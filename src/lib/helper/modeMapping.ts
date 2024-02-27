@@ -41,7 +41,7 @@ export const modeMapping: {
 	altSoundFiles: { route: 'altsounds', name: 'Alt. Sounds', component: FileCard, icon: faMusic },
 	topperFiles: { route: 'toppers', name: 'Toppers', component: FileCard, icon: faBox },
 	povFiles: { route: 'pov', name: 'POVs', component: FileCard, icon: faCamera },
-	soundFiles: { route: 'sounds', name: 'Sounds', component: FileCard, icon: faVolumeControlPhone },
+	// soundFiles: { route: 'sounds', name: 'Sounds', component: FileCard, icon: faVolumeControlPhone },
 	mediaPackFiles: { route: 'mediapacks', name: 'Media Packs', component: FileCard, icon: faImage },
 	wheelArtFiles: { route: 'wheelart', name: 'Wheelart', component: FileCard, icon: faCircle },
 	ruleFiles: { route: 'rules', name: 'Rules', component: FileCard, icon: faFile }

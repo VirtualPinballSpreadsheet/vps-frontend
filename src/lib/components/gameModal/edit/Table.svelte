@@ -87,6 +87,7 @@
 					<option value="VP9">VP9</option>
 					<option value="FX">FX</option>
 					<option value="FX2">FX2</option>
+					<option value="M">M</option>
 					<option value="PM5">PM5</option>
 				</select>
 			</div>

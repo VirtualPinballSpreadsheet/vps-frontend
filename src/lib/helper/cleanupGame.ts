@@ -1,10 +1,10 @@
 import type { Game } from '$lib/types/VPin';
-import { getLastCreatedAt } from './getLastCreatedAt';
+import { getLastCreatedAt, getLastUpdatedAt } from './getLastCreatedAt';
 
 export const cleanupGame = (table: Game) => {
 	let updatedAt = 0;
 	filePaths.forEach((path) => {
-		const ts = getLastCreatedAt(table, path);
+		const ts = getLastUpdatedAt(table, path);
 		if (ts > updatedAt) {
 			updatedAt = ts;
 		}

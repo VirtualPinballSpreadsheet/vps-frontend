@@ -10,11 +10,11 @@
 	import { diff, flattenChangeset } from 'json-diff-ts';
 	import Tooltip from '$lib/components/Tooltip.svelte';
 	const { editStore, deleteEdit } = Edit;
-	const { dbStore } = DB;
+	const { dbStoreOriginal } = DB;
 
 	export let edit: GameEdit;
 
-	$: game = edit.action === 'UPDATE' ? $dbStore[edit.id] : undefined;
+	$: game = edit.action === 'UPDATE' ? $dbStoreOriginal[edit.id] : undefined;
 
 	$: changes = game ? flattenChangeset(diff(game, edit.data)) : undefined;
 
@@ -52,7 +52,7 @@
 				<Tooltip content="Delete edit">
 					<button
 						class=" btn-icon btn-icon-sm variant-filled-error"
-						on:click={() => deleteEdit(edit)}><Fa icon={faRemove} /></button
+						on:click={() => deleteEdit([edit])}><Fa icon={faRemove} /></button
 					>
 				</Tooltip>
 			</div>

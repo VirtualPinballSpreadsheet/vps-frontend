@@ -4,6 +4,7 @@ import { DB_URL } from '../../env';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 
 const dbStore = writable<Database>({});
+const dbStoreOriginal = writable<Database>({});
 // const dbStoreCache = localStorageStore<Database>('db', {});
 const lastUpdated = localStorageStore<number>('lastUpdatedDb', 0);
 
@@ -30,6 +31,7 @@ const fetchDb = async () => {
 		lastUpdated.set(_lu);
 		console.log('SET DB STORE');
 		dbStore.set(_db);
+		dbStoreOriginal.set(JSON.parse(JSON.stringify(_db)));
 	} catch (e) {
 		console.log(e);
 	}
@@ -87,5 +89,6 @@ export const DB = {
 	getGameImage,
 	getGame,
 	lastUpdated,
-	dbStore
+	dbStore,
+	dbStoreOriginal
 };

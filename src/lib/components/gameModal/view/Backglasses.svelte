@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getUrl } from '$lib/helper/getUrl';
-	import { EmptyB2sFile } from '$lib/types/VPin';
+	import type { B2SFile } from '$lib/types/VPin';
 	import HeaderInfo from './HeaderInfo.svelte';
 	import B2sDetailCard from '../../cards/B2sDetailCard.svelte';
 	import { mobile } from '$lib/helper/mobile';
 	import B2sDetailCardMobile from '$lib/components/cards/B2sDetailCardMobile.svelte';
 
-	export let b2ss = [EmptyB2sFile];
+	export let b2ss: B2SFile[] = [];
 	export let gameId: string;
 	$: _b2ss = b2ss?.sort((a, b) => (b.createdAt || b.updatedAt) - (a.createdAt || a.updatedAt));
 

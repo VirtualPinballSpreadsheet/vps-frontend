@@ -1,6 +1,6 @@
 <script>
 	import { Edit } from '$lib/stores/EditStore';
-	import { faAdd } from '@fortawesome/free-solid-svg-icons';
+	import { faAdd, faCodeMerge } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import { nanoid } from 'nanoid';
 	import { EmptyGame } from '$lib/types/VPin';
@@ -24,6 +24,13 @@
 				class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm flex gap-2 items-center"
 			>
 				<Fa icon={faAdd} /> Add new game
+			</li></a
+		>
+		<a href="alignAuthors">
+			<li
+				class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm flex gap-2 items-center"
+			>
+				<Fa icon={faCodeMerge} /> Align authors
 			</li></a
 		>
 	</ul>

@@ -7,12 +7,14 @@
 	import Header from './Header.svelte';
 	import FileList from './FileList.svelte';
 	import ColoredRomList from './ColoredRomList.svelte';
+	import Admin from '../Admin.svelte';
 
 	export let game: Game = EmptyGame;
 </script>
 
 <Header {game} />
 <hr class=" -mx-2 md:-mx-8" />
+<Admin {game} />
 <Tables tables={game.tableFiles} gameId={game.id} />
 <hr class=" -mx-2 md:-mx-8" />
 <Backglasses b2ss={game.b2sFiles} gameId={game.id} />

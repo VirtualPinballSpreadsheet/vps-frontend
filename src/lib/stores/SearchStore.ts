@@ -145,7 +145,7 @@ sortedDbStore.subscribe(($db) => {
 		if (t.features) _features.push(...t.features);
 		if (t.designers) _designers.push(...t.designers);
 		if (t.theme) _theme.push(...t.theme);
-		if (t.manufacturer) _manufacturer.push(...t.manufacturer);
+		if (t.manufacturer) _manufacturer.push(t.manufacturer);
 		t.year < year[0] && (year[0] = t.year);
 		t.year > year[1] && (year[1] = t.year);
 		fileTypes.forEach((ft) => {
@@ -154,11 +154,6 @@ sortedDbStore.subscribe(($db) => {
 				_authors.push(...file.authors);
 			});
 		});
-		// if (t.tableFiles)
-		// 	t.tableFiles.forEach((t) => {
-		// 		if (!t.authors) return;
-		// 		_authors.push(...t.authors);
-		// 	});
 	});
 
 	features.update((state) => ({

@@ -45,7 +45,7 @@ export const fileTypes = [
 	'wheelArtFiles',
 	'topperFiles',
 	'mediaPackFiles',
-	'soundFiles',
+	// 'soundFiles',
 	'ruleFiles',
 	'tutorialFiles'
 ] as const;
@@ -148,7 +148,9 @@ export const TableFeatures = [
 	'nFozzy',
 	'Fleep',
 	'LUT',
-	'Scorbit'
+	'Scorbit',
+	'BAM',
+	'FizX'
 ];
 
 export type B2SFeature = (typeof B2SFeatures)[number];

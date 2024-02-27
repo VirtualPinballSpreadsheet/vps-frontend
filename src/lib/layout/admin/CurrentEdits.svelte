@@ -20,6 +20,10 @@
 		});
 		loading = false;
 	};
+
+	const clearAll = () => {
+		Edit.deleteEdit($editStore.edits);
+	};
 </script>
 
 <div class="flex flex-col gap-2">
@@ -35,6 +39,10 @@
 		<EditItem {edit} />
 		<hr />
 	{/each}
+
+	{#if $editStore.edits.length}
+		<button class="btn variant-soft-error" on:click={clearAll}>Clear all</button>
+	{/if}
 
 	<button
 		class="btn variant-filled-secondary"
