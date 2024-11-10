@@ -30,7 +30,11 @@
 <div class="flex flex-col md:flex-row px-16 py-16 gap-0 md:gap-12 items-stretch overflow-clip">
 	<!-- Challenge -->
 	<div class="flex flex-col flex-1">
-		<div class="text-sm opacity-40 font-bold uppercase">VPC Weekly Challenge</div>
+		<a
+			class="text-sm opacity-40 font-bold uppercase cursor-pointer hover:text-primary-500 hover:opacity-100 transition-all"
+			target="_blank"
+			href="https://virtualpinballchat.com/">VPC Weekly Challenge</a
+		>
 		<div class="text-2xl font-bold">
 			{game.name}
 		</div>

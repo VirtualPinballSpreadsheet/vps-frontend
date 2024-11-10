@@ -18,13 +18,13 @@
 {#if _game && $userStore.admin}
 	<a
 		href="?edit=true"
-		class="pointer-events-auto chip variant-soft-primary hover:variant-filled-primary gap-2 flex-1"
+		class="pointer-events-auto chip variant-soft-primary hover:variant-filled-primary gap-2 flex-1 p-2"
 		on:click={() => {
 			$editStore.cache = {
 				id: _game.id,
 				action: 'UPDATE',
 				data: JSON.parse(JSON.stringify(_game))
 			};
-		}}><Fa icon={faEdit} />Edit</a
+		}}><Fa icon={faEdit} /></a
 	>
 {/if}

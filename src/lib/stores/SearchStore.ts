@@ -1,4 +1,4 @@
-import { type Game, fileTypes, type FileUpload } from '$lib/types/VPin';
+import { type Game, fileTypes, type FileUpload, type TableFile } from '$lib/types/VPin';
 import MiniSearch from 'minisearch';
 import { derived, get, writable, type Writable } from 'svelte/store';
 import { DB } from './DbStore';
@@ -294,7 +294,9 @@ const themeFilterStore = derived(
 	[filterActive, theme, manufacturerFilterStore],
 	([$filterActive, $filter, $db]) => {
 		if (!$filterActive || !$filter.active || !$db?.length) return $db;
-		return genericFilter($db, (game) => $filter.value.some((theme) => game.theme?.includes(theme)));
+		return genericFilter($db, (game) =>
+			$filter.value.every((theme) => game.theme?.includes(theme))
+		);
 	}
 );
 const authorFilterStore = derived(
@@ -304,10 +306,10 @@ const authorFilterStore = derived(
 		return $db.filter((item: any) => {
 			if ((item as FileUpload).game) {
 				// FileMode
-				return (item as FileUpload).authors?.some((a) => $filter.value.includes(a));
+				return $filter.value.every((a) => (item as FileUpload).authors?.includes(a));
 			} else {
 				return (item as Game).tableFiles?.some((t) =>
-					t.authors?.some((a) => $filter.value.includes(a))
+					$filter.value.every((a) => t.authors?.includes(a))
 				);
 			}
 		});
@@ -321,12 +323,12 @@ const featureFilterStore = derived(
 		return $db.filter((item: any) => {
 			if ((item as FileUpload).game) {
 				// FileMode
-				if (item.tableFormat && $filter.value.includes(item.tableFormat)) return true;
-				//@ts-ignore
-				return (item as FileUpload).features?.some((f) => $filter.value.includes(f));
+				return $filter.value.every(
+					(f) => (item as TableFile).features?.includes(f) || item.tableFormat === f
+				);
 			} else {
 				return (item as Game).tableFiles?.some((t) =>
-					t.features?.some((f) => $filter.value.includes(f))
+					$filter.value.every((f) => t.features?.includes(f))
 				);
 			}
 		});

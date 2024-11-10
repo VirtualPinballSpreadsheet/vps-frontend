@@ -48,17 +48,6 @@
 		<div class="flex gap-6 flex-col border border-primary-400 p-2 rounded">
 			<div class="flex gap-6 items-center justify-between">
 				<div class="font-bold">Players</div>
-
-				<button
-					class="btn btn-sm variant-filled-secondary flex gap-4 items-center self-start"
-					on:click={() => {
-						$tournamentStore[tindex].players.push('');
-						$tournamentStore = $tournamentStore;
-					}}
-				>
-					<Fa icon={faAdd} />
-					Add new player
-				</button>
 			</div>
 			{#each tournament.players as player, i}
 				<div class="flex gap-4">
@@ -74,6 +63,16 @@
 					</button>
 				</div>
 			{/each}
+			<button
+				class="btn btn-md variant-filled-secondary flex gap-4 items-center"
+				on:click={() => {
+					$tournamentStore[tindex].players.push('');
+					$tournamentStore = $tournamentStore;
+				}}
+			>
+				<Fa icon={faAdd} />
+				Add new player
+			</button>
 		</div>
 		<button class="btn variant-filled-primary flex gap-4 items-center mt-auto" on:click={onSave}>
 			<Fa icon={faSave} />

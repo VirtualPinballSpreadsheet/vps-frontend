@@ -36,6 +36,6 @@
 	Tools <Fa icon={faChevronDown} class="ml-2" size="xs" />
 </button>
 
-<a href="help/" class="btn hover:variant-soft-primary btn-icon" on:click={closeDrawer}>
+<a href="/help" class="btn hover:variant-soft-primary btn-icon" on:click={closeDrawer}>
 	<Fa icon={faCircleQuestion} />
 </a>

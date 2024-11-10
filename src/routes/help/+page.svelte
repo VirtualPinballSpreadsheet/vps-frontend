@@ -64,8 +64,9 @@
 	<code>https://virtualpinballspreadsheet.github.io/vps-db/db/puplookup.csv</code>
 	<h1 class="text-4xl font-bold pt-8">Contact</h1>
 	<p>
-		You can find us in <a class="text-primary-400 font-bold" href="https://discord.gg/WRhR5v59"
-			>Discord</a
+		You can find us in <a
+			class="text-primary-400 font-bold"
+			href="https://discord.gg/virtual-pinball-chat-652274650524418078">Discord</a
 		>
 		in the VPS channel or on
 		<a class="text-primary-400 font-bold" href="https://www.facebook.com/VPSheet">Facebook</a>. Feel

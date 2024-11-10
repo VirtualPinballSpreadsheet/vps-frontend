@@ -52,6 +52,11 @@
 				Bookmarks
 			</li></a
 		>
+		<!-- <a href="/tournaments"
+			><li class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm">
+				Tournaments
+			</li></a
+		> -->
 	</ul>
 	<hr />
 	<div class="p-4 flex flex-col gap-4">

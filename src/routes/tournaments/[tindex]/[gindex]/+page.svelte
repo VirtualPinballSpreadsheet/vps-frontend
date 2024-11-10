@@ -13,37 +13,31 @@
 	import { goto } from '$app/navigation';
 	import { Autocomplete, popup, SlideToggle, type PopupSettings } from '@skeletonlabs/skeleton';
 	import Placeholder from '$lib/assets/img/bgPlaceholder.jpg';
+	import { Search } from '$lib/stores/SearchStore';
+	import { DB } from '$lib/stores/DbStore';
+	import { getBackglassUrl } from '$lib/helper/getBackglassUrl';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 	let { tindex, gindex } = data;
 	const { tournamentStore } = Tournaments;
-	$: tournament = $tournamentStore.length >= tindex ? $tournamentStore[tindex] : undefined;
+	const { sortedFilesStore, sortedDbStore } = Search;
+	const { dbStore } = DB;
+
+	$: tournament = $tournamentStore[tindex];
 	$: game = (tournament?.games?.length || -1) >= gindex ? tournament?.games[gindex] : undefined;
+	$: gameData = game.gameId ? $dbStore[game.gameId] : undefined;
 
-	let inputDemo = '';
+	let inputDemo = gameData?.name || '';
+	$: options = $sortedDbStore.map((g) => ({ label: g.name, value: g.id }));
 
-	const onAdd = () => {
-		// if (!tournament) return;
-		// $tournamentStore[tindex].games.push({ balls: 3, points: {}, scores: {}, gameId: '' });
-		// goto(tindex + '/' + tournament.games.length);
-	};
+	onMount(() => {
+		inputDemo = gameData?.name || '';
+	});
 
-	const flavorAllowlist: string[] = ['neapolitan', 'pineapple', 'peach'];
-	const flavorOptions: any[] = [
-		{ label: 'Vanilla', value: 'vanilla', keywords: 'plain, basic', meta: { healthy: false } },
-		{ label: 'Chocolate', value: 'chocolate', keywords: 'dark, white', meta: { healthy: false } },
-		{ label: 'Strawberry', value: 'strawberry', keywords: 'fruit', meta: { healthy: true } },
-		{
-			label: 'Neapolitan',
-			value: 'neapolitan',
-			keywords: 'mix, strawberry, chocolate, vanilla',
-			meta: { healthy: false }
-		},
-		{ label: 'Pineapple', value: 'pineapple', keywords: 'fruit', meta: { healthy: true } },
-		{ label: 'Peach', value: 'peach', keywords: 'fruit', meta: { healthy: true } }
-	];
-	function onFlavorSelection(event: CustomEvent<any>): void {
+	function onGameSelection(event: CustomEvent<any>): void {
 		inputDemo = event.detail.label;
+		$tournamentStore[tindex].games[gindex].gameId = event.detail.value;
 	}
 	let popupSettings: PopupSettings = {
 		event: 'focus-click',
@@ -53,6 +47,7 @@
 </script>
 
 {#if game && tournament}
+	<!-- {JSON.stringify(game)} -->
 	<div class="flex flex-row gap-2 items-center bg-secondary-600/20 p-2">
 		<button
 			class="btn btn-icon flex gap-4 items-center self-start"
@@ -71,8 +66,9 @@
 		<div class="flex">
 			<button
 				class="btn btn-icon-lg flex gap-4 items-center"
+				disabled={gindex <= 0}
 				on:click={() => {
-					goto(tindex + '/edit');
+					goto(tindex + '/' + gindex - 1);
 				}}
 			>
 				<Fa icon={faBackwardStep} />
@@ -85,41 +81,51 @@
 				placeholder="Pick a table"
 				use:popup={popupSettings}
 			/>
-			<div data-popup="popupAutocomplete">
-				<Autocomplete
-					bind:input={inputDemo}
-					options={flavorOptions}
-					on:selection={onFlavorSelection}
-				/>
+			<div
+				data-popup="popupAutocomplete"
+				class="card max-h-48 p-4 overflow-y-auto z-50 max-w-[80vw]"
+			>
+				<Autocomplete bind:input={inputDemo} {options} on:selection={onGameSelection} />
 			</div>
 			<button
 				class="btn btn-icon-lg flex gap-4 items-center"
 				on:click={() => {
-					goto(tindex + '/edit');
+					if (gindex === $tournamentStore.length - 1) {
+						$tournamentStore[tindex].games.push({ balls: 3, points: {}, scores: {}, gameId: '' });
+					}
+					goto('' + (parseInt(gindex) + 1));
 				}}
 			>
 				<Fa icon={faForwardStep} />
 			</button>
 		</div>
-		<img src={Placeholder} alt={''} class="card aspectTable rounded" />
+		<img src={getBackglassUrl(gameData)} alt={''} class="card aspectTable rounded" />
 		<div class="flex gap-4 items-center">
 			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 				<div class="input-group-shim">Balls</div>
-				<input type="number" placeholder="1234567890" bind:value={game.balls} />
+				<input
+					type="number"
+					placeholder="1234567890"
+					bind:value={$tournamentStore[tindex].games[gindex].balls}
+				/>
 			</div>
 			<SlideToggle
 				size="sm"
 				class="md:pt-6"
 				active="variant-filled-primary"
 				name="slide"
-				bind:checked={$tournamentStore[tindex].vpin}>VPin</SlideToggle
+				bind:checked={$tournamentStore[tindex].games[gindex].vpin}>VPin</SlideToggle
 			>
 		</div>
 		<hr />
 		{#each tournament.players as player}
 			<div class="input-group input-group-divider grid-cols-[auto_1fr_auto]">
 				<div class="input-group-shim w-[8rem]">{player}</div>
-				<input type="number" placeholder="1234567890" bind:value={game.scores[player]} />
+				<input
+					type="number"
+					placeholder="Enter score..."
+					bind:value={$tournamentStore[tindex].games[gindex].scores[player]}
+				/>
 			</div>
 		{/each}
 	</div>

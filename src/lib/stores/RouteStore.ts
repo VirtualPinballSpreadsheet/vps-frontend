@@ -14,7 +14,7 @@ Search.finalResultsStore.subscribe(() => {
 	const path = _page?.url?.pathname;
 	if (!path) return;
 	// if (path === '/export') return;
-	if (!get(Search.isSearchActive) && !modeRutes.includes(path)) return;
+	if (!get(Search.isSearchActive) && !modeRutes.includes(path.slice(1))) return;
 	const mode = get(Search.mode);
 	const route = modeMapping[mode].route;
 	if (path?.includes(route)) return;

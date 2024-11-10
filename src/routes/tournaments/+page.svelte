@@ -9,8 +9,8 @@
 	const { tournamentStore, addNewTournament } = Tournaments;
 
 	const onAdd = () => {
-		const nt = addNewTournament();
-		goto(`/tournaments/${nt.id}/edit`);
+		const { index } = addNewTournament();
+		goto(`/tournaments/${index}/edit`);
 	};
 </script>
 
