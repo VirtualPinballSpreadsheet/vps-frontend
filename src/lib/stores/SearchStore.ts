@@ -150,8 +150,8 @@ sortedDbStore.subscribe(($db) => {
 		t.year > year[1] && (year[1] = t.year);
 		fileTypes.forEach((ft) => {
 			t[ft]?.forEach((file) => {
-				if (!file.authors) return;
-				_authors.push(...file.authors);
+				if (file.authors) _authors.push(...file.authors);
+				if (file.features) _features.push(...file.features);
 			});
 		});
 	});
