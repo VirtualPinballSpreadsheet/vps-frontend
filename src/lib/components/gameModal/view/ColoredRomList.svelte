@@ -4,6 +4,7 @@
 	import type { AltColorFile, FileUpload } from '$lib/types/VPin';
 	import type { Mode } from 'fs';
 	import UrlChips from '../../URLChips.svelte';
+	import IdTag from '../../IdTag.svelte';
 	import { clipboard, getToastStore } from '@skeletonlabs/skeleton';
 
 	export let title: string = '';
@@ -35,6 +36,7 @@
 						<th>Folder</th>
 						<th>Comment</th>
 						<th>URLs</th>
+						<th>ID</th>
 						<th>Updated at</th>
 					</tr>
 				</thead>
@@ -65,6 +67,7 @@
 							>
 							<td>{file.comment || ''}</td>
 							<td class="w-40"><UrlChips urls={file.urls} /></td>
+							<td class="w-20"><IdTag id={file.id} /></td>
 							<td class="w-32">{formatDate(file.updatedAt)}</td>
 						</tr>
 					{/each}
