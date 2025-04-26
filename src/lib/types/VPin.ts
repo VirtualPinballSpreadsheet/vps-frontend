@@ -129,9 +129,11 @@ export interface TutorialFile {
 export const TableFeatures = [
 	'Hybrid',
 	'VR',
+	'Mixed Reality',
 	'FSS',
 	'4k',
 	'MOD',
+	'Retheme',
 	'FastFlips',
 	'SSF',
 	'P-ROC',
@@ -150,7 +152,8 @@ export const TableFeatures = [
 	'LUT',
 	'Scorbit',
 	'BAM',
-	'FizX'
+	'FizX',
+	'DOF'
 ];
 
 export type B2SFeature = (typeof B2SFeatures)[number];
