@@ -89,6 +89,7 @@
 					<option value="FX2">FX2</option>
 					<option value="M">M</option>
 					<option value="PM5">PM5</option>
+					<option value="PC">PC</option>
 				</select>
 			</div>
 			<label class="label">
