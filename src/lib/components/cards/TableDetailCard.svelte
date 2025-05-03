@@ -13,7 +13,7 @@
 	export let gameId: string;
 </script>
 
-<div class="wrapper relative z-0" id={file.id} data-gameid={gameId} data-filetype="tableFiles">
+<div class="flex flex-col" id={file.id} data-gameid={gameId} data-filetype="tableFiles">
 	<a {href} target={href ? '_blank' : ''} class="relative group">
 		<div
 			style="background:{$modeCurrent ? 'rgba(255,255,255,.4)' : 'rgba(0,0,0,.4)'}!important;"
