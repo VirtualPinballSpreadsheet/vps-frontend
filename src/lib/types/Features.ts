@@ -27,5 +27,5 @@ export const FeatureDescriptions = {
 	'Scorbit': 'Table integrates with Scorbit score management',
 	'BAM': 'Future Pinball table requires BAM (better arcade mode)',
 	'FizX': 'Future Pinball table with improved physics',
-    'DOF': 'Table integrates with DOF (solenoids and lights)',
+	'DOF': 'Table integrates with DOF (solenoids and lights)',
 };
