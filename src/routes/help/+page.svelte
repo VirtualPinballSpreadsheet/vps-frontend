@@ -55,7 +55,7 @@
 		The database is rebuilt regulary on every change. If you want to save on excess calls you can
 		fetch this file first to get the timestamp of the latest release:
 	</p>
-	<code>https://virtualpinballspreadsheet.github.io/vps-db/db/lastUpdated.json</code>
+	<code>https://virtualpinballspreadsheet.github.io/vps-db/lastUpdated.json</code>
 	<p>If your version is outdated, you might fetch the latest.</p>
 	<p>
 		With every update, a full new pupLookup.csv is generated aswell in case you want to update yours
