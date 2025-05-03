@@ -6,6 +6,7 @@ export const colorMap = {
 	PuP: 'bg-sky-500',
 	VR: 'bg-cyan-500',
 	Hybrid: 'bg-violet-500',
+	'Mixed Reality': 'bg-cyan-500',
 	Music: 'bg-rose-500',
 	FSS: 'bg-green-500',
 	'4k': 'bg-teal-500',

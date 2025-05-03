@@ -129,9 +129,12 @@ export interface TutorialFile {
 export const TableFeatures = [
 	'Hybrid',
 	'VR',
+	'Mixed Reality',
 	'FSS',
 	'4k',
 	'MOD',
+	'Retheme',
+	'VPU Patch',
 	'FastFlips',
 	'SSF',
 	'P-ROC',
@@ -139,6 +142,7 @@ export const TableFeatures = [
 	'Music',
 	'incl. B2S',
 	'incl. ROM',
+	'incl. nvram',
 	'incl. Art',
 	'incl. PuP',
 	'incl. Video',
@@ -150,7 +154,8 @@ export const TableFeatures = [
 	'LUT',
 	'Scorbit',
 	'BAM',
-	'FizX'
+	'FizX',
+	'DOF'
 ];
 
 export type B2SFeature = (typeof B2SFeatures)[number];
