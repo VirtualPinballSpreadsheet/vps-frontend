@@ -24,7 +24,7 @@ export const getGameNames = (game: Game, nameOptions: NameOptions): [string, Tab
 			`${name}${
 				nameOptions.edition && t.edition ? ` ${t.edition}` : ''
 			}${
-				nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ''
+				nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ' -'
 			}${
 				nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 			}${nameOptions.version ? ` ${t.version || ''}` : ''}${
@@ -44,7 +44,7 @@ export const getTableName = (t: TableFile, game: Game, nameOptions: NameOptions)
 	return `${name}${
 		nameOptions.edition && t.edition ? ` ${t.edition} ` : ''
 	}${
-		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ''
+		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ' -'
 	}${
 		nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 	}${nameOptions.version ? ` ${t.version || ''}` : ''}${
