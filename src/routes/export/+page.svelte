@@ -13,6 +13,7 @@
 		theAtEnd: true,
 		author: true,
 		version: true,
+		edition: true,
 		mod: true,
 		vr: true
 	};
@@ -129,6 +130,10 @@
 				<button
 					class:variant-filled-secondary={state.version}
 					on:click={() => (state.version = !state.version)}>Version</button
+				>
+				<button
+					class:variant-filled-secondary={state.edition}
+					on:click={() => (state.edition = !state.edition)}>Edition</button
 				>
 				<button class:variant-filled-secondary={state.mod} on:click={() => (state.mod = !state.mod)}
 					>MOD</button

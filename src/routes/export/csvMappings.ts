@@ -7,6 +7,7 @@ export interface NameOptions {
 	theAtEnd?: boolean;
 	author?: boolean;
 	version?: boolean;
+	edition?: boolean;
 	mod?: boolean;
 	ssf?: boolean;
 	vr?: boolean;
@@ -19,7 +20,9 @@ export const getGameNames = (game: Game, nameOptions: NameOptions): [string, Tab
 	}
 	return (
 		game.tableFiles?.map((t) => [
-			`${name} (${game.manufacturer} ${game.year})${
+			`${name} ${
+				nameOptions.edition && t.edition ? `${t.edition} ` : ''
+			}(${game.manufacturer} ${game.year})${
 				nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 			}${nameOptions.version ? ` ${t.version || ''}` : ''}${
 				nameOptions.ssf && t.features?.includes('SSF') ? ` SSF` : ''
@@ -35,7 +38,9 @@ export const getTableName = (t: TableFile, game: Game, nameOptions: NameOptions)
 	if (nameOptions.theAtEnd && game.name.slice(0, 4).toLowerCase() === 'the ') {
 		name = `${name.slice(4).trim()}, The`;
 	}
-	return `${name} (${game.manufacturer} ${game.year})${
+	return `${name} ${
+		nameOptions.edition && t.edition ? `${t.edition} ` : ''
+	}(${game.manufacturer} ${game.year})${
 		nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 	}${nameOptions.version ? ` ${t.version || ''}` : ''}${
 		nameOptions.ssf && t.features?.includes('SSF') ? ` SSF` : ''
@@ -76,6 +81,7 @@ export const transformPopper = (tables: TableFile[], options: NameOptions) => {
 			Category: '',
 			GameTheme: arrToStr(game.theme),
 			WebLinkURL: game.ipdbUrl?.includes('.ipdb.org/machine.cgi?id=') ? `${game.ipdbUrl}` : '',
+			WebLink2URL: `https://virtualpinballspreadsheet.github.io/tables?game=${game.id}&fileType=tables&fileId=${table.id}`,
 			IPDBNum: game.ipdbUrl?.includes('.ipdb.org/machine.cgi?id=')
 				? game.ipdbUrl.split('.cgi?id=')[1]
 				: '',
@@ -92,7 +98,9 @@ export const transformPopper = (tables: TableFile[], options: NameOptions) => {
 						)
 				)
 			),
-			'VPS-ID': table.id
+			'VPS-ID': table.id,
+			WebGameID: table.id,
+			MasterID: game.id
 		});
 	}
 	return res;
