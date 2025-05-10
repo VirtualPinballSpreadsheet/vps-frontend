@@ -24,7 +24,8 @@ export const getGameNames = (game: Game, nameOptions: NameOptions): [string, Tab
 			`${name}${
 				nameOptions.edition && t.edition ? ` ${t.edition}` : ''
 			}${
-				nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ' -'
+				nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : 
+					(nameOptions.author || nameOptions.version) ? ' -' : ''
 			}${
 				nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 			}${nameOptions.version ? ` ${t.version || ''}` : ''}${
@@ -44,7 +45,8 @@ export const getTableName = (t: TableFile, game: Game, nameOptions: NameOptions)
 	return `${name}${
 		nameOptions.edition && t.edition ? ` ${t.edition} ` : ''
 	}${
-		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ' -'
+		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : 
+			(nameOptions.author || nameOptions.version) ? ' -' : ''
 	}${
 		nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 	}${nameOptions.version ? ` ${t.version || ''}` : ''}${
@@ -72,7 +74,7 @@ export const transformPopper = (tables: TableFile[], options: NameOptions) => {
 		const GameFileName = sanitizeFilename(getTableName(table, game, options));
 		const GameName = sanitizeFilename(
 			getTableName(table, game, {
-				theAtEnd: options.theAtEnd
+				theAtEnd: options.theAtEnd, manufacturerYear: options.manufacturerYear,
 			})
 		);
 		// Get all tables in game
