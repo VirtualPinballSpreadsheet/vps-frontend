@@ -102,7 +102,7 @@
 			style="scroll-padding-inline:{overflow}rem; padding:1rem {overflow}rem; gap:{$mobile.mobile
 				? gap / 2
 				: gap}rem;"
-			class="scroller grid grid-flow-col overflow-x-scroll md:overflow-x-hidden w-full hide-scrollbar"
+			class="scroller grid grid-flow-col overflow-x-scroll w-full hide-scrollbar"
 			class:hovered
 		>
 			{#each pages as _, i}
