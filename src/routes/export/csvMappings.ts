@@ -5,9 +5,10 @@ import { get } from 'svelte/store';
 import XLSX from 'xlsx';
 export interface NameOptions {
 	theAtEnd?: boolean;
+	edition?: boolean;
+	manufacturerYear?: boolean;
 	author?: boolean;
 	version?: boolean;
-	edition?: boolean;
 	mod?: boolean;
 	ssf?: boolean;
 	vr?: boolean;
@@ -20,9 +21,11 @@ export const getGameNames = (game: Game, nameOptions: NameOptions): [string, Tab
 	}
 	return (
 		game.tableFiles?.map((t) => [
-			`${name} ${
-				nameOptions.edition && t.edition ? `${t.edition} ` : ''
-			}(${game.manufacturer} ${game.year})${
+			`${name}${
+				nameOptions.edition && t.edition ? ` ${t.edition}` : ''
+			}${
+				nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ''
+			}${
 				nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 			}${nameOptions.version ? ` ${t.version || ''}` : ''}${
 				nameOptions.ssf && t.features?.includes('SSF') ? ` SSF` : ''
@@ -38,9 +41,11 @@ export const getTableName = (t: TableFile, game: Game, nameOptions: NameOptions)
 	if (nameOptions.theAtEnd && game.name.slice(0, 4).toLowerCase() === 'the ') {
 		name = `${name.slice(4).trim()}, The`;
 	}
-	return `${name} ${
-		nameOptions.edition && t.edition ? `${t.edition} ` : ''
-	}(${game.manufacturer} ${game.year})${
+	return `${name}${
+		nameOptions.edition && t.edition ? ` ${t.edition} ` : ''
+	}${
+		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : ''
+	}${
 		nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
 	}${nameOptions.version ? ` ${t.version || ''}` : ''}${
 		nameOptions.ssf && t.features?.includes('SSF') ? ` SSF` : ''
