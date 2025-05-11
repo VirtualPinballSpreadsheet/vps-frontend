@@ -92,7 +92,8 @@ const sortUpdatedFiles = (a: FileUpload, b: FileUpload) => {
 }
 
 const sortYear = (a: Game, b: Game) => { 
-	return (a.year || 0) - (b.year || 0);
+	const c = (a.year || 0) - (b.year || 0);
+	return c == 0 ? sortName(a, b) : c;
 }
 
 const sortName = (a: Game, b: Game) => { 
@@ -100,7 +101,8 @@ const sortName = (a: Game, b: Game) => {
 }
 
 const sortDesigner = (a: Game, b: Game, missing: string) => { 
-	return (a.designers?.[0] || missing).localeCompare(b.designers?.[0] || missing);
+	const c = (a.designers?.[0] || missing).localeCompare(b.designers?.[0] || missing);
+	return c == 0 ? sortName(a, b) : c;
 }
 
 export const sortOptions: {
