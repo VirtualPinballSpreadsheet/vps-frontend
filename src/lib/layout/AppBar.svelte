@@ -47,7 +47,7 @@
 		</div>
 	</svelte:fragment>
 	<div class="p-0 md:px-4 flex items-center gap-4 text-xs md:text-sm">
-		<div class="input-group input-group-divider grid-cols-[fr_auto] md:grid-cols-[auto_fr_auto]">
+		<div class="input-group input-group-divider grid-cols-[1fr_auto] md:grid-cols-[auto_1fr_auto]">
 			<div class="input-group-shim !hidden md:!flex"><Fa icon={faSearch} /></div>
 			<input type="search" placeholder="Search..." bind:value={$query} />
 			<select class="select rounded-l-none text-xs md:text-sm" bind:value={$mode}>

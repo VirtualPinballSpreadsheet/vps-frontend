@@ -92,8 +92,7 @@ const sortUpdatedFiles = (a: FileUpload, b: FileUpload) => {
 }
 
 const sortYear = (a: Game, b: Game) => {
-	const c = (a.year || 0) - (b.year || 0);
-	return c == 0 ? sortName(a, b) : c;
+	return ((a.year || 0) - (b.year || 0)) || sortName(a, b);
 }
 
 const sortName = (a: Game, b: Game) => {
@@ -101,8 +100,8 @@ const sortName = (a: Game, b: Game) => {
 }
 
 const sortDesigner = (a: Game, b: Game, missing: string) => {
-	const c = (a.designers?.[0] || missing).localeCompare(b.designers?.[0] || missing);
-	return c == 0 ? sortName(a, b) : c;
+	return ((a.designers?.[0] || missing).localeCompare(b.designers?.[0] || missing)) ||
+		sortName(a, b);
 }
 
 export const sortOptions: {
@@ -124,31 +123,31 @@ export const sortOptions: {
 		{
 			name: "Year Ascending", sortBy: 'yearASC',
 			compareGames: (a, b) => { return sortYear(a, b) },
-			compareFiles: (af, ag, bf, bg) => { return sortYear(ag, bg) }
+			compareFiles: (af, ag, bf, bg) => { return sortYear(ag, bg) || sortUpdatedFiles(af, bf) }
 		},
 		{
 			name: "Year Descending", sortBy: 'yearDSC',
 			compareGames: (a, b) => { return sortYear(b, a) },
-			compareFiles: (af, ag, bf, bg) => { return sortYear(bg, ag) }
+			compareFiles: (af, ag, bf, bg) => { return sortYear(bg, ag) || sortUpdatedFiles(af, bf)}
 		},
 		{
 			name: "Name A-Z", sortBy: 'nameASC',
 			compareGames: (a, b) => { return sortName(a, b) },
-			compareFiles: (af, ag, bf, bg) => { return sortName(ag, bg) }
+			compareFiles: (af, ag, bf, bg) => { return sortName(ag, bg) || sortUpdatedFiles(af, bf) }
 		},
 		{
 			name: "Name Z-A", sortBy: 'nameDSC',
 			compareGames: (a, b) => { return sortName(b, a) },
-			compareFiles: (af, ag, bf, bg) => { return sortName(bg, ag) }
+			compareFiles: (af, ag, bf, bg) => { return sortName(bg, ag) || sortUpdatedFiles(af, bf) }
 		},
 		{
 			name: "Designer A-Z", sortBy: 'designerASC',
 			compareGames: (a, b) => { return sortDesigner(a, b, 'zzz') },
-			compareFiles: (af, ag, bf, bg) => { return sortDesigner(ag, bg, 'zzz') }
+			compareFiles: (af, ag, bf, bg) => { return sortDesigner(ag, bg, 'zzz') || sortUpdatedFiles(af, bf) }
 		},
 		{
 			name: "Designer Z-A", sortBy: 'designerDSC',
 			compareGames: (a, b) => { return sortDesigner(b, a, '@@@') },
-			compareFiles: (af, ag, bf, bg) => { return sortDesigner(bg, ag, '@@@') }
+			compareFiles: (af, ag, bf, bg) => { return sortDesigner(bg, ag, '@@@') || sortUpdatedFiles(af, bf) }
 		},
 	]
