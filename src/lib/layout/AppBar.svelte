@@ -3,7 +3,7 @@
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
-	import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faFilter, faSearch, faSort } from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import Navigation from './Navigation.svelte';
@@ -14,6 +14,13 @@
 	const drawerStore = getDrawerStore();
 	const onOpenDrawer = () => {
 		drawerStore?.open();
+	};
+
+	const popupSort: PopupSettings = {
+		event: 'focus-click',
+		target: 'popupSort',
+		placement: 'bottom',
+		closeQuery: '.listbox-item'
 	};
 </script>
 
@@ -40,7 +47,7 @@
 		</div>
 	</svelte:fragment>
 	<div class="p-0 md:px-4 flex items-center gap-4 text-xs md:text-sm">
-		<div class="input-group input-group-divider grid-cols-[1fr_auto] md:grid-cols-[auto_1fr_auto]">
+		<div class="input-group input-group-divider grid-cols-[fr_auto] md:grid-cols-[auto_1fr_auto]">
 			<div class="input-group-shim !hidden md:!flex"><Fa icon={faSearch} /></div>
 			<input type="search" placeholder="Search..." bind:value={$query} />
 			<select class="select rounded-l-none text-xs md:text-sm" bind:value={$mode}>
@@ -57,6 +64,11 @@
 		>
 			<Fa icon={faFilter} />
 		</button>
+
+		<button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSort}>
+			Sort <Fa icon={faSort} class="ml-2" size="xs" />
+		</button>
+
 	</div>
 
 	<div slot="trail" class="hidden lg:flex mr-4 items-center gap-4">
