@@ -75,6 +75,11 @@
 				</div>
 				<EditButton {game} />
 			</div>
+			{#if file.edition}
+				<div class="flex gap-2 max-w-full">
+				<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.edition}</p>
+				</div>
+			{/if}
 
 			<div class="flex gap-1 text-center">
 				<p class="text-ellipsis whitespace-nowrap overflow-hidden">{game.manufacturer}</p>
@@ -113,7 +118,8 @@
 	<!-- Main Text -->
 	<div class="flex flex-col py-4 info" class:opacity-0={hovered}>
 		<div class="flex gap-2">
-			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.game?.name}</p>
+			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">{file.game?.name}{
+				file.edition ? ` ${file.edition}` : ''}</p>
 			<div class="badge badge-glass my-auto py-0.5 px-1">
 				{file.tableFormat}
 			</div>

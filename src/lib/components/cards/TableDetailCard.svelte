@@ -47,6 +47,11 @@
 		/>
 	</a>
 	<div class="flex flex-col py-4">
+		{#if file.edition}
+		<div class="flex gap-2">
+			<p class="text-ellipsis whitespace-nowrap overflow-hidden">{file.edition}</p>
+		</div>
+		{/if}
 		<div class="flex gap-2">
 			<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden">
 				{file.authors?.join(', ')}
