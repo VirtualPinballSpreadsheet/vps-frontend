@@ -11,6 +11,8 @@
 
 	let state: NameOptions = {
 		theAtEnd: true,
+		edition: true,
+		manufacturerYear: true,
 		author: true,
 		version: true,
 		mod: true,
@@ -118,6 +120,14 @@
 					on:click={() => (state.theAtEnd = !state.theAtEnd)}
 				>
 					", The" at the end</button
+				>
+				<button
+					class:variant-filled-secondary={state.manufacturerYear}
+					on:click={() => (state.manufacturerYear = !state.manufacturerYear)}>Manufacturer / Year</button
+				>
+				<button
+					class:variant-filled-secondary={state.edition}
+					on:click={() => (state.edition = !state.edition)}>Edition</button
 				>
 				<button
 					class:variant-filled-secondary={state.author}
