@@ -1,18 +1,21 @@
-import { type Game, fileTypes, type FileUpload, type TableFile } from '$lib/types/VPin';
+import { type Game, fileTypes, type FileUpload, type TableFile, EmptyGame } from '$lib/types/VPin';
 import MiniSearch from 'minisearch';
 import { derived, get, writable, type Writable } from 'svelte/store';
 import { DB } from './DbStore';
 import type { SortBy, Mode } from '$lib/types/Filter';
+import { sortOptions } from '$lib/types/Filter';
 
 // -------- STORES -----------------------------------------------------------------------
 
-const sortedDbStore = derived(DB.dbStore, ($db) => {
-	return Object.values($db).sort((a, b) => {
-		return (b.lastCreatedAt || b.updatedAt) - (a.lastCreatedAt || a.updatedAt);
-	});
+const sortBy = writable<SortBy>('lastUpdated');
+
+const sortedDbStore = derived([DB.dbStore, sortBy], ([$db, sortBy]) => {
+	const sortOption = sortOptions.find(element => element.sortBy == sortBy) || sortOptions[0];
+	return Object.values($db).sort(sortOption.compareGames);
 });
 
-const sortedFilesStore = derived(DB.dbStore, ($db) => {
+const sortedFilesStore = derived([DB.dbStore, sortBy], ([$db, sortBy]) => {
+	const sortOption = sortOptions.find(element => element.sortBy == sortBy) || sortOptions[0];
 	const games = Object.values($db);
 	const res: { [K in (typeof fileTypes)[number]]?: FileUpload[] } = {};
 	for (const fileType of fileTypes) {
@@ -44,7 +47,11 @@ const sortedFilesStore = derived(DB.dbStore, ($db) => {
 	Object.entries(res).forEach(([key, val]) => {
 		//@ts-ignore
 		res[key] = val.sort((a, b) => {
-			return (b.createdAt || 0) - (a.createdAt || 0);
+			//@ts-ignore
+			const ag = $db[a.game.id] || EmptyGame;
+			//@ts-ignore
+			const bg = $db[b.game.id] || EmptyGame;
+			return sortOption.compareFiles(a, ag, b, bg);
 		});
 	});
 
@@ -86,8 +93,6 @@ const designers = writable<{
 	active: boolean;
 	options: { label: string; value: string }[];
 }>({ active: false, value: [], options: [] });
-
-const sortBy = writable<SortBy>('lastUpdated');
 
 let timeoutId: NodeJS.Timeout;
 

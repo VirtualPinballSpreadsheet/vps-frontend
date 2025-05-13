@@ -3,7 +3,7 @@
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
-	import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { faFilter, faSearch, faSort } from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import Navigation from './Navigation.svelte';
@@ -14,6 +14,13 @@
 	const drawerStore = getDrawerStore();
 	const onOpenDrawer = () => {
 		drawerStore?.open();
+	};
+
+	const popupSort: PopupSettings = {
+		event: 'focus-click',
+		target: 'popupSort',
+		placement: 'bottom',
+		closeQuery: '.listbox-item'
 	};
 </script>
 
@@ -57,6 +64,11 @@
 		>
 			<Fa icon={faFilter} />
 		</button>
+
+		<button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSort}>
+			Sort <Fa icon={faSort} class="ml-2" size="xs" />
+		</button>
+
 	</div>
 
 	<div slot="trail" class="hidden lg:flex mr-4 items-center gap-4">
