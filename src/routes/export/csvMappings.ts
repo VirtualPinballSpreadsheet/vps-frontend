@@ -43,7 +43,7 @@ export const getTableName = (t: TableFile, game: Game, nameOptions: NameOptions)
 		name = `${name.slice(4).trim()}, The`;
 	}
 	return `${name}${
-		nameOptions.edition && t.edition ? ` ${t.edition} ` : ''
+		nameOptions.edition && t.edition ? ` ${t.edition}` : ''
 	}${
 		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : 
 			(nameOptions.author || nameOptions.version) ? ' -' : ''
@@ -74,7 +74,9 @@ export const transformPopper = (tables: TableFile[], options: NameOptions) => {
 		const GameFileName = sanitizeFilename(getTableName(table, game, options));
 		const GameName = sanitizeFilename(
 			getTableName(table, game, {
-				theAtEnd: options.theAtEnd, manufacturerYear: options.manufacturerYear,
+				theAtEnd: options.theAtEnd,
+				edition: options.edition,
+				manufacturerYear: options.manufacturerYear,
 			})
 		);
 		// Get all tables in game
