@@ -9,7 +9,7 @@
 	const { userStore } = User;
 
 	const popupSettings: PopupSettings = {
-		event: 'focus-click',
+		event: 'click',
 		target: 'popupSettings',
 		placement: 'bottom',
 		closeQuery: '.listbox-item'

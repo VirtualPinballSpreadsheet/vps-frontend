@@ -17,7 +17,7 @@
 	};
 
 	const popupSort: PopupSettings = {
-		event: 'focus-click',
+		event: 'click',
 		target: 'popupSort',
 		placement: 'bottom',
 		closeQuery: '.listbox-item'
