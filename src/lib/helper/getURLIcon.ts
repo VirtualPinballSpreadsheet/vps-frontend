@@ -1,4 +1,5 @@
 import {
+	faBicycle,
 	faCircle,
 	faCloudArrowDown,
 	faEarthAmericas,
@@ -32,6 +33,16 @@ export const getURLIcon = (url: FileUrl) => {
 			...url
 		};
 
+	if (url.url.includes('pinballnirvana'))
+		return {
+			tooltip: 'Pinball Nirvana',
+			class: 'variant-ghost-primary',
+			icon: faBicycle,
+			title: 'Nirvana',
+			...url
+		};
+	
+	
 	if (url.url.includes('drive.google'))
 		return {
 			tooltip: 'Google Drive',
