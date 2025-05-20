@@ -74,6 +74,7 @@ export type LetterFilter = (typeof letters)[number];
 export type Mode = 'game' | (typeof fileTypes)[number];
 
 export type SortBy =
+	| 'search'
 	| 'lastUpdated'
 	| 'leastUpdated'
 	| 'yearASC'
@@ -110,6 +111,11 @@ export const sortOptions: {
 	compareGames: (a: Game, b: Game) => number;
 	compareFiles: (af: FileUpload, ag: Game, bf: FileUpload, bg: Game) => number;
 }[] = [
+		{
+			name: "Search Relevance", sortBy: 'search',
+			compareGames: (a, b) => { return sortUpdatedGames(a, b) },
+			compareFiles: (af, ag, bf, bg) => { return sortUpdatedFiles(af, bf) }
+		},
 		{
 			name: "Last Updated", sortBy: 'lastUpdated',
 			compareGames: (a, b) => { return sortUpdatedGames(a, b) },

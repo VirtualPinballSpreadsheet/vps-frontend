@@ -1,5 +1,6 @@
 import { type Game, fileTypes, type FileUpload, type TableFile, EmptyGame } from '$lib/types/VPin';
 import MiniSearch from 'minisearch';
+import SPACE_OR_PUNCTUATION from 'minisearch';
 import { derived, get, writable, type Writable } from 'svelte/store';
 import { DB } from './DbStore';
 import type { SortBy, Mode } from '$lib/types/Filter';
@@ -116,27 +117,67 @@ const isSearchActive = derived(
 	}
 );
 
+query.subscribe(($query) => {
+	// update the sortBy based on there being a query -- the minisearch
+	// produces search relevance order results by default
+	if ($query) {
+		if (get(sortBy) == 'lastUpdated') {
+			sortBy.set('search');
+		}
+	} else {
+		if (get(sortBy) == 'search') {
+			sortBy.set('lastUpdated');
+		}
+	}
+});
+
+
 // -------- MINISEARCH -----------------------------------------------------------------------
+
+const COMBINE_WORDS = /[ -]/g;
+
+// define the minisearch store -- this describes how to
+// add documents (games) to the index.
 const minisearch = new MiniSearch<Game>({
-	fields: ['name', 'manufacturer', 'designers', ...fileTypes],
+	fields: ['name', 'nospace-name', 'manufacturer', 'designers', ...fileTypes],
 	extractField: (document: any, fieldName) => {
+
+		// handle names like count-down and dragon ball/dragon-ball/dragonball
+		if (fieldName == 'nospace-name') {
+			if (document.name.includes(' ') || document.name.includes('-')) {
+				return document.name.replaceAll(COMBINE_WORDS, '');
+			} else {
+				return null;
+			}
+		}
+
 		//@ts-ignore
 		if (fileTypes.includes(fieldName)) {
-			const vals = document[fieldName]?.reduce(
-				(a: any, b: any) => [...a, ...(b.authors || [])],
-				[]
-			);
-			return vals?.join(', ') || '';
+			// files are searched by author and (optionally) edition
+			const authors = Array.isArray(document[fieldName])
+				? document[fieldName].flatMap((item: any) => item.authors || [])
+				: [];
+			const editions: string[] = (document[fieldName] ?? [])
+				.filter((item: any): item is { edition: string } => typeof item.edition === 'string')
+				.map((item: any) => item.edition);
+			const combined = editions.concat(authors);
+			return combined.join(', ');
 		}
+
+		// e.g. designers
 		if (Array.isArray(document[fieldName])) return document[fieldName].join(', ');
-		// Access nested fields
+
+		// Access nested fields, e.g. name
 		return document[fieldName];
 	}
 });
 
-sortedDbStore.subscribe(($db) => {
+const miniSearchStore = derived([DB.dbStore], ([$db]) => {
+	// when the database changes, update the minisearch and
+	// filter domain tables
 	minisearch.removeAll();
 	minisearch.addAll(Object.values($db));
+
 	let _features: string[] = [];
 	let _theme: string[] = [];
 	let _designers: string[] = [];
@@ -146,7 +187,7 @@ sortedDbStore.subscribe(($db) => {
 
 	let time = performance.now();
 
-	$db.forEach((t) => {
+	for (const [id, t] of Object.entries($db)) {
 		if (t.designers) _designers.push(...t.designers);
 		if (t.theme) _theme.push(...t.theme);
 		if (t.manufacturer) _manufacturer.push(t.manufacturer);
@@ -159,7 +200,7 @@ sortedDbStore.subscribe(($db) => {
 				if (file.tableFormat) _features.push(file.tableFormat);
 			});
 		});
-	});
+	}
 
 	features.update((state) => ({
 		...state,
@@ -193,15 +234,62 @@ sortedDbStore.subscribe(($db) => {
 	}));
 
 	console.log('Assemble autocomplete', performance.now() - time);
+
+	return minisearch;
 });
 
 // Search results
-const minisearchResultsStore = derived([debouncedQuery, sortedDbStore], ([$q, $db]) => {
+const minisearchResultsStore = derived([debouncedQuery, sortedDbStore, mode, miniSearchStore], ([$q, $db, $mode, $minisearch]) => {
 	if (!$q) return;
-	const res = minisearch.search($q.toLowerCase(), {
-		prefix: true,
-		fuzzy: 0.2,
-		combineWith: 'AND'
+	const text = $q.toLowerCase();
+	const terms = MiniSearch.getDefault('tokenize')(text);
+	let combineWith;
+	let queries;
+
+	// a query for "dragon ball" will search for (dragon AND ball) OR (dragonball)
+	if (text.includes(' ')) {
+		combineWith = 'OR';
+		queries = [
+			{
+				queries: terms,
+				combineWith: 'AND'
+			},
+			{
+				queries: [text.replaceAll(' ', '')],
+				combineWith: 'AND'
+			}
+		];
+	} else {
+		// (this should only be a single term)
+		combineWith = 'AND';
+		queries = terms;
+	}
+
+	// search should not include authors (there is filtering for this) from
+	// random file categories
+	const matchFileType = $mode == 'game' ? 'tableFiles' : $mode;
+	const fields = ['name', 'nospace-name', 'manufacturer', 'designers', matchFileType];
+
+	const res = $minisearch.search({
+		fields: fields,
+		prefix: ((term, index, terms) => {
+			// special handling for "ball" as it matches too many
+			// things like "bally"
+			if (term == 'ball') {
+				return false;
+			}
+			return true;
+		}),
+		fuzzy: ((term, index, terms) => {
+			// special handling for "ball" as it matches too many
+			// things like "bally"
+			if (term == 'ball') {
+				return false;
+			}
+			return 0.2;
+		}),
+		combineWith: combineWith,
+		queries: queries
 	});
 	return res;
 });
@@ -219,17 +307,30 @@ const modeSearchResults = derived(
 		const $fullDb = get(DB.dbStore);
 
 		if ($mode === 'game') {
-			return $sr.map((r) => $fullDb[r.id]);
+			if (get(sortBy) == 'search') {
+				// this is in search relevance order
+				return $sr.map((r) => $fullDb[r.id]);
+			} else {
+				// apply sort order
+				const ids = new Set($sr.map((r) => r.id));
+				return $db.filter((g) => ids.has(g.id));
+			}
+		}
+
+		let sortedSr;
+		if (get(sortBy) == 'search') {
+			sortedSr = $sr;
+		} else {
+			const srIndex = Object.fromEntries($sr.map(sr => [sr.id, sr]));
+			sortedSr = $db
+				.map(g => srIndex[g.id])
+				.filter(entry => entry != null);
 		}
 
 		// Filter so that only valid entries are shown
-		const valid = ['name', 'manufacturer', 'designers', $mode];
-		const validGame = ['name', 'manufacturer', 'designers'];
-		const filteredSr = $sr.filter((sr) =>
-			Object.values(sr.match).some((els) => els.some((el) => valid.includes(el)))
-		);
+		const validGame = ['name', 'nospace-name', 'manufacturer', 'designers'];
 		const res: FileUpload[] = [];
-		for (const sr of filteredSr) {
+		for (const sr of sortedSr) {
 			const game = $fullDb[sr.id];
 			const files = game?.[$mode];
 			if (!files?.length) continue;
@@ -238,12 +339,20 @@ const modeSearchResults = derived(
 				res.push(...files.map((f) => ({ ...f, game: { id: game.id, name: game.name } })));
 				continue;
 			}
+
+			// if the query matches the mode, continue (though I think this should be
+			// true per filterdSr)
 			const q = Object.entries(sr.match).find(([q, els]) => els.some((el) => el === $mode))?.[0];
 			if (!q) continue;
-			// .. otherwise theres only author to match
+			// .. otherwise theres only autho or edition to match
 			files.forEach((file) => {
-				if (!file.authors?.some((author) => author.includes(q))) return;
-				res.push({ ...file, game: { id: game.id, name: game.name } });
+				if (
+					file.authors?.some((author) => author.toLowerCase().includes(q)) ||
+					//@ts-ignore
+					file.edition?.toLowerCase().includes(q)
+				) {
+					res.push({ ...file, game: { id: game.id, name: game.name } });
+				}
 			});
 		}
 		return res;
@@ -279,8 +388,8 @@ const playerFilterStore = derived(
 		return genericFilter($db, (game) =>
 			Boolean(
 				game.players !== undefined &&
-					game.players >= $filter.value[0] &&
-					game.players <= $filter.value[1]
+				game.players >= $filter.value[0] &&
+				game.players <= $filter.value[1]
 			)
 		);
 	}
