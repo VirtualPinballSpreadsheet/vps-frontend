@@ -147,7 +147,6 @@ sortedDbStore.subscribe(($db) => {
 	let time = performance.now();
 
 	$db.forEach((t) => {
-		if (t.features) _features.push(...t.features);
 		if (t.designers) _designers.push(...t.designers);
 		if (t.theme) _theme.push(...t.theme);
 		if (t.manufacturer) _manufacturer.push(t.manufacturer);
@@ -157,6 +156,7 @@ sortedDbStore.subscribe(($db) => {
 			t[ft]?.forEach((file) => {
 				if (file.authors) _authors.push(...file.authors);
 				if (file.features) _features.push(...file.features);
+				if (file.tableFormat) _features.push(file.tableFormat);
 			});
 		});
 	});
@@ -333,7 +333,9 @@ const featureFilterStore = derived(
 				);
 			} else {
 				return (item as Game).tableFiles?.some((t) =>
-					$filter.value.every((f) => t.features?.includes(f))
+					$filter.value.every(
+						(f) => (t.features?.includes(f) || t.tableFormat == f)
+					)
 				);
 			}
 		});
