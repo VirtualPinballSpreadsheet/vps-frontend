@@ -39,5 +39,6 @@ export const colorMap = {
 	LUT: 'bg-gray-500',
 	nFozzy: 'bg-blue-500',
 	Scorbit: 'bg-indigo-500',
-	Fleep: 'bg-yellow-500'
+	Fleep: 'bg-yellow-500',
+	VLM: 'bg-lime-500',
 } as const;
