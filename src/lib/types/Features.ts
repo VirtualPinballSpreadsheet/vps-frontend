@@ -23,6 +23,7 @@ export const FeatureDescriptions = {
 	'Adult': 'Table has adult themes',
 	'nFozzy': 'Table has improved/realistic physics',
 	'Fleep': 'Table has improve ball sounds',
+	'VLM': 'VPX Light Mapper -- enhanced lighting',
 	'LUT': 'Table coloring can be changed',
 	'Scorbit': 'Table integrates with Scorbit score management',
 	'BAM': 'Future Pinball table requires BAM (better arcade mode)',

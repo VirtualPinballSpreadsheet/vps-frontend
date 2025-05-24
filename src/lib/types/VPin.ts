@@ -151,6 +151,7 @@ export const TableFeatures = [
 	'Adult',
 	'nFozzy',
 	'Fleep',
+	'VLM',
 	'LUT',
 	'Scorbit',
 	'BAM',
