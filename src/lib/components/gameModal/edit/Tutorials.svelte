@@ -4,11 +4,12 @@
 	import { formatDate, formatDateDashed } from '$lib/helper/formatDate';
 	import { Search } from '$lib/stores/SearchStore';
 	import type { TutorialFile } from '$lib/types/VPin';
-	import UrlInputs from './URLInputs.svelte';
+	import { Paste } from '$lib/helper/paste';
 
 	const { author } = Search;
 	export let file: TutorialFile;
 	export let onDelete = () => {};
+	export let paste: Paste | undefined = undefined;
 </script>
 
 <div class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col gap-8">

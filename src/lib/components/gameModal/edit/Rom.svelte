@@ -3,23 +3,13 @@
 	import IdTag from '$lib/components/IdTag.svelte';
 	import { formatDate, formatDateDashed } from '$lib/helper/formatDate';
 	import { Search } from '$lib/stores/SearchStore';
-	import type { FileUpload } from '$lib/types/VPin';
+	import type { FileUpload, RomFile } from '$lib/types/VPin';
 	import UrlInputs from './URLInputs.svelte';
-	import { Paste, getClipboardText } from '$lib/helper/paste';
 
 	const { author } = Search;
-	export let file: FileUpload;
+	export let file: RomFile;
 	export let onDelete = () => {};
-	export let paste: Paste | undefined = undefined;
-
-	function pasteVersion(event: ClipboardEvent) {
-		file = paste.pasteVersion(file, getClipboardText(event));
-		event.preventDefault();
-	}
-	function pasteAuthors(event: ClipboardEvent) {
-		file = paste.pasteAuthors(file, getClipboardText(event));
-		event.preventDefault();
-	}
+    export let paste: Paste | undefined = undefined;
 </script>
 
 <div class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col gap-8">
@@ -41,7 +31,6 @@
 				type="text"
 				title="Version"
 				bind:value={file.version}
-				on:paste={pasteVersion}
 				on:blur={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</label>
@@ -53,7 +42,6 @@
 				type="date"
 				title="Created at"
 				value={formatDateDashed(file.createdAt || '')}
-				on:paste={pasteVersion}
 				on:change={(e) => (file.createdAt = new Date(e.target.value).getTime())}
 			/>
 		</label>
@@ -64,7 +52,6 @@
 		<EditableAutoCompleteChips
 			bind:value={file.authors}
 			options={$author.options}
-			onPaste={pasteAuthors}
 			on:change={(v) => {
 				file.updatedAt = new Date().getTime();
 				file.authors = v.detail;

@@ -2,9 +2,11 @@
 	import type { FileUpload } from '$lib/types/VPin';
 	import { faAdd, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
-	import { nanoid } from 'nanoid';
+	import { Paste } from '$lib/helper/paste';
+	import AddButton from './AddButton.svelte';
 
 	export let files: FileUpload[] | undefined;
+	export let paste: Paste | undefined = undefined;
 	export let title = '???';
 	export let component: ConstructorOfATypedSvelteComponent;
 
@@ -12,12 +14,16 @@
 </script>
 
 <div class="flex flex-col gap-4">
-	<button on:click={() => (open = !open)} class="h3 flex gap-2 items-center"
-		>{title} <span class="opacity-40">{files?.length || 0}</span><Fa
-			icon={open ? faChevronUp : faChevronDown}
-			size="12"
-		/></button
-	>
+	<div class="flex gap-4">
+		<button on:click={() => (open = !open)} class="h3 flex gap-2 items-center"
+			>{title} <span class="opacity-40">{files?.length || 0}</span><Fa
+				icon={open ? faChevronUp : faChevronDown}
+				size="12"
+			/></button
+		>
+
+		<AddButton bind:files={files} bind:paste={paste} bind:title={title} bind:open={open} />
+	</div>
 
 	{#if open}
 		{#if files?.length}
@@ -29,22 +35,9 @@
 						//@ts-ignore
 						files = files.filter((f) => f.id !== file.id);
 					}}
+					paste={paste}
 				/>
 			{/each}
 		{/if}
-
-		<button
-			class="btn variant-ghost-tertiary self-end flex gap-4"
-			on:click={() => {
-				if (!files) files = [];
-				//@ts-ignore
-				files.push({
-					id: nanoid(10),
-					createdAt: new Date().getTime(),
-					updatedAt: new Date().getTime()
-				});
-				files = files;
-			}}><Fa icon={faAdd} /> Add new {title}</button
-		>
 	{/if}
 </div>

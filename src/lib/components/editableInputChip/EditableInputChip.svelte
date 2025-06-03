@@ -60,6 +60,8 @@
 	/** Provide classes to set border radius styles. */
 	export let rounded: CssClasses = 'rounded-container-token';
 
+	export let onPaste: ((event: ClipboardEvent) => void) | undefined = undefined;
+
 	// Classes
 	const cBase = 'textarea cursor-pointer';
 	const cInterface = 'space-y-4';
@@ -193,6 +195,7 @@
 	<!-- Interface -->
 	<div class="input-chip-interface {classesInterface}">
 		<!-- Input Field -->
+		 <!-- TODO dkoski pass in function here for paste update value (array of string) -->
 		<form on:submit={addChip}>
 			<input
 				type="text"
@@ -203,6 +206,7 @@
 				on:input
 				on:focus
 				on:blur
+				on:paste={(e) => onPaste?.(e)}
 				disabled={$$restProps.disabled}
 			/>
 		</form>

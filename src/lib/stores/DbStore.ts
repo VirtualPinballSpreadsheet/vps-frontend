@@ -1,5 +1,5 @@
 import { get, writable } from 'svelte/store';
-import { EmptyGame, type Database, type Game } from '../types/VPin';
+import { EmptyFile, EmptyGame, type FileUpload, type Database, type Game } from '../types/VPin';
 import { DB_URL } from '../../env';
 import { localStorageStore } from '@skeletonlabs/skeleton';
 
@@ -67,6 +67,44 @@ export const getGame = (id: string) => {
 	return res;
 };
 
+export const findRom = (id: string) => {
+	const $db = get(dbStore);
+
+	// find an exemplar game with the given identifier:
+	// - game.id
+	// - table.id
+	// - rom name
+
+	const game = $db[id];
+	if (game) return game;
+
+	for (const game of Object.values($db)) {
+		const rom = game.romFiles?.find((t) => t.version === id);
+		if (rom) return game;
+
+		if (game.tableFiles?.some((t) => t.id === id)) {
+			return game;
+		}
+	}
+
+	return null;
+};
+
+export const findFile = (id: string, key: keyof Game extends infer K ? K : string): FileUpload | undefined => {
+	const $db = get(dbStore);
+
+	for (const group of Object.values($db)) {
+		const files = group[key];
+
+		if (Array.isArray(files)) {
+			const match = files.find((t) => t.id === id);
+			if (match) return match;
+		}
+	}
+
+	return undefined;
+};
+
 const fetchLastUpdatedDb = async () => {
 	try {
 		// const res = await fetch(
@@ -90,5 +128,7 @@ export const DB = {
 	getGame,
 	lastUpdated,
 	dbStore,
-	dbStoreOriginal
+	dbStoreOriginal,
+	findRom,
+	findFile,
 };

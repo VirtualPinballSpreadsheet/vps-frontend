@@ -58,6 +58,7 @@ export interface FileUpload {
 	imgUrl?: string;
 	broken?: boolean;
 	id: string;
+	parentId?: string;
 	version?: string;
 	// For internal search only
 	game?: {
@@ -72,7 +73,7 @@ export interface FileUrl {
 }
 
 export interface TableFile extends FileUpload {
-	tableFormat: 'VPX' | 'VP9' | 'PM5' | 'FX3' | 'FX2' | 'FX' | 'FP' | 'M';
+	tableFormat: 'VPX' | 'VP9' | 'PM5' | 'FX3' | 'FX2' | 'FX' | 'FP' | 'M' | 'PM5' | 'PC';
 	features?: TableFeature[];
 	theme?: string[];
 	comment?: string;
@@ -115,7 +116,7 @@ export interface MediaPackFile extends FileUpload {}
 
 export interface SoundFile extends FileUpload {}
 
-export type TableFeature = (typeof TableFeatures)[number];
+export type TableFeature = (typeof TableFeatures)[number] | (string & {});
 
 export interface TutorialFile {
 	authors: string[];
@@ -159,7 +160,7 @@ export const TableFeatures = [
 	'DOF'
 ];
 
-export type B2SFeature = (typeof B2SFeatures)[number];
+export type B2SFeature = (typeof B2SFeatures)[number] | (string & {});
 
 export const B2SFeatures = ['2Screens', '3Screens', 'FullDMD', 'incl. Table'] as const;
 

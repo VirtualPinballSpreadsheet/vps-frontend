@@ -9,6 +9,7 @@
 	const { author } = Search;
 	export let file: AltColorFile;
 	export let onDelete = () => {};
+    export let paste: Paste | undefined = undefined;
 </script>
 
 <div class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col gap-8">
