@@ -120,12 +120,7 @@
 			<div class="flex mt-auto w-full">
 				<div class="flex flex-col items-center justify-center flex-1 gap-1">
 					<p class="text-xs font-bold uppercase opacity-40">Updated at</p>
-					<p class="">{formatDate(table.updatedAt)}</p>
-				</div>
-				<div class="bg-surface-900-50-token h-full w-px opacity-20" />
-				<div class="flex flex-col items-center justify-center flex-1 gap-1">
-					<p class="text-xs font-bold uppercase opacity-40">Added at</p>
-					<p class="">{formatDate(table.createdAt || table.updatedAt)}</p>
+					<p class="">{formatDate(table.createdAt ?? table.updatedAt)}</p>
 				</div>
 			</div>
 		</div>
