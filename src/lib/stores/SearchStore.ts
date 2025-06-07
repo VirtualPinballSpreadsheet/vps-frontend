@@ -305,9 +305,10 @@ const modeSearchResults = derived(
 		}
 
 		const $fullDb = get(DB.dbStore);
+		const $sortBy = get(sortBy);
 
 		if ($mode === 'game') {
-			if (get(sortBy) == 'search') {
+			if ($sortBy == 'search') {
 				// this is in search relevance order
 				return $sr.map((r) => $fullDb[r.id]);
 			} else {
@@ -317,20 +318,10 @@ const modeSearchResults = derived(
 			}
 		}
 
-		let sortedSr;
-		if (get(sortBy) == 'search') {
-			sortedSr = $sr;
-		} else {
-			const srIndex = Object.fromEntries($sr.map(sr => [sr.id, sr]));
-			sortedSr = $db
-				.map(g => srIndex[g.id])
-				.filter(entry => entry != null);
-		}
-
-		// Filter so that only valid entries are shown
+		// Filter so that only valid entries (files) are shown
 		const validGame = ['name', 'nospace-name', 'manufacturer', 'designers'];
 		const res: FileUpload[] = [];
-		for (const sr of sortedSr) {
+		for (const sr of $sr) {
 			const game = $fullDb[sr.id];
 			const files = game?.[$mode];
 			if (!files?.length) continue;
@@ -340,11 +331,10 @@ const modeSearchResults = derived(
 				continue;
 			}
 
-			// if the query matches the mode, continue (though I think this should be
-			// true per filterdSr)
+			// if the query matches the mode, continue
 			const q = Object.entries(sr.match).find(([q, els]) => els.some((el) => el === $mode))?.[0];
 			if (!q) continue;
-			// .. otherwise theres only autho or edition to match
+			// .. otherwise there is only author or edition to match
 			files.forEach((file) => {
 				if (
 					file.authors?.some((author) => author.toLowerCase().includes(q)) ||
@@ -355,6 +345,21 @@ const modeSearchResults = derived(
 				}
 			});
 		}
+
+		if ($sortBy == 'search') {
+			// already in search relevance order
+		} else {
+			// sort the file result
+			const sortOption = sortOptions.find(element => element.sortBy == $sortBy) || sortOptions[0];
+			res.sort((a, b) => {
+				//@ts-ignore
+				const ag = $db[a.game.id] || EmptyGame;
+				//@ts-ignore
+				const bg = $db[b.game.id] || EmptyGame;
+				return sortOption.compareFiles(a, ag, b, bg);
+			});
+		}
+
 		return res;
 	}
 );

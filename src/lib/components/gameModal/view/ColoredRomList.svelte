@@ -68,7 +68,7 @@
 							<td>{file.comment || ''}</td>
 							<td class="w-40"><UrlChips urls={file.urls} /></td>
 							<td class="w-20"><IdTag id={file.id} /></td>
-							<td class="w-32">{formatDate(file.updatedAt)}</td>
+							<td class="w-32">{formatDate(file.createdAt ?? file.updatedAt)}</td>
 						</tr>
 					{/each}
 				</tbody>
