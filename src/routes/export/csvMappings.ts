@@ -14,36 +14,13 @@ export interface NameOptions {
 	vr?: boolean;
 }
 
-export const getGameNames = (game: Game, nameOptions: NameOptions): [string, TableFile][] => {
-	let name = game.name;
-	if (nameOptions.theAtEnd && game.name.slice(0, 4).toLowerCase() === 'the ') {
-		name = `${name.slice(4).trim()}, The`;
-	}
-	return (
-		game.tableFiles?.map((t) => [
-			`${name}${
-				nameOptions.edition && t.edition ? ` ${t.edition}` : ''
-			}${
-				nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : 
-					(nameOptions.author || nameOptions.version) ? ' -' : ''
-			}${
-				nameOptions.author && t.authors?.length ? ` ${t.authors[0]}` : ''
-			}${nameOptions.version ? ` ${t.version || ''}` : ''}${
-				nameOptions.ssf && t.features?.includes('SSF') ? ` SSF` : ''
-			}${nameOptions.mod && t.features?.includes('MOD') ? ` MOD` : ''}${
-				nameOptions.vr && t.features?.includes('VR') ? ` VR` : ''
-			}`,
-			t
-		]) || []
-	);
-};
 export const getTableName = (t: TableFile, game: Game, nameOptions: NameOptions): string => {
 	let name = game.name;
 	if (nameOptions.theAtEnd && game.name.slice(0, 4).toLowerCase() === 'the ') {
 		name = `${name.slice(4).trim()}, The`;
 	}
 	return `${name}${
-		nameOptions.edition && t.edition ? ` ${t.edition}` : ''
+		nameOptions.edition && t.edition ? ` - ${t.edition}` : ''
 	}${
 		nameOptions.manufacturerYear ? ` (${game.manufacturer} ${game.year})` : 
 			(nameOptions.author || nameOptions.version) ? ' -' : ''
@@ -72,13 +49,12 @@ export const transformPopper = (tables: TableFile[], options: NameOptions) => {
 		const game = db[table.game!.id];
 
 		const GameFileName = sanitizeFilename(getTableName(table, game, options));
-		const GameName = sanitizeFilename(
+		const GameName =
 			getTableName(table, game, {
 				theAtEnd: options.theAtEnd,
 				edition: options.edition,
 				manufacturerYear: options.manufacturerYear,
-			})
-		);
+			});
 		// Get all tables in game
 		res.push({
 			GameFileName: table.gameFileName || GameFileName,
