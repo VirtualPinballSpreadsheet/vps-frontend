@@ -46,7 +46,7 @@
 	<div class="flex justify-between mt-4">
 		<IdTag id={file.id} />
 		<h4 class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
-			{formatDate(file.updatedAt) || '???'}
+			{formatDate(file.createdAt || file.updatedAt) || '???'}
 		</h4>
 	</div>
 </div>

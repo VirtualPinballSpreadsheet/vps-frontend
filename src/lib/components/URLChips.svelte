@@ -16,12 +16,19 @@
 				? 'This link is broken and needs to be updated. If you are aware of a working upload, please contact us!'
 				: url.tooltip}
 		>
+		{#if url.broken}
+			<span
+				class="chip {url.class}"
+				class:opacity-20={url.broken}
+			><Fa icon={url.icon} />&nbsp;Broken</span>
+		{:else}
 			<a
 				href={url.broken ? '' : url.url}
 				target="_blank"
 				class="chip {url.class}"
 				class:opacity-20={url.broken}><Fa icon={url.icon} /><span>{url.title}</span></a
 			>
+		{/if}
 		</Tooltip>
 	{/each}
 </div>
