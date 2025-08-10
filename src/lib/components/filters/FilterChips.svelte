@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { SlideToggle } from '@skeletonlabs/skeleton';
 	import type { Writable } from 'svelte/store';
-	import AutoCompleteChips from './AutoCompleteChips.svelte';
+	import AutoCompleteChips from '../AutoCompleteChips.svelte';
 
 	export let store: Writable<{
 		value: string[];
