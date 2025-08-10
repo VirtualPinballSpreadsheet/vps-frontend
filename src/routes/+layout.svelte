@@ -19,7 +19,7 @@
 	import { onMount } from 'svelte';
 	import { DB } from '$lib/stores/DbStore';
 	import ModalStore from '$lib/stores/ModalStore.svelte';
-	import Filter from '$lib/components/Filter.svelte';
+	import Filter from '$lib/components/filters/Filter.svelte';
 	import { Search } from '$lib/stores/SearchStore';
 	import SidebarLeft from '$lib/layout/SidebarLeft.svelte';
 	import Drawer from '$lib/layout/Drawer.svelte';

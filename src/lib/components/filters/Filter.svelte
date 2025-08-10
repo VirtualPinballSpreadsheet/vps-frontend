@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Search } from '$lib/stores/SearchStore';
 	import FilterChips from './FilterChips.svelte';
+	import FilterYear from './FilterYear.svelte'; // ← new component below
 
-	const { manufacturer, theme, author, features } = Search;
+	const { manufacturer, theme, author, features, year } = Search;
 </script>
 
 <div class="p-4 flex">
@@ -11,5 +12,6 @@
 		<FilterChips store={author} title="Author" />
 		<FilterChips store={manufacturer} title="Manufacturer" />
 		<FilterChips store={theme} title="Theme" />
+		<FilterYear store={year} title="Year" />
 	</div>
 </div>
