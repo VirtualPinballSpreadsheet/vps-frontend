@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Search } from '$lib/stores/SearchStore';
 	import FilterChips from './FilterChips.svelte';
-	import FilterYear from './FilterYear.svelte'; // ← new component below
+	import FilterYear from './FilterYear.svelte';
 
 	const { manufacturer, theme, author, features, year } = Search;
 </script>
