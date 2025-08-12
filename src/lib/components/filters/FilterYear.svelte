@@ -12,14 +12,12 @@
 	function setMinLive(e: Event) {
 		const s = $store;
 		let min = Number((e.target as HTMLInputElement).value) || s.range[0];
-		min = Math.max(s.range[0], Math.min(min, s.range[1]));
 		store.set({ ...s, value: [min, s.value[1]], active: true });
 	}
 
 	function setMaxLive(e: Event) {
 		const s = $store;
 		let max = Number((e.target as HTMLInputElement).value) || s.range[1];
-		max = Math.max(s.range[0], Math.min(max, s.range[1]));
 		store.set({ ...s, value: [s.value[0], max], active: true });
 	}
 
