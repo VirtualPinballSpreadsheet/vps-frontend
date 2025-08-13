@@ -69,6 +69,12 @@ const players = writable<{ value: [number, number]; active: boolean }>({
 	active: false,
 	value: [0, 10]
 });
+const currentYear = new Date().getFullYear();
+const year = writable<{ value: [number, number]; active: boolean; range: [number, number] }>({
+	active: false,
+	value: [1930, currentYear],
+	range: [1930, currentYear]
+});
 const manufacturer = writable<{
 	value: string[];
 	active: boolean;
@@ -107,12 +113,19 @@ const debouncedQuery = derived<Writable<string>, string>(query, ($q, set) => {
 });
 
 const isSearchActive = derived(
-	[debouncedQuery, players, manufacturer, features, author, theme, filterActive],
-	([q, players, manufacturer, features, theme, author, filterActive]) => {
+	[debouncedQuery, players, manufacturer, features, author, theme, year, filterActive],
+	([$q, $players, $manufacturer, $features, $author, $theme, $year, $filterActive]) => {
 		return (
-			q ||
-			(filterActive &&
-				(players.active || manufacturer.active || features.active || theme.active || author.active))
+			$q ||
+			($filterActive &&
+				(
+					$players.active ||
+					$manufacturer.active ||
+					$features.active ||
+					$theme.active ||
+					$author.active ||
+					$year.active
+				))
 		);
 	}
 );
@@ -386,8 +399,21 @@ const genericFilter = (arr: FileUpload[] | Game[], filter: (game: Game) => boole
 	}
 };
 
+
+const yearFilterStore = derived(
+	[filterActive, year, modeSearchResults],
+	([$filterActive, $filter, $db]) => {
+		if (!$filterActive || !$filter.active || !$db?.length) return $db;
+		return genericFilter($db, (game) =>
+			typeof game.year === 'number' &&
+			game.year >= $filter.value[0] &&
+			game.year <= $filter.value[1]
+		);
+	}
+);
+
 const playerFilterStore = derived(
-	[filterActive, players, modeSearchResults],
+	[filterActive, players, yearFilterStore],
 	([$filterActive, $filter, $db]) => {
 		if (!$filterActive || !$filter.active || !$db?.length || !$filter.value.length) return $db;
 		return genericFilter($db, (game) =>
@@ -468,6 +494,7 @@ export const Search = {
 	// FILTER
 	filterActive,
 	players,
+	year,
 	manufacturer,
 	theme,
 	author,
