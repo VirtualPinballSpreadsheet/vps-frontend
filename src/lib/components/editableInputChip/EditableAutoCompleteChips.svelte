@@ -10,6 +10,7 @@
 	export let options: { label: string; value: string }[] = [];
 	export let placeholder = '';
 	export let restrict = false;
+	export let onPaste: ((event: ClipboardEvent) => void) | undefined = undefined;
 
 	let inputChip = '';
 	const id = nanoid(10);
@@ -30,6 +31,7 @@
 		name="chips"
 		{placeholder}
 		chips="variant-filled-primary"
+		onPaste={onPaste}
 	/>
 	<div
 		class="card max-h-48 p-4 overflow-y-auto z-50"

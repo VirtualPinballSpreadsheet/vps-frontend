@@ -6,10 +6,25 @@
 	import { Search } from '$lib/stores/SearchStore';
 	import { B2SFeatureOptions, type B2SFile, type TableFile } from '$lib/types/VPin';
 	import UrlInputs from './URLInputs.svelte';
+    import { Paste, getClipboardText } from '$lib/helper/paste';
 
 	const { features, theme, author } = Search;
 	export let file: B2SFile;
 	export let onDelete = () => {};
+    export let paste: Paste | undefined = undefined;
+
+	function pasteVersion(event: ClipboardEvent) {
+		file = paste.pasteVersion(file, getClipboardText(event));
+		event.preventDefault();
+	}
+	function pasteAuthors(event: ClipboardEvent) {
+		file = paste.pasteAuthors(file, getClipboardText(event));
+		event.preventDefault();
+	}
+	function pasteFeatures(event: ClipboardEvent) {
+		file = paste.pasteFeatures(file, getClipboardText(event));
+		event.preventDefault();
+	}
 </script>
 
 <div
@@ -62,6 +77,7 @@
 					type="text"
 					title="Version"
 					bind:value={file.version}
+					on:paste={pasteVersion}
 					on:blur={() => (file.updatedAt = new Date().getTime())}
 				/>
 			</label>
@@ -74,6 +90,7 @@
 					title="Created at"
 					value={formatDateDashed(file.createdAt || '')}
 					on:blur={() => (file.updatedAt = new Date().getTime())}
+					on:paste={pasteVersion}
 					on:change={(e) => (file.createdAt = new Date(e.target.value).getTime())}
 				/>
 			</label>
@@ -83,6 +100,7 @@
 			<EditableAutoCompleteChips
 				options={B2SFeatureOptions}
 				bind:value={file.features}
+				onPaste={pasteFeatures}
 				on:change={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</div>
@@ -91,6 +109,7 @@
 			<EditableAutoCompleteChips
 				options={$author.options}
 				bind:value={file.authors}
+				onPaste={pasteAuthors}
 				on:change={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</div>

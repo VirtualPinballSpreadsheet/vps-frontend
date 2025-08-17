@@ -7,10 +7,29 @@
 	import { Search } from '$lib/stores/SearchStore';
 	import { TableFeatureOptions, type TableFile } from '$lib/types/VPin';
 	import UrlInputs from './URLInputs.svelte';
+	import { Paste, getClipboardText } from '$lib/helper/paste';
 
 	const { theme, author } = Search;
 	export let file: TableFile;
 	export let onDelete = () => {};
+	export let paste: Paste;
+
+	function pasteVersion(event: ClipboardEvent) {
+		file = paste.pasteVersion(file, getClipboardText(event));
+		event.preventDefault();
+	}
+	function pasteAuthors(event: ClipboardEvent) {
+		file = paste.pasteAuthors(file, getClipboardText(event));
+		event.preventDefault();
+	}
+	function pasteFeatures(event: ClipboardEvent) {
+		file = paste.pasteFeatures(file, getClipboardText(event));
+		event.preventDefault();
+	}
+	function pasteComment(event: ClipboardEvent) {
+		file = paste.pasteComment(file, getClipboardText(event));
+		event.preventDefault();
+	}
 </script>
 
 <div
@@ -51,6 +70,7 @@
 				type="text"
 				title="Comment"
 				bind:value={file.comment}
+				on:paste={pasteComment}
 				on:blur={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</label>
@@ -74,6 +94,7 @@
 					type="text"
 					title="Version"
 					bind:value={file.version}
+					on:paste={pasteVersion}
 					on:blur={() => (file.updatedAt = new Date().getTime())}
 				/>
 			</label>
@@ -99,6 +120,7 @@
 					type="date"
 					title="Created at"
 					value={formatDateDashed(file.createdAt || '')}
+					on:paste={pasteVersion}
 					on:change={(e) => (file.createdAt = new Date(e.target.value).getTime())}
 				/>
 			</label>
@@ -108,6 +130,7 @@
 			<EditableAutoCompleteChips
 				options={TableFeatureOptions}
 				bind:value={file.features}
+				onPaste={pasteFeatures}
 				on:change={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</div>
@@ -116,6 +139,7 @@
 			<EditableAutoCompleteChips
 				options={$author.options}
 				bind:value={file.authors}
+				onPaste={pasteAuthors}
 				on:change={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</div>
