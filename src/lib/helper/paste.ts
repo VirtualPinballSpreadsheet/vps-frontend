@@ -148,24 +148,3 @@ export class PasteROM extends Paste {
 export const getClipboardText = (event: ClipboardEvent) => {
     return event.clipboardData?.getData('Text') || "";
 }
-
-/*
-
-- pasteVersion
-- pasteFeatures
-- pasteAuthors
-
-Tables
-Backglasses
-Pup
-Colored Roms
-Alt Sound
-POV
-
-
-Look at Colored Roms
-- type
-- filename
-- foldername
-
-*/
