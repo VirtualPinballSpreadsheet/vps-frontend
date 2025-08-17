@@ -12,7 +12,7 @@
 	const { theme, author } = Search;
 	export let file: TableFile;
 	export let onDelete = () => {};
-	export let paste: Paste | undefined = undefined;
+	export let paste: Paste;
 
 	function pasteVersion(event: ClipboardEvent) {
 		file = paste.pasteVersion(file, getClipboardText(event));
@@ -24,6 +24,10 @@
 	}
 	function pasteFeatures(event: ClipboardEvent) {
 		file = paste.pasteFeatures(file, getClipboardText(event));
+		event.preventDefault();
+	}
+	function pasteComment(event: ClipboardEvent) {
+		file = paste.pasteComment(file, getClipboardText(event));
 		event.preventDefault();
 	}
 </script>
@@ -66,6 +70,7 @@
 				type="text"
 				title="Comment"
 				bind:value={file.comment}
+				on:paste={pasteComment}
 				on:blur={() => (file.updatedAt = new Date().getTime())}
 			/>
 		</label>

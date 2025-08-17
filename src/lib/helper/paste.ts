@@ -42,6 +42,22 @@ export class Paste {
         return file;
     }
 
+    pasteComment<T extends TableFile>(file: T, paste: string): T {
+        const other = DB.findFile(paste, this.key);
+
+        if (other) {
+            file.parentId = other.id;
+
+            const game = DB.getGame(other.game?.id || "");
+            
+            if (file.game != other.game) {
+                file.comment = `Retheme of ${game?.name || ""} (${game.manufacturer} ${game.year}) by ${(other.authors || [""])[0]}`
+            }
+        }
+
+        return file;
+    }
+
     pasteAuthors<T extends FileUpload>(file: T, paste: string): T {
         const other = DB.findFile(paste, this.key);
 

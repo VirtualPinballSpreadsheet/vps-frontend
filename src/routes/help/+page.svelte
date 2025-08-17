@@ -1,4 +1,54 @@
+<script lang="ts">
+	import { User } from '$lib/stores/UserStore';
+	const { userStore } = User;
+
+	import { faCopy } from '@fortawesome/free-solid-svg-icons';
+	import { clipboard, getToastStore } from '@skeletonlabs/skeleton';
+	import Fa from 'svelte-fa';
+
+	const copyBookmarklet = "javascript:(function()%7Bconst%20url%20%3D%20window.location.href%3B%0Aconst%20domain%20%3D%20window.location.hostname%3B%0Aif%20(domain%20%3D%3D%20%22vpuniverse.com%22)%20%7B%0A%09navigator.clipboard.writeText(document.querySelectorAll('script%5Btype%3D%22application%2Fld%2Bjson%22%5D')%5B0%5D.text)%3B%0A%7D%20else%20if%20(domain%20%3D%3D%20%22www.vpforums.org%22)%20%7B%0A%09const%20nav%20%3D%20document.querySelectorAll('span%5Bitemprop%3D%22title%22%5D')%0A%09const%20title%20%3D%20nav%5Bnav.length%20-%201%5D.textContent.split(%22%20(%22)%5B0%5D%3B%0A%09const%20author%20%3D%20document.querySelector(%22.name%22).textContent%3B%09%0A%09const%20dateElements%20%3D%20Array.from(document.querySelectorAll('strong')).filter(el%20%3D%3E%20el.textContent.trim()%20%3D%3D%3D%20'Last%20Updated%3A')%3B%0A%09const%20dateString%20%3D%20dateElements.first()%3F.nextSibling%3F.textContent%3F.trim()%20%7C%7C%20''%3B%0A%09const%20date%20%3D%20Date.parse(dateString)%20%7C%7C%20Date.now()%3B%0A%09const%20titleVersion%20%3D%20document.querySelector('.ipsType_pagetitle').textContent.replace(%22Download%22%2C%20%22%22).trim()%3B%0A%09const%20version%20%3D%20titleVersion.match(%2F%5Cd%2B%5C.%5Cd*%5C.%3F%5Cd*%7C%5Cw%2B%5C.zip%2F)%5B0%5D%3B%0A%09const%20description%20%3D%20document.querySelector('.description_content').textContent.trim()%3B%0A%09const%20content%20%3D%20%7B%22url%22%3A%20url%2C%20%22author%22%3A%7B%22name%22%3Aauthor%7D%2C%22name%22%3Atitle%2C%22description%22%3Adescription%2C%22dateModified%22%3Adate%2C%22softwareVersion%22%3Aversion%7D%3B%0A%09navigator.clipboard.writeText(JSON.stringify(content))%3B%0A%0A%7D%20else%20if%20(domain%20%3D%3D%20%22youtube.com%22%20%7C%7C%20domain%20%3D%3D%20%22www.youtube.com%22)%20%7B%0A%09const%20id%20%3D%20new%20URLSearchParams(window.location.search).get(%22v%22)%3B%0A%09const%20title%20%3D%20document.querySelector(%22%23title%22).textContent.trim()%3B%0A%09const%20author%20%3D%20document.querySelector(%22%23text-container%22).textContent.trim()%3B%0A%09const%20content%20%3D%20%7B%22url%22%3A%20url%2C%20%22author%22%3A%7B%22name%22%3Aauthor%7D%2C%22name%22%3Atitle%2C%22youtubeId%22%3Aid%7D%3B%0A%09navigator.clipboard.writeText(JSON.stringify(content))%3B%0A%7D%7D)()%3B";
+</script>
+
 <div class="flex flex-col gap-4">
+
+	{#if $userStore.admin}
+	<div class="text-4xl font-bold">Admin Tools - Cut & Paste</div>
+
+	<p>To gather information from VPU, VPF and YouTube you need to create a bookmarklet --
+		a bookmark that executes javascript rather than goes to a url.
+	</p>
+
+	<p>
+		1. Click this button to copy the javascript:
+		<button
+			class="chip badge-glass py-0.5 px-1 cursor-pointer"
+			use:clipboard={copyBookmarklet}
+		>
+			COPY Bookmarklet
+			<Fa icon={faCopy} size="8" class="ml-2" />
+		</button>
+	</p>
+	<p>2. Go to the bookmark manager.</p>
+	<p>3. Create a new bookmark and name it something like "COPY".</p>
+	<p>4. Paste the javascript (copied above) as the url.</p>
+
+	<p>
+		Now when you go to a table (etc.) page on VPU, VPF or YouTube you can click
+		that bookmark to copy the information from the page.  On the Game edit page you
+		can click the "New from paste" button to create a new entry.
+	</p>
+
+	<p>
+		Additionally you can do the following:
+	</p>
+	<p>&bull; copy a Game id and "New from paste" to copy the roms from another Game</p>
+	<p>&bull; copy a Table (File) id and paste into Comments</p>
+	<p>&bull; copy a Table (File) id and paste into Features</p>
+	<p>&bull; copy a Table (File) id and paste into Authors</p>
+	<p>&bull; copy from VPU/VPF and paste into Version to set the version and date</p>
+
+	{/if}
+
 	<div class="text-4xl font-bold">About VPS</div>
 	<p>VPS is community maintained database for Virtual Pinball related files and infos.</p>
 	<p>
