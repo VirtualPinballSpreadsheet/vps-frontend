@@ -10,15 +10,23 @@
 	const { author } = Search;
 	export let file: FileUpload;
 	export let onDelete = () => {};
-	export let paste: Paste | undefined = undefined;
+	export let paste: Paste;
 
-	function pasteVersion(event: ClipboardEvent) {
-		file = paste.pasteVersion(file, getClipboardText(event));
-		event.preventDefault();
+	function pasteVersion(event: ClipboardEvent): void {
+		const clipboardText = getClipboardText(event);
+		const [newFile, applied] = paste.pasteVersion(file, clipboardText);
+		if (applied) {
+			file = newFile;
+			event.preventDefault();
+		}
 	}
 	function pasteAuthors(event: ClipboardEvent) {
-		file = paste.pasteAuthors(file, getClipboardText(event));
-		event.preventDefault();
+		const clipboardText = getClipboardText(event);
+		const [newFile, applied] = paste.pasteAuthors(file, clipboardText);
+		if (applied) {
+			file = newFile;
+			event.preventDefault();
+		}
 	}
 </script>
 
