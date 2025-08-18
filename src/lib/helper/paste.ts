@@ -42,7 +42,7 @@ export class Paste {
         return file;
     }
 
-    pasteComment<T extends TableFile>(file: T, paste: string): T {
+    pasteComment<T extends TableFile>(file: T, paste: string): [T, Boolean] {
         const other = DB.findFile(paste, this.key);
 
         if (other) {
@@ -53,53 +53,55 @@ export class Paste {
             if (file.game != other.game) {
                 file.comment = `Retheme of ${game?.name || ""} (${game.manufacturer} ${game.year}) by ${(other.authors || [""])[0]}`
             }
+            return [file, true];
+        } else {
+            return [file, false];
         }
-
-        return file;
     }
 
-    pasteAuthors<T extends FileUpload>(file: T, paste: string): T {
+    pasteAuthors<T extends FileUpload>(file: T, paste: string): [T, Boolean] {
         const other = DB.findFile(paste, this.key);
 
         if (other) {
             file.parentId = other.id;
-        }
+            if (!other?.authors?.length) return file;
 
-        if (!other?.authors?.length) return file;
-
-        if (!file.authors) {
-            file.authors = [];
-        }
-
-        for (const author of other.authors) {
-            if (!file.authors.includes(author)) {
-                file.authors.push(author);
+            if (!file.authors) {
+                file.authors = [];
             }
-        }
 
-        return file;
+            for (const author of other.authors) {
+                if (!file.authors.includes(author)) {
+                    file.authors.push(author);
+                }
+            }
+            return [file, true];
+        } else {
+            return [file, false];
+        }
     }
 
-    pasteFeatures<T extends TableFile | B2SFile>(file: T, paste: string): T {
+    pasteFeatures<T extends TableFile | B2SFile>(file: T, paste: string): [T, Boolean] {
         const other = DB.findFile(paste, this.key) as unknown as TableFile|B2SFile;
 
         if (other) {
             file.parentId = other.id;
-        }
 
-        if (!other?.features?.length) return file;
+            if (!other?.features?.length) return file;
 
-        if (!file.features) {
-            file.features = [];
-        }
-
-        for (const feature of other.features) {            
-            if (!file.features.includes(feature)) {
-                file.features.push(feature);
+            if (!file.features) {
+                file.features = [];
             }
-        }
 
-        return file;
+            for (const feature of other.features) {            
+                if (!file.features.includes(feature)) {
+                    file.features.push(feature);
+                }
+            }
+            return [file, true];
+        } else {
+            return [file, false];
+        }
     }
 }
 
@@ -131,11 +133,6 @@ export class PasteTutorial extends Paste {
             n[0].title = json.name;
         }
         return n as unknown as FileUpload[];
-    }
-
-    pasteVersion<T extends FileUpload>(file: T, paste: string): T {
-        // tutorials do not track date/version
-        return file;
     }
 }
 
