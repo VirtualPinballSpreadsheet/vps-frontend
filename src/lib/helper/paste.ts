@@ -25,7 +25,7 @@ export class Paste {
         }];
     }
 
-    pasteVersion<T extends FileUpload>(file: T, paste: string): T {
+    pasteVersion = <T extends FileUpload>(file: T, paste: string): T => {
         const json = JSON.parse(paste);
 
         if (json) {
@@ -42,7 +42,11 @@ export class Paste {
         return file;
     }
 
-    pasteComment<T extends TableFile>(file: T, paste: string): [T, Boolean] {
+    makeComment = (game: Game, other: FileUpload): string => {
+        return `Retheme of ${game?.name || ""} (${game.manufacturer} ${game.year}) by ${(other.authors || [""])[0]}`;
+    }
+
+    pasteComment = <T extends TableFile>(file: T, paste: string): [T, Boolean] => {
         const other = DB.findFile(paste, this.key);
 
         if (other) {
@@ -51,7 +55,7 @@ export class Paste {
             const game = DB.getGame(other.game?.id || "");
             
             if (file.game != other.game) {
-                file.comment = `Retheme of ${game?.name || ""} (${game.manufacturer} ${game.year}) by ${(other.authors || [""])[0]}`
+                file.comment = this.makeComment(game, other);
             }
             return [file, true];
         } else {
@@ -59,12 +63,12 @@ export class Paste {
         }
     }
 
-    pasteAuthors<T extends FileUpload>(file: T, paste: string): [T, Boolean] {
+    pasteAuthors = <T extends FileUpload>(file: T, paste: string): [T, Boolean] => {
         const other = DB.findFile(paste, this.key);
 
         if (other) {
             file.parentId = other.id;
-            if (!other?.authors?.length) return file;
+            if (!other?.authors?.length) return [file, true];
 
             if (!file.authors) {
                 file.authors = [];
@@ -81,13 +85,13 @@ export class Paste {
         }
     }
 
-    pasteFeatures<T extends TableFile | B2SFile>(file: T, paste: string): [T, Boolean] {
+    pasteFeatures = <T extends TableFile | B2SFile>(file: T, paste: string): [T, Boolean] => {
         const other = DB.findFile(paste, this.key) as unknown as TableFile|B2SFile;
 
         if (other) {
             file.parentId = other.id;
 
-            if (!other?.features?.length) return file;
+            if (!other?.features?.length) return [file, true];
 
             if (!file.features) {
                 file.features = [];
@@ -103,6 +107,38 @@ export class Paste {
             return [file, false];
         }
     }
+
+    pasteParent = <T extends TableFile>(file: T, paste: string): [T, Boolean] => {
+        const other = DB.findFile(paste, this.key) as unknown as TableFile|B2SFile;
+        const game = DB.getGame(other.game?.id || "");
+
+        if (other) {
+            file.parentId = other.id;
+
+            if (!file.features?.length) {
+                file.features = other.features;
+                if (other.game != file.game && !file.features?.includes("Retheme")) {
+                    file.features?.push("Retheme");
+                }
+            }
+
+            if (file.authors.length) {
+                for (const author of other.authors) {
+                    if (!file.authors.includes(author)) {
+                        file.authors.push(author);
+                    }
+                }
+            }
+
+            if (!file.comment) {
+                file.comment = this.makeComment(game, other);
+            }
+            return [file, true];
+        } else {
+            return [file, false];
+        }
+    }
+
 }
 
 export class PasteTable extends Paste {
@@ -125,7 +161,7 @@ export class PasteTutorial extends Paste {
         super("tutorialFiles");
     }
 
-    newFromPaste(paste: string): FileUpload[] | undefined {
+    newFromPaste = (paste: string): FileUpload[] | undefined => {
         let n = super.newFromPaste(paste) as unknown as TutorialFile[];
         if (n) {
             const json = JSON.parse(paste);
@@ -142,7 +178,7 @@ export class PasteROM extends Paste {
         super("romFiles");
     }
 
-    newFromPaste(paste: string): FileUpload[] | undefined {
+    newFromPaste = (paste: string): FileUpload[] | undefined => {
         if (paste.length <= 16) {
             const game = DB.findRom(paste);
             if (game && game.romFiles) {

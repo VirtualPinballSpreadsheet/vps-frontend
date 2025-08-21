@@ -13,30 +13,18 @@
 	export let onDelete = () => {};
     export let paste: Paste;
 
-	function pasteVersion(event: ClipboardEvent): void {
+	function handlePaste(event: ClipboardEvent, pasteFn: (file: B2SFile, text: string) => [B2SFile, boolean]) {
 		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteVersion(file, clipboardText);
+		const [newFile, applied] = pasteFn(file, clipboardText);
 		if (applied) {
 			file = newFile;
 			event.preventDefault();
 		}
 	}
-	function pasteAuthors(event: ClipboardEvent) {
-		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteAuthors(file, clipboardText);
-		if (applied) {
-			file = newFile;
-			event.preventDefault();
-		}
-	}
-	function pasteFeatures(event: ClipboardEvent) {
-		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteFeatures(file, clipboardText);
-		if (applied) {
-			file = newFile;
-			event.preventDefault();
-		}
-	}
+
+	const pasteVersion = (e: ClipboardEvent) => handlePaste(e, paste.pasteVersion);
+	const pasteAuthors = (e: ClipboardEvent) => handlePaste(e, paste.pasteAuthors);
+	const pasteFeatures = (e: ClipboardEvent) => handlePaste(e, paste.pasteFeatures);
 </script>
 
 <div
