@@ -3,6 +3,9 @@
 	import { formatDate } from '$lib/helper/formatDate';
 	import IdTag from '../IdTag.svelte';
 
+	import { faFileText } from '@fortawesome/free-solid-svg-icons';
+	import Fa from 'svelte-fa';
+
 	export let file = EmptyTutorialFile;
 	export let href = '';
 	export let active = false;
@@ -10,6 +13,7 @@
 </script>
 
 <a {href} class="flex flex-col" id={file.id} data-gameid={gameId} data-filetype="b2sFiles">
+	{#if file.youtubeId}
 	<img
 		alt={file.youtubeId}
 		title={file.title}
@@ -18,6 +22,9 @@
 		width="352"
 		src={`https://img.youtube.com/vi/${file.youtubeId}/0.jpg`}
 	/>
+	{:else}
+		<Fa icon={faFileText} title={file.title} class="aspectTable hover:brightness-125 hover:scale-110 transition-all text-[146px]" />
+	{/if}
 
 	<div class="flex flex-col py-4">
 		<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden leading-4">

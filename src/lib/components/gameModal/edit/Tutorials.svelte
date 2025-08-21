@@ -35,6 +35,16 @@
 			/>
 		</label>
 	</div>
+	<div class="label">
+		<span>Text URL</span>
+		<input
+			class="input"
+			type="text"
+			title="Text URL"
+			bind:value={file.textURL}
+			on:blur={() => (file.updatedAt = new Date().getTime())}
+		/>
+	</div>
 
 	<div class="label">
 		<span>Authors</span>
