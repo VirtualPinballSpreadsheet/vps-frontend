@@ -12,7 +12,7 @@ export class Paste {
 
     newFromPaste(paste: string): FileUpload[] | undefined {
         const json = JSON.parse(paste);
-        const date = new Date(json.dateModified || json.dateCreated);
+        const date = new Date(json.dateModified || json.dateCreated || new Date());
 
         //@ts-ignore
         return [{
