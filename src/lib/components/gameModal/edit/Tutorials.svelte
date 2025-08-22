@@ -36,12 +36,12 @@
 		</label>
 	</div>
 	<div class="label">
-		<span>Text URL</span>
+		<span>URL (Text/Download)</span>
 		<input
 			class="input"
 			type="text"
 			title="Text URL"
-			bind:value={file.textURL}
+			bind:value={file.url}
 			on:blur={() => (file.updatedAt = new Date().getTime())}
 		/>
 	</div>

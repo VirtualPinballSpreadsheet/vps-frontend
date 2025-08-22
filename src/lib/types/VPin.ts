@@ -125,7 +125,7 @@ export interface TutorialFile {
 	id: string;
 	title: string;
 	youtubeId?: string;
-	textURL?: string;
+	url?: string;
 }
 
 export const TableFeatures = [
