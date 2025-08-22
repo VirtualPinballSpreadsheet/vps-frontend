@@ -4,6 +4,9 @@
 	import { formatDate } from '$lib/helper/formatDate';
 	import IdTag from '../IdTag.svelte';
 
+	import { faFileText } from '@fortawesome/free-solid-svg-icons';
+	import Fa from 'svelte-fa';
+
 	export let file = EmptyTutorialFile;
 	export let href = '';
 	export let active = false;
@@ -11,6 +14,7 @@
 </script>
 
 <div class="flex flex-col" id={file.id} data-gameid={gameId} data-filetype="b2sFiles">
+	{#if file.youtubeId}
 	<iframe
 		title={file.title}
 		class:glow={active}
@@ -21,6 +25,11 @@
 		allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
 		allowFullScreen
 	/>
+	{:else}
+	<a href="{file.textURL}" target="_blank">
+		<Fa icon={faFileText} class="text-[264px]" />
+	</a>
+	{/if}
 
 	<div class="flex flex-col py-4">
 		<p class="font-bold text-ellipsis whitespace-nowrap overflow-hidden leading-4">

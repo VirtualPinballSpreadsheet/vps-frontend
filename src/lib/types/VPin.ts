@@ -124,7 +124,8 @@ export interface TutorialFile {
 	createdAt?: number;
 	id: string;
 	title: string;
-	youtubeId: string;
+	youtubeId?: string;
+	textURL?: string;
 }
 
 export const TableFeatures = [
