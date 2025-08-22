@@ -8,42 +8,40 @@
 	import { TableFeatureOptions, type TableFile } from '$lib/types/VPin';
 	import UrlInputs from './URLInputs.svelte';
 	import { Paste, getClipboardText } from '$lib/helper/paste';
+	import { DB } from '$lib/stores/DbStore';
 
 	const { theme, author } = Search;
 	export let file: TableFile;
 	export let onDelete = () => {};
 	export let paste: Paste;
+	export let parentTableName: string = "";
 
-	function pasteVersion(event: ClipboardEvent): void {
+	function handlePaste(event: ClipboardEvent, pasteFn: (file: TableFile, text: string) => [TableFile, boolean]) {
 		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteVersion(file, clipboardText);
+		const [newFile, applied] = pasteFn(file, clipboardText);
 		if (applied) {
 			file = newFile;
 			event.preventDefault();
 		}
 	}
-	function pasteAuthors(event: ClipboardEvent) {
-		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteAuthors(file, clipboardText);
-		if (applied) {
-			file = newFile;
-			event.preventDefault();
-		}
-	}
-	function pasteFeatures(event: ClipboardEvent) {
-		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteFeatures(file, clipboardText);
-		if (applied) {
-			file = newFile;
-			event.preventDefault();
-		}
-	}
-	function pasteComment(event: ClipboardEvent) {
-		const clipboardText = getClipboardText(event);
-		const [newFile, applied] = paste.pasteComment(file, clipboardText);
-		if (applied) {
-			file = newFile;
-			event.preventDefault();
+
+	const pasteVersion = (e: ClipboardEvent) => handlePaste(e, paste.pasteVersion);
+	const pasteAuthors = (e: ClipboardEvent) => handlePaste(e, paste.pasteAuthors);
+	const pasteFeatures = (e: ClipboardEvent) => handlePaste(e, paste.pasteFeatures);
+	const pasteComment = (e: ClipboardEvent) => handlePaste(e, paste.pasteComment);
+	const pasteParent = (e: ClipboardEvent) => handlePaste(e, paste.pasteParent);
+
+	$: {
+		if (file?.parentId) {
+			const table = DB.findFile(file.parentId, "tableFiles");
+			const game = DB.getGame(table?.game?.id || "");
+			if (table && game) {
+				parentTableName = `${game.name} (${game.manufacturer} ${game.year}) by ${table.authors[0]}`;
+			} else {
+				parentTableName = "";
+			}
+		} else {
+			parentTableName = "";
 		}
 	}
 </script>
@@ -158,6 +156,17 @@
 				onPaste={pasteAuthors}
 				on:change={() => (file.updatedAt = new Date().getTime())}
 			/>
+		</div>
+		<div class="label">
+			<span>Parent</span>
+			<input
+				class="input"
+				type="text"
+				title="Parent (paste tableId)"
+				bind:value={file.parentId}
+				on:paste={pasteParent}
+			/>
+			<span>{parentTableName}</span>
 		</div>
 		<UrlInputs bind:urls={file.urls} on:blur={() => (file.updatedAt = new Date().getTime())} />
 		<!-- <div class="label">
