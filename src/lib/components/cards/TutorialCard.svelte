@@ -4,7 +4,7 @@
 	import { formatDate } from '$lib/helper/formatDate';
 	import IdTag from '../IdTag.svelte';
 
-	import { faFileText } from '@fortawesome/free-solid-svg-icons';
+	import { faFileText, faDownload } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
 	export let file = EmptyTutorialFile;
@@ -26,7 +26,7 @@
 		allowFullScreen
 	/>
 	{:else}
-	<a href="{file.textURL}" target="_blank">
+	<a href="{file.url}" target="_blank">
 		<Fa icon={faFileText} class="text-[264px]" />
 	</a>
 	{/if}
@@ -41,6 +41,13 @@
 		</p>
 		<div class="flex justify-between">
 			<IdTag id={file.id} />
+
+			{#if file.youtubeId && file.url}
+			<a href="{file.url}" target="_blank">
+				<Fa icon={faDownload} size="2x"/>
+			</a>
+			{/if}
+
 			<h4 class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden">
 				{formatDate(file.updatedAt) || '???'}
 			</h4>

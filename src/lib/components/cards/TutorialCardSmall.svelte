@@ -3,7 +3,7 @@
 	import { formatDate } from '$lib/helper/formatDate';
 	import IdTag from '../IdTag.svelte';
 
-	import { faFileText } from '@fortawesome/free-solid-svg-icons';
+	import { faFileText, faDownload } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 
 	export let file = EmptyTutorialFile;
@@ -31,7 +31,12 @@
 			{file.title}
 		</p>
 
-		<p class="text-ellipsis whitespace-nowrap overflow-hidden opacity-60 pb-1">
+		<p class="flex items-center gap-1 text-ellipsis whitespace-nowrap overflow-hidden opacity-60 pb-1">
+			{#if file.youtubeId && file.url}
+			<a href="{file.url}" target="_blank">
+				<Fa icon={faDownload}/>
+			</a>
+			{/if}
 			{file.authors?.join(', ')}
 		</p>
 	</div>
