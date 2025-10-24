@@ -60,6 +60,7 @@ export interface FileUpload {
 	id: string;
 	parentId?: string;
 	version?: string;
+	comment?: string;
 	// For internal search only
 	game?: {
 		id: string;
