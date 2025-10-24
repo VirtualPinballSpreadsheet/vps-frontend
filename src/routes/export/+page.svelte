@@ -5,7 +5,7 @@
 	import Spreadsheet from 'x-data-spreadsheet';
 
 	import { utils, writeFile } from 'xlsx';
-	import { transformPopper, transformPinx, type NameOptions, stox } from './csvMappings';
+	import { transformPopper, transformPinx, type NameOptions, stox, transformRaw } from './csvMappings';
 	import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
 	const { finalResultsStore, mode } = Search;
 
@@ -72,10 +72,22 @@
 
 	$: {
 		if (sheet && $finalResultsStore?.length && $finalResultsStore[0].tableFormat) {
-			let data =
-				type === 'popper'
-					? transformPopper($finalResultsStore as TableFile[], state)
-					: transformPinx($finalResultsStore as TableFile[], state);
+			let transformer
+			switch (type) {
+				case 'popper':
+					transformer = transformPopper;
+					break;
+				case 'pinx':
+					transformer = transformPinx;
+					break;
+				case 'raw':
+					transformer = transformRaw;
+					break;
+				default:
+					transformer = transformPopper;
+					break;
+			}
+			let data = transformer($finalResultsStore as TableFile[], state);
 
 			workbook.Sheets['lookup'] = utils.json_to_sheet(data);
 			sheet?.loadData(stox(workbook));
@@ -150,6 +162,7 @@
 			<RadioGroup>
 				<RadioItem bind:group={type} name="popper" value="popper">Popper</RadioItem>
 				<RadioItem bind:group={type} name="pinx" value="pinx">Pinball X</RadioItem>
+				<RadioItem bind:group={type} name="raw" value="raw">Raw</RadioItem>
 			</RadioGroup>
 			<div class="flex-1" />
 			<div class="font-bold">{$finalResultsStore?.length} tables</div>
