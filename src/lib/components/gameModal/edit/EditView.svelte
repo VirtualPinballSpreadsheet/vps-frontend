@@ -11,7 +11,7 @@
 	import { Edit } from '$lib/stores/EditStore';
 	import { ProgressRadial, getModalStore } from '@skeletonlabs/skeleton';
 	import ColoredRoms from './ColoredRoms.svelte';
-	import { Paste, PasteTutorial, PasteROM, PasteB2S, PasteTable } from '$lib/helper/paste';
+	import { Paste, PasteTutorial, PasteROM, PasteB2S, PasteTable, PasteWheel } from '$lib/helper/paste';
 	const modalStore = getModalStore();
 	const { saveEdit, editStore } = Edit;
 
@@ -50,7 +50,7 @@
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="POV" bind:files={cache.povFiles} paste={new Paste("povFiles")} component={File} />
 	<hr class="-mx-2 md:-mx-8" />
-	<FileSection title="Wheelart" bind:files={cache.wheelArtFiles} paste={new Paste("wheelArtFiles")} component={File} />
+	<FileSection title="Wheelart" bind:files={cache.wheelArtFiles} paste={new PasteWheel()} component={File} />
 	<hr class="-mx-2 md:-mx-8" />
 	<FileSection title="Topper" bind:files={cache.topperFiles} paste={new Paste("topperFiles")} component={File} />
 	<hr class="-mx-2 md:-mx-8" />

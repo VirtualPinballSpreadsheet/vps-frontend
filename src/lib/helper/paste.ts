@@ -1,4 +1,4 @@
-import type { FileUpload, TutorialFile, Game, TableFile, B2SFile } from '$lib/types/VPin';
+import type { FileUpload, TutorialFile, Game, TableFile, B2SFile, WheelArtFile } from '$lib/types/VPin';
 import { DB } from '$lib/stores/DbStore';
 import { nanoid } from 'nanoid';
 
@@ -39,7 +39,7 @@ export class Paste {
             file.version = paste || file.version;
         }
 
-        return file;
+        return [file, true];
     }
 
     makeComment = (game: Game, other: FileUpload): string => {
@@ -154,6 +154,42 @@ export class PasteB2S extends Paste {
         super("b2sFiles");
     }
 }
+
+export class PasteWheel extends Paste {
+
+    constructor() {
+        super("wheelArtFiles");
+    }
+
+    commentFromJSON = (json: any): string | null => {
+        const text = `${json.name ?? ""} ${json.description ?? ""}`.toLowerCase();
+        const keywords: Record<string, string> = {
+            "animated": "Animated",
+            "neon": "Neon",
+            "glass orb": "Glass Orb",
+            "blue ring": "Blue Ring",
+            "logo": "Logo",
+            "diagonal": "Diagonal",
+        };
+
+        const items = Object.entries(keywords)
+            .filter(([keyword]) => text.includes(keyword))
+            .map(([_, label]) => label);
+
+        return items.length > 0 ? items.join(" ") : null;
+    }
+
+    newFromPaste = (paste: string): FileUpload[] | undefined => {
+        let n = super.newFromPaste(paste) as unknown as WheelArtFile[];
+        if (n) {
+            const json = JSON.parse(paste);
+            n[0].comment = this.commentFromJSON(json)
+        }
+        return n as unknown as FileUpload[];
+    }
+
+}
+
 
 export class PasteTutorial extends Paste {
 
