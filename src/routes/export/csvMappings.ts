@@ -122,6 +122,70 @@ export const transformPinx = (tables: TableFile[], options: NameOptions) => {
 	return res;
 };
 
+export const transformRaw = (tables: TableFile[], options: NameOptions) => {
+	const res = [];
+	const db = get(DB.dbStore);
+	const _tables = JSON.parse(JSON.stringify(tables)).sort((a, b) =>
+		b.game!.name > a.game!.name ? -1 : 1
+	);
+
+	for (const table of _tables) {
+		const game = db[table.game!.id];
+
+		const GameFileName = sanitizeFilename(getTableName(table, game, options));
+		const GameName =
+			getTableName(table, game, {
+				theAtEnd: options.theAtEnd,
+				edition: options.edition,
+				manufacturerYear: options.manufacturerYear,
+			});
+
+		let name = game.name;
+		if (options.theAtEnd && game.name.slice(0, 4).toLowerCase() === 'the ') {
+			name = `${name.slice(4).trim()}, The`;
+		}
+
+		// Get all tables in game
+		res.push({
+			CombinedGameFileName: table.gameFileName || GameFileName,
+			CombinedGameName: GameName,
+			Name: name,
+			Manufact: game.manufacturer || '',
+			GameYear: game.year?.toString() || '',
+			Edition: table.edition || '',
+			FirstAuthor: table.authors?.[0] || '',
+			NumPlayers: game.players?.toString() || '',
+			SSF: table.features?.includes('SSF') ? 1 : 0,
+			MOD: table.features?.includes('MOD') ? 1 : 0,
+			VR: table.features?.includes('VR') ? 1 : 0,
+			GameType: game.type || '',
+			GameTheme: arrToStr(game.theme),
+			IPDBURL: game.ipdbUrl?.includes('.ipdb.org/machine.cgi?id=') ? `${game.ipdbUrl}` : '',
+			IPDBNum: game.ipdbUrl?.includes('.ipdb.org/machine.cgi?id=')
+				? game.ipdbUrl.split('.cgi?id=')[1]
+				: '',
+			VPSURL: `https://virtualpinballspreadsheet.github.io/tables?game=${game.id}&fileType=tables&fileId=${table.id}`,
+			DesignedBy: arrToStr(game.designers),
+			Author: arrToStr(table.authors),
+			Version: table.version || '',
+			Updated: formatDateDashed(table.createdAt || table.updatedAt),
+			Comment: table.comment || '',
+			Rom: game.romFiles?.length ? game.romFiles[0].version || '' : '',
+			Tags: arrToStr(
+				table.features?.filter(
+					(f) =>
+						!['incl. B2S', 'incl. ROM', 'incl. Art', 'incl. PuP', 'incl. Video', 'no ROM'].includes(
+							f
+						)
+				)
+			),
+			TableID: table.id,
+			GameID: game.id
+		});
+	}
+	return res;
+};
+
 export const sanitizeFilename = (input: string) => {
 	// List of illegal characters in Windows filenames
 	const illegalChars = /[\/:*\?"<>\|]/g;
