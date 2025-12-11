@@ -1,6 +1,6 @@
 <script>
 	import { Edit } from '$lib/stores/EditStore';
-	import { faAdd, faCodeMerge } from '@fortawesome/free-solid-svg-icons';
+	import { faAdd, faCodeMerge, faSearch } from '@fortawesome/free-solid-svg-icons';
 	import Fa from 'svelte-fa';
 	import { nanoid } from 'nanoid';
 	import { EmptyGame } from '$lib/types/VPin';
@@ -31,6 +31,13 @@
 				class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm flex gap-2 items-center"
 			>
 				<Fa icon={faCodeMerge} /> Align authors
+			</li></a
+		>
+		<a href="https://davidkoski.github.io/vps-db-tool/" target="missing">
+			<li
+				class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm flex gap-2 items-center"
+			>
+				<Fa icon={faSearch} /> Missing Resources
 			</li></a
 		>
 	</ul>
