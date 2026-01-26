@@ -8,6 +8,7 @@
 	import EditButton from '../EditButton.svelte';
 	import FeatureBlock from '../FeatureBlock.svelte';
 	import { formatDate } from '$lib/helper/formatDate';
+	import { onDestroy } from 'svelte';
 
 	const fac = new FastAverageColor();
 	const { dbStore } = DB;
@@ -17,13 +18,18 @@
 
 	let color = '';
 	let hovered = false;
+	let colorPromise: Promise<any> | null = null;
+	let imgElement: HTMLImageElement | null = null;
 
 	$: game = file?.game?.id ? $dbStore[file.game.id] : EmptyGame;
 
+	// Only calculate color on hover for desktop to save resources
 	$: {
-		if (file.imgUrl) {
-			fac.getColorAsync(file.imgUrl).then((_color) => {
+		if (hovered && file.imgUrl && !color) {
+			colorPromise = fac.getColorAsync(file.imgUrl, { algorithm: 'simple' }).then((_color) => {
 				if (_color) color = _color.rgb;
+			}).catch(() => {
+				// Silently fail if image can't be loaded
 			});
 		}
 	}
@@ -37,6 +43,15 @@
 		if ($mobile.mobile) return;
 		hovered = false;
 	};
+
+	onDestroy(() => {
+		// Clean up FastAverageColor resources
+		if (fac) {
+			fac.destroy();
+		}
+		// Cancel any pending color calculations
+		colorPromise = null;
+	});
 </script>
 
 <a
@@ -57,12 +72,16 @@
 		class:hovered
 		class="card !bg-surface-100 dark:!bg-surface-600 shadow-2xl shadow-black absolute top-0 -left-4 -right-4 bottom-0 -z-1 flex flex-col p-4 gap-0.5 items-center hoverCard"
 	>
+		{#if hovered}
 		<img
 			src={file.imgUrl || Placeholder}
 			alt={file.id}
 			style="height:35%;"
 			class="absolute top-0 left-0 right-0 w-full bgImage z-0 object-cover opacity-60"
+			loading="lazy"
+			decoding="async"
 		/>
+		{/if}
 
 		<div
 			class="flex flex-col max-w-full w-full absolute items-center p-4 gap-0.5 bottom-0"
@@ -108,6 +127,8 @@
 		class:hovered
 		class="card pinImage bg-surface-300-600-token shadow-black"
 		class:shadow-lg={hovered}
+		loading="lazy"
+		decoding="async"
 	/>
 
 	<!-- Main Text -->
