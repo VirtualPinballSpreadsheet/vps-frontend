@@ -3,7 +3,7 @@
 
 	const getData = async () => {
 		const res = await fetch(
-			'https://virtualpinballchat.com:6080/api/v1/currentWeek?channelName=competition-corner'
+			'https://virtualpinballchat.com/vpc/api/v1/currentWeek?channelName=competition-corner'
 		);
 		const data = await res.json();
 		return data;
