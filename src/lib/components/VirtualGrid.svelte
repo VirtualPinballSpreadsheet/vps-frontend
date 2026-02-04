@@ -154,6 +154,11 @@
 	}
 
 	.virtual-item {
-		contain: layout style paint;
+		position: relative;
+		z-index: 1;
+	}
+
+	.virtual-item:hover {
+		z-index: 10;
 	}
 </style>
