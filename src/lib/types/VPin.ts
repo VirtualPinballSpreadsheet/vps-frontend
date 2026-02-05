@@ -50,6 +50,8 @@ export const fileTypes = [
 	'tutorialFiles'
 ] as const;
 
+type FileTypeKey = typeof fileTypes[number];
+
 export interface FileUpload {
 	urls: FileUrl[];
 	authors: string[];

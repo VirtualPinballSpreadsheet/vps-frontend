@@ -1,7 +1,8 @@
 import { get, writable } from 'svelte/store';
-import { EmptyFile, EmptyGame, type FileUpload, type Database, type Game } from '../types/VPin';
+import { EmptyGame, type FileUpload, type Database, type Game } from '../types/VPin';
 import { DB_URL } from '../../env';
 import { localStorageStore } from '@skeletonlabs/skeleton';
+import { fileTypes } from '../types/VPin';
 
 const dbStore = writable<Database>({});
 const dbStoreOriginal = writable<Database>({});
@@ -105,6 +106,48 @@ export const findFile = (id: string, key: keyof Game extends infer K ? K : strin
 	return undefined;
 };
 
+const normalizeName = (s: string): string =>
+	s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+type CountedSet = Map<string, number>;
+
+const getAllFiles = (g: Game) => {
+	return fileTypes.flatMap(k => g[k] ?? []);
+};
+
+export const findAuthor = (name: string): string => {
+	const $db = get(dbStore);
+
+	const target = normalizeName(name);
+	const counts: CountedSet = new Map();
+
+	for (const game of Object.values($db)) {
+
+		for (const file of getAllFiles(game)) {
+			for (const author of file.authors ?? []) {
+
+				if (normalizeName(author).includes(target)) {
+					counts.set(author, (counts.get(author) ?? 0) + 1);
+				}
+
+			}
+		}
+	}
+
+	// take the most common match
+	let best: string | undefined;
+	let bestCount = 0;
+
+	for (const [author, count] of counts) {
+		if (count > bestCount) {
+			best = author;
+			bestCount = count;
+		}
+	}
+
+	return best ?? name;
+};
+
 const fetchLastUpdatedDb = async () => {
 	try {
 		// const res = await fetch(
@@ -131,4 +174,5 @@ export const DB = {
 	dbStoreOriginal,
 	findRom,
 	findFile,
+	findAuthor,
 };

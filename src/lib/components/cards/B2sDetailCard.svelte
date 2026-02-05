@@ -22,7 +22,9 @@
 				<p class="font-bold">
 					{file.authors?.join(', ')}
 				</p>
+				{#if file.version}
 				<p>{file.version}</p>
+				{/if}
 			</div>
 			{#if file.comment}
 				<p>{file.comment}</p>
