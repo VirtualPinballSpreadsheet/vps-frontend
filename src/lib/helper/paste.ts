@@ -20,12 +20,12 @@ export class Paste {
             version: json.softwareVersion,
             createdAt: date.getTime(),
             updatedAt: date.getTime(),
-            authors: [json.author.name],
+            authors: [DB.findAuthor(json.author.name)],
             urls: [{ url: json.url }]
         }];
     }
 
-    pasteVersion = <T extends FileUpload>(file: T, paste: string): T => {
+    pasteVersion = <T extends FileUpload>(file: T, paste: string): [T, Boolean] => {
         const json = JSON.parse(paste);
 
         if (json) {
@@ -75,8 +75,10 @@ export class Paste {
             }
 
             for (const author of other.authors) {
-                if (!file.authors.includes(author)) {
-                    file.authors.push(author);
+                const resolved = DB.findAuthor(author);
+
+                if (!file.authors.includes(resolved)) {
+                    file.authors.push(resolved);
                 }
             }
             return [file, true];
