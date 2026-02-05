@@ -43,7 +43,7 @@
 				href="{base}/{val.route}/"
 				title={val.name}
 				component={data?.length ? val.component : FileCardPlaceholder}
-				num={(data || dummy).length}
+				num={($sortedFilesStore?.[key] || dummy).length}
 				data={data?.length ? data : dummy}
 			/>
 		{/if}
