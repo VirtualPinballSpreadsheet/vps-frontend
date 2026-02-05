@@ -5,6 +5,7 @@
 	import { mobile } from '$lib/helper/mobile';
 	import { modeCurrent } from '@skeletonlabs/skeleton';
 	import { formatDate } from '$lib/helper/formatDate';
+	import { onDestroy } from 'svelte';
 
 	const fac = new FastAverageColor();
 
@@ -13,6 +14,7 @@
 
 	let color = '';
 	let hovered = false;
+	let colorPromise: Promise<any> | null = null;
 
 	$: bgImg = getBackglassUrl(file);
 
@@ -20,10 +22,13 @@
 		new Set((file.tableFiles || []).map((t) => t.tableFormat).filter((f) => !!f))
 	);
 
+	// Only calculate color on hover for desktop to save resources
 	$: {
-		if (bgImg) {
-			fac.getColorAsync(bgImg).then((_color) => {
+		if (hovered && bgImg && !color) {
+			colorPromise = fac.getColorAsync(bgImg, { algorithm: 'simple' }).then((_color) => {
 				if (_color) color = _color.rgb;
+			}).catch(() => {
+				// Silently fail if image can't be loaded
 			});
 		}
 	}
@@ -37,6 +42,15 @@
 		if ($mobile.mobile) return;
 		hovered = false;
 	};
+
+	onDestroy(() => {
+		// Clean up FastAverageColor resources
+		if (fac) {
+			fac.destroy();
+		}
+		// Cancel any pending color calculations
+		colorPromise = null;
+	});
 </script>
 
 <a
@@ -55,12 +69,16 @@
 			`rgb(var(--color-surface-${$modeCurrent ? 100 : 600})`}) !important;"
 		class:hovered
 	>
+		{#if hovered}
 		<img
 			src={bgImg}
 			alt={file.id}
 			style="height:36%;"
 			class="absolute top-0 left-0 right-0 w-full bgImage z-0 object-cover opacity-10"
+			loading="lazy"
+			decoding="async"
 		/>
+		{/if}
 
 		<div
 			class="flex flex-col max-w-full w-full absolute items-center p-2 bottom-0"
@@ -109,6 +127,8 @@
 		class:hovered
 		class="card pinImage bg-surface-300-600-token shadow-black"
 		class:shadow-lg={hovered}
+		loading="lazy"
+		decoding="async"
 	/>
 
 	<!-- Main Text -->
@@ -151,9 +171,5 @@
 		&.hovered {
 			transform: scale(1);
 		}
-	}
-
-	.hide {
-		opacity: 0;
 	}
 </style>
