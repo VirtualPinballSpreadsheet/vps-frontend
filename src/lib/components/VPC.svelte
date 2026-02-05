@@ -41,7 +41,7 @@
 		<div
 			class="flex gap-2 p-2 items-center rounded bg-surface-200 dark:bg-surface-800 mr-auto mt-2"
 		>
-			<div class="badge p-0 leading-3">W{data.currentSeasonWeekNumber}</div>
+			<div class="badge p-0 leading-3">W{data.weekNumber}</div>
 			<div class="badge p-0 m-0 leading-3">
 				{formatDate(data.periodStart)} -
 				{formatDate(data.periodEnd)}
