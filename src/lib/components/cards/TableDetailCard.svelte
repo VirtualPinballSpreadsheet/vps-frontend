@@ -22,7 +22,9 @@
 			<p class="font-bold max-h-48 overflow-hidden max-w-full">
 				{file.authors?.join(', ')}
 			</p>
+			{#if file.version}
 			<p>{file.version}</p>
+			{/if}
 			{#if file.comment}
 				<p>{file.comment}</p>
 			{/if}
