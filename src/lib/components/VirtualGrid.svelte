@@ -155,7 +155,6 @@
 
 	.virtual-item {
 		position: relative;
-		z-index: 1;
 	}
 
 	.virtual-item:hover {
