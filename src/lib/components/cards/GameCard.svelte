@@ -105,7 +105,9 @@
 			</p>
 			<div class="flex gap-2 mt-4 flex-wrap">
 				{#each file.theme || [] as theme}
-					<div class="badge variant-filled-surface">{theme.toUpperCase()}</div>
+					<div class="badge variant-ringed-surface px-1.5 py-0.5">
+						{theme.toUpperCase()}
+					</div>
 				{/each}
 			</div>
 			<div class="flex mt-auto w-full">
