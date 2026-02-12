@@ -6,6 +6,7 @@
 	import { modeCurrent } from '@skeletonlabs/skeleton';
 	import { formatDate } from '$lib/helper/formatDate';
 	import { onDestroy } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	const fac = new FastAverageColor();
 
@@ -54,7 +55,7 @@
 </script>
 
 <a
-	class="wrapper relative z-0"
+	class="wrapper relative z-0 overflow-visible block"
 	{href}
 	on:mouseenter={onMouseEnter}
 	on:mouseleave={onMouseLeave}
@@ -77,6 +78,7 @@
 			class="absolute top-0 left-0 right-0 w-full bgImage z-0 object-cover opacity-10"
 			loading="lazy"
 			decoding="async"
+			transition:fade={{ duration: 300 }}
 		/>
 		{/if}
 
@@ -103,7 +105,9 @@
 			</p>
 			<div class="flex gap-2 mt-4 flex-wrap">
 				{#each file.theme || [] as theme}
-					<div class="badge variant-filled-surface">{theme.toUpperCase()}</div>
+					<div class="badge variant-ringed-surface px-1.5 py-0.5">
+						{theme.toUpperCase()}
+					</div>
 				{/each}
 			</div>
 			<div class="flex mt-auto w-full">
@@ -142,8 +146,8 @@
 			{/each}
 		</div>
 		<p>{file.manufacturer} ({file.year})</p>
-		<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full">
-			{file.designers?.join(', ') || ''}
+		<p class="opacity-60 text-ellipsis whitespace-nowrap overflow-hidden max-w-full designers-line">
+			{file.designers?.join(', ') || '\u00A0'}
 		</p>
 	</div>
 </a>
@@ -165,11 +169,18 @@
 		transition: opacity 100ms ease-in-out 100ms;
 	}
 
+	.designers-line {
+		min-height: 1.5rem;
+	}
+
 	.hoverCard {
 		transform: scale(0);
+		transform-origin: center center;
 		transition: transform 100ms ease-in-out 100ms;
+		pointer-events: none;
 		&.hovered {
 			transform: scale(1);
+			pointer-events: auto;
 		}
 	}
 </style>

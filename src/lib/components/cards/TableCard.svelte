@@ -9,6 +9,7 @@
 	import FeatureBlock from '../FeatureBlock.svelte';
 	import { formatDate } from '$lib/helper/formatDate';
 	import { onDestroy } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	const fac = new FastAverageColor();
 	const { dbStore } = DB;
@@ -80,6 +81,7 @@
 			class="absolute top-0 left-0 right-0 w-full bgImage z-0 object-cover opacity-60"
 			loading="lazy"
 			decoding="async"
+			transition:fade={{ duration: 600 }}
 		/>
 		{/if}
 
