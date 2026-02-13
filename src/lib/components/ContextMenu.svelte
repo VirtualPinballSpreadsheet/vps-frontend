@@ -21,8 +21,8 @@
 
 	function rightClickContextMenu(e) {
 		const idNode = findAncestor(e.target);
-		const hasHighligtedText = window.getSelection()?.toString().length > 0;
-		if (!idNode || hasHighligtedText) return;
+		const hasHighlightedText = window.getSelection()?.toString().length > 0;
+		if (!idNode || hasHighlightedText) return;
 
 		const id = idNode.id;
 		const fileType = idNode.dataset.filetype;
