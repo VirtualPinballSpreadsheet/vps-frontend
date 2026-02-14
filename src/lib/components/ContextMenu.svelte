@@ -21,12 +21,15 @@
 
 	function rightClickContextMenu(e) {
 		const idNode = findAncestor(e.target);
-		if (!idNode) return;
-		debugger;
+		const hasHighlightedText = window.getSelection()?.toString().length > 0;
+		if (!idNode || hasHighlightedText) return;
+
 		const id = idNode.id;
 		const fileType = idNode.dataset.filetype;
 		const gameId = idNode.dataset.gameid;
 		if (!gameId || !fileType || !id) return;
+
+		e.preventDefault();
 
 		currentFile = { id, gameId, fileType };
 		showMenu = true;
@@ -91,4 +94,4 @@
 	</nav>
 {/if}
 
-<svelte:window on:contextmenu|preventDefault={rightClickContextMenu} on:click={onPageClick} />
+<svelte:window on:contextmenu={rightClickContextMenu} on:click={onPageClick} />
