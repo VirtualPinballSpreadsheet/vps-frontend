@@ -164,7 +164,14 @@ export class PasteWheel extends Paste {
     }
 
     commentFromJSON = (json: any): string | null => {
-        const text = `${json.name ?? ""} ${json.description ?? ""}`.toLowerCase();
+
+        // handle text like:
+        // All Logos, Copyrights and Trademarks are property of their respective owners
+        //
+        // we don't want to pick up "Logos" -> Logo
+        const text = `${json.name ?? ""} ${json.description ?? ""}`
+            .toLowerCase().replaceAll("logos", "");
+
         const keywords: Record<string, string> = {
             "animated": "Animated",
             "neon": "Neon",
