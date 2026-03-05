@@ -10,8 +10,9 @@
 	import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 	import { numberWithCommas } from '$lib/helper/numberWithCommas';
 
-	export let data: VPC;
-
+  	export let data: VPC;
+  	const { dbStore } = DB;
+  
 	const getTableImageUrl = (game?: Game, tableId?: string) => {
 		if (!game?.tableFiles || !tableId) return Placeholder;
 		for (let table of game.tableFiles) {
@@ -19,12 +20,11 @@
 		}
 		return Placeholder;
 	};
-
-	const { getGame } = DB;
-	$: game = getGame(data.vpsId);
-	$: gameImage = getBackglassUrl(game);
-	$: tableImage = getTableImageUrl(game, data.vpsId);
-	$: scores = data.scores.slice(0, 10).sort((a, b) => b.score - a.score);
+	
+	$: game = Object.keys($dbStore).length > 0 ? DB.getGame(data.vpsId) : undefined;
+	$: gameImage = game ? getBackglassUrl(game) : Placeholder;
+	$: tableImage = game ? getTableImageUrl(game, data.vpsId) : Placeholder;
+  	$: scores = data.scores.slice(0, 10).sort((a, b) => b.score - a.score);
 </script>
 
 <div class="flex flex-col md:flex-row px-16 py-16 gap-0 md:gap-12 items-stretch overflow-clip">

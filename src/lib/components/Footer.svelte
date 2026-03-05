@@ -14,11 +14,11 @@
 <div class="min-h-96 bg-surface-100 dark:bg-surface-600 -m-10 flex justify-center">
 	<div class="max-w-screen-2xl w-full">
 		{#await promise}
-			Loading VPC Weekly challenge...
+			Loading VPC weekly competition...
 		{:then data}
 			<VPC {data} />
 		{:catch someError}
-			Theres been an error fetching the VPC weekly challenge SpeechRecognitionResultList.
+			Theres been an error fetching the VPC weekly competition data.
 		{/await}
 	</div>
 </div>
