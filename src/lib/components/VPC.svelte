@@ -27,6 +27,7 @@
   	$: scores = data.scores.slice(0, 10).sort((a, b) => b.score - a.score);
 </script>
 
+{#if game}
 <div class="flex flex-col md:flex-row px-16 py-16 gap-0 md:gap-12 items-stretch overflow-clip">
 	<!-- Challenge -->
 	<div class="flex flex-col flex-1">
@@ -152,6 +153,9 @@
 		</div>
 	</div>
 </div>
+{:else}
+  <div class="p-16">Loading game data...</div>
+{/if}
 
 <style>
 	.tablevpc {
