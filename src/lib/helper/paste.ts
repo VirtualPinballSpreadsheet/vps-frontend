@@ -170,7 +170,8 @@ export class PasteWheel extends Paste {
         //
         // we don't want to pick up "Logos" -> Logo
         const text = `${json.name ?? ""} ${json.description ?? ""}`
-            .toLowerCase().replaceAll("logos", "");
+            .toLowerCase()
+            .replaceAll("logos", "");
 
         const keywords: Record<string, string> = {
             "animated": "Animated",
@@ -179,6 +180,7 @@ export class PasteWheel extends Paste {
             "blue ring": "Blue Ring",
             "logo": "Logo",
             "diagonal": "Diagonal",
+            "pup pack wheel": "PuP Pack Wheel",
         };
 
         const items = Object.entries(keywords)
