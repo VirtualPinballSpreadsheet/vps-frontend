@@ -5,6 +5,7 @@ import { derived, get, writable, type Writable } from 'svelte/store';
 import { DB } from './DbStore';
 import type { SortBy, Mode } from '$lib/types/Filter';
 import { sortOptions } from '$lib/types/Filter';
+import { isUrlQuery, isIdQuery, urlLookup, idLookup } from '$lib/helper/directSearch';
 
 // -------- STORES -----------------------------------------------------------------------
 
@@ -307,10 +308,29 @@ const minisearchResultsStore = derived([debouncedQuery, sortedDbStore, mode, min
 	return res;
 });
 
+// Direct lookup by URL or id. Returns undefined when the query is a normal
+// text search (so the minisearch pipeline runs), or the matching games/files
+// when the query is a URL or an id.
+const directSearchResults = derived([debouncedQuery, DB.dbStore, mode], ([$q, $db, $mode]) => {
+	if (!$q) return undefined;
+	const q = $q.trim();
+	if (isUrlQuery(q)) {
+		// a url that matches nothing yields an empty result (no fallback)
+		return urlLookup(q, $db, $mode);
+	}
+	if (isIdQuery(q)) {
+		const res = idLookup(q, $db, $mode);
+		if (res !== null) return res;
+		// id matched nothing -> fall through to text search
+	}
+	return undefined;
+});
+
 // Searchresults mapped by mode to objects
 const modeSearchResults = derived(
-	[mode, minisearchResultsStore, sortedDbStore, sortedFilesStore],
-	([$mode, $sr, $db, $fdb]) => {
+	[mode, minisearchResultsStore, sortedDbStore, sortedFilesStore, directSearchResults],
+	([$mode, $sr, $db, $fdb, $direct]) => {
+		if ($direct !== undefined) return $direct;
 		if (!$sr) {
 			// No Searchresult, return sorted dbs
 			if ($mode === 'game') return $db;
