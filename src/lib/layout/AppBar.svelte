@@ -1,14 +1,41 @@
 <script lang="ts">
-	import { AppBar, getDrawerStore, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import {
+		AppBar,
+		clipboard,
+		getDrawerStore,
+		getToastStore,
+		popup,
+		type PopupSettings
+	} from '@skeletonlabs/skeleton';
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
-	import { faFilter, faSearch, faSort } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faArrowUpFromBracket,
+		faFilter,
+		faSearch,
+		faSort
+	} from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
+	import { buildShareUrl } from '$lib/helper/shareSearch';
 	import Navigation from './Navigation.svelte';
 
-	const { query, mode, filterActive, resetFilters } = Search;
+	const {
+		query,
+		mode,
+		sortBy,
+		filterActive,
+		isSearchActive,
+		year,
+		players,
+		manufacturer,
+		features,
+		theme,
+		author,
+		designers,
+		resetFilters
+	} = Search;
 
 	const modes = Object.entries(modeMapping);
 	const drawerStore = getDrawerStore();
@@ -22,6 +49,22 @@
 		placement: 'bottom',
 		closeQuery: '.listbox-item'
 	};
+
+	// The share URL is a function of the whole search state. Referencing each
+	// reactive value here makes Svelte recompute it when any of them change.
+	$: shareState = {
+		query: $query,
+		mode: $mode,
+		sortBy: $sortBy,
+		year: $year.active ? $year.value : null,
+		players: $players.active ? $players.value : null,
+		manufacturer: $manufacturer.active ? $manufacturer.value : null,
+		features: $features.active ? $features.value : null,
+		theme: $theme.active ? $theme.value : null,
+		author: $author.active ? $author.value : null,
+		designers: $designers.active ? $designers.value : null
+	};
+	$: shareUrl = $isSearchActive ? buildShareUrl(shareState) : '';
 </script>
 
 <AppBar padding="py-2 md:py-4 px-0 pl-2">
@@ -69,6 +112,18 @@
 			Sort <Fa icon={faSort} class="ml-2" size="xs" />
 		</button>
 
+		<button
+			class="flex btn hover:variant-soft-primary btn-icon"
+			class:opacity-30={!$isSearchActive}
+			disabled={!$isSearchActive}
+			use:clipboard={shareUrl}
+			on:click={() => {
+				getToastStore().trigger({ message: 'Share link copied to clipboard.' });
+			}}
+			title="Copy share link"
+		>
+			<Fa icon={faArrowUpFromBracket} />
+		</button>
 	</div>
 
 	<div slot="trail" class="hidden lg:flex mr-4 items-center gap-4">

@@ -26,6 +26,7 @@
 	import { User } from '$lib/stores/UserStore';
 	import ResizeObserver from '$lib/components/resizeObserver.svelte';
 	import ContextMenu from '$lib/components/ContextMenu.svelte';
+	import { importShareLink } from '$lib/helper/shareSearch';
 
 	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
@@ -33,6 +34,9 @@
 	const { userStore } = User;
 
 	onMount(() => {
+		// One-shot: import search state from a share link (if any), then
+		// clean the URL up so it looks like a normal page.
+		importShareLink();
 		DB.fetchDb();
 		setInitialClassState();
 		const elemHtmlClasses = document.documentElement.classList;
