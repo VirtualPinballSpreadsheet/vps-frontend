@@ -29,4 +29,5 @@ export const FeatureDescriptions = {
 	'BAM': 'Future Pinball table requires BAM (better arcade mode)',
 	'FizX': 'Future Pinball table with improved physics',
 	'DOF': 'Table integrates with DOF (solenoids and lights)',
+	'GenAI': 'Author discloses GenAI used',
 };
