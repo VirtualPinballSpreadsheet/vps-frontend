@@ -43,8 +43,8 @@ describe('shareStateToParams', () => {
 			base({
 				year: [1990, 2000],
 				players: [1, 2],
-				manufacturer: ['Bally', 'Williams'],
-				author: ['Teisen']
+				manufacturer: { values: ['Bally', 'Williams'], negate: false },
+				author: { values: ['Teisen'], negate: false, firstOnly: false }
 			})
 		);
 		expect(p.get('year')).toBe('1990-2000');
@@ -54,6 +54,28 @@ describe('shareStateToParams', () => {
 		expect(p.get('theme')).toBeNull();
 		expect(p.get('features')).toBeNull();
 		expect(p.get('designers')).toBeNull();
+	});
+	it('encodes a negated filter with a leading !', () => {
+		const p = shareStateToParams(
+			base({ manufacturer: { values: ['Bally', 'Williams'], negate: true } })
+		);
+		expect(p.get('manufacturer')).toBe('!Bally,Williams');
+	});
+	it('encodes first-author-only as a flag param', () => {
+		const p = shareStateToParams(
+			base({ author: { values: ['Teisen'], negate: false, firstOnly: true } })
+		);
+		expect(p.get('author')).toBe('Teisen');
+		expect(p.get('firstAuthor')).toBe('true');
+	});
+	it('omits the firstAuthor flag when inactive, and a valueless author filter entirely', () => {
+		const p = shareStateToParams(
+			base({
+				author: { values: [], negate: true, firstOnly: true }
+			})
+		);
+		expect(p.get('author')).toBeNull();
+		expect(p.get('firstAuthor')).toBeNull();
 	});
 });
 
@@ -81,12 +103,25 @@ describe('paramsToShareState', () => {
 			sortBy: 'nameDSC',
 			year: [1990, 2000],
 			players: null,
-			manufacturer: ['Bally', 'Williams'],
+			manufacturer: { values: ['Bally', 'Williams'], negate: false },
 			features: null,
 			theme: null,
-			author: ['Teisen'],
+			author: { values: ['Teisen'], negate: false, firstOnly: false },
 			designers: null
 		});
+	});
+	it('parses a negated filter and the firstAuthor flag', () => {
+		const s = paramsToShareState(
+			new URLSearchParams('features=!MOD,FastFlips&author=!Teisen&firstAuthor=true'),
+			'game'
+		);
+		expect(s?.features).toEqual({ values: ['MOD', 'FastFlips'], negate: true });
+		expect(s?.author).toEqual({ values: ['Teisen'], negate: true, firstOnly: true });
+	});
+	it('a lone ! parses to an inactive filter', () => {
+		expect(
+			paramsToShareState(new URLSearchParams('manufacturer=!'), 'game')?.manufacturer
+		).toBeNull();
 	});
 	it('falls back to the default sort for an invalid sort value', () => {
 		const s = paramsToShareState(new URLSearchParams('query=x&sort=bogus'), 'game');
@@ -104,7 +139,7 @@ describe('paramsToShareState', () => {
 	it('trims and drops empty list items', () => {
 		expect(
 			paramsToShareState(new URLSearchParams('manufacturer=Bally,,Williams,'), 'game')?.manufacturer
-		).toEqual(['Bally', 'Williams']);
+		).toEqual({ values: ['Bally', 'Williams'], negate: false });
 	});
 });
 
@@ -120,10 +155,10 @@ describe('round trip', () => {
 			sortBy: 'yearASC',
 			year: [1977, 1999],
 			players: [1, 2],
-			manufacturer: ['Bally', 'Williams'],
-			features: ['MOD', 'FastFlips'],
-			theme: ['Sci-Fi'],
-			author: ['Teisen', 'Jubilee'],
+			manufacturer: { values: ['Bally', 'Williams'], negate: false },
+			features: { values: ['MOD', 'FastFlips'], negate: true },
+			theme: { values: ['Sci-Fi'], negate: false },
+			author: { values: ['Teisen', 'Jubilee'], negate: false, firstOnly: true },
 			designers: ['John Datko']
 		});
 		expect(paramsToShareState(shareStateToParams(s), s.mode)).toEqual(s);
@@ -133,6 +168,15 @@ describe('round trip', () => {
 			query: 'https://vpforums.org/index.php?app=downloads&showfile=751',
 			mode: 'tableFiles',
 			sortBy: 'search'
+		});
+		expect(paramsToShareState(shareStateToParams(s), s.mode)).toEqual(s);
+	});
+	it('every filter negated and first-author-only survives the round trip', () => {
+		const s = base({
+			manufacturer: { values: ['Bally'], negate: true },
+			features: { values: ['MOD'], negate: true },
+			theme: { values: ['Sci-Fi'], negate: true },
+			author: { values: ['Teisen'], negate: true, firstOnly: true }
 		});
 		expect(paramsToShareState(shareStateToParams(s), s.mode)).toEqual(s);
 	});
@@ -149,5 +193,22 @@ describe('buildShareUrl', () => {
 	});
 	it('has no query string for an empty state', () => {
 		expect(buildShareUrl(base())).toBe(`${window.location.origin}/games`);
+	});
+	it('keeps ! and , readable (both are legal in a query string)', () => {
+		const url = buildShareUrl(
+			base({
+				manufacturer: { values: ['Bally', 'Williams'], negate: true },
+				features: { values: ['MOD'], negate: false }
+			})
+		);
+		expect(url).toBe(`${window.location.origin}/games?manufacturer=!Bally,Williams&features=MOD`);
+	});
+	it('a ! kept readable in the URL parses back to a negated filter', () => {
+		const url = buildShareUrl(base({ manufacturer: { values: ['Bally'], negate: true } }));
+		const params = new URLSearchParams(new URL(url).search);
+		expect(paramsToShareState(params, 'game')?.manufacturer).toEqual({
+			values: ['Bally'],
+			negate: true
+		});
 	});
 });

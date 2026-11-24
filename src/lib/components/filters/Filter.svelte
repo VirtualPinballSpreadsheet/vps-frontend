@@ -8,10 +8,10 @@
 
 <div class="p-4 flex">
 	<div class="p-4 card w-full border-primary-600 border flex flex-col md:flex-row gap-4">
-		<FilterChips store={features} title="Features" />
-		<FilterChips store={author} title="Author" />
-		<FilterChips store={manufacturer} title="Manufacturer" />
-		<FilterChips store={theme} title="Theme" />
+		<FilterChips store={features} title="Features" allowNegate />
+		<FilterChips store={author} title="Author" allowNegate allowFirstOnly />
+		<FilterChips store={manufacturer} title="Manufacturer" allowNegate />
+		<FilterChips store={theme} title="Theme" allowNegate />
 		<FilterYear store={year} title="Year" />
 	</div>
 </div>

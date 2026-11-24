@@ -50,6 +50,9 @@
 		closeQuery: '.listbox-item'
 	};
 
+	// An active filter with no selected values is treated as inactive (null).
+	const listFilter = (f: { active: boolean; value: string[]; negate: boolean }) =>
+		f.active && f.value.length ? { values: f.value, negate: f.negate } : null;
 	// The share URL is a function of the whole search state. Referencing each
 	// reactive value here makes Svelte recompute it when any of them change.
 	$: shareState = {
@@ -58,10 +61,13 @@
 		sortBy: $sortBy,
 		year: $year.active ? $year.value : null,
 		players: $players.active ? $players.value : null,
-		manufacturer: $manufacturer.active ? $manufacturer.value : null,
-		features: $features.active ? $features.value : null,
-		theme: $theme.active ? $theme.value : null,
-		author: $author.active ? $author.value : null,
+		manufacturer: listFilter($manufacturer),
+		features: listFilter($features),
+		theme: listFilter($theme),
+		author:
+			$author.active && $author.value.length
+				? { values: $author.value, negate: $author.negate, firstOnly: $author.firstOnly }
+				: null,
 		designers: $designers.active ? $designers.value : null
 	};
 	$: shareUrl = $isSearchActive ? buildShareUrl(shareState) : '';
