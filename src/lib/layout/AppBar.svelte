@@ -14,9 +14,12 @@
 		faArrowUpFromBracket,
 		faFilter,
 		faSearch,
-		faSort
+		faSort,
+		faTableCellsLarge,
+		faTableList
 	} from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
+	import { viewMode } from '$lib/stores/ViewStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import { buildShareUrl } from '$lib/helper/shareSearch';
 	import Navigation from './Navigation.svelte';
@@ -113,6 +116,28 @@
 		>
 			<Fa icon={faFilter} />
 		</button>
+
+		<!-- view toggle: results grid vs. data table. flex-shrink-0 throughout:
+		     the AppBar row squeezes flex items otherwise, and the container's
+		     overflow-hidden would clip the icons. -->
+		<div class="flex shrink-0 rounded-lg overflow-hidden border border-surface-400/30">
+			<button
+				class="btn btn-sm rounded-none px-2.5 py-1 shrink-0"
+				class:variant-filled-primary={$viewMode === 'grid'}
+				on:click={() => viewMode.set('grid')}
+				title="Grid view"
+			>
+				<Fa icon={faTableCellsLarge} size="sm" class="shrink-0" />
+			</button>
+			<button
+				class="btn btn-sm rounded-none px-2.5 py-1 shrink-0"
+				class:variant-filled-primary={$viewMode === 'table'}
+				on:click={() => viewMode.set('table')}
+				title="Table view"
+			>
+				<Fa icon={faTableList} size="sm" class="shrink-0" />
+			</button>
+		</div>
 
 		<button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSort}>
 			Sort <Fa icon={faSort} class="ml-2" size="xs" />
