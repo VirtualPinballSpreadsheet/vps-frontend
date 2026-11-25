@@ -143,11 +143,43 @@ export class Paste {
 
 }
 
+// "GenAI" feature: authors disclose AI use in the name/description they
+// publish (e.g. from a VPU page); "AI-Free" is an explicit denial that
+// outweighs any other mention of AI.
+export const hasGenAiDisclosure = (text: string): boolean => {
+    const t = text.toLowerCase();
+    if (t.includes('ai-free')) return false;
+    return ['chatgpt', 'chat gpt', 'genai', 'ai generated', 'ai-generated']
+        .some(k => t.includes(k));
+};
+
+const markGenAI = (files: FileUpload[] | undefined, paste: string): FileUpload[] | undefined => {
+    if (!files?.length) return files;
+
+    let json: any;
+    try {
+        json = JSON.parse(paste);
+    } catch {
+        return files;
+    }
+
+    if (!hasGenAiDisclosure(`${json.name ?? ""} ${json.description ?? ""}`)) return files;
+
+    for (const f of files as unknown as (TableFile | B2SFile)[]) {
+        if (!f.features) f.features = [];
+        if (!f.features.includes("GenAI")) f.features.push("GenAI");
+    }
+    return files;
+};
+
 export class PasteTable extends Paste {
 
     constructor() {
         super("tableFiles");
     }
+
+    newFromPaste = (paste: string): FileUpload[] | undefined =>
+        markGenAI(super.newFromPaste(paste), paste);
 }
 
 export class PasteB2S extends Paste {
@@ -155,6 +187,9 @@ export class PasteB2S extends Paste {
     constructor() {
         super("b2sFiles");
     }
+
+    newFromPaste = (paste: string): FileUpload[] | undefined =>
+        markGenAI(super.newFromPaste(paste), paste);
 }
 
 export class PasteWheel extends Paste {
