@@ -22,6 +22,7 @@
 	import { viewMode } from '$lib/stores/ViewStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
 	import { buildShareUrl } from '$lib/helper/shareSearch';
+	import { page } from '$app/stores';
 	import Navigation from './Navigation.svelte';
 
 	const {
@@ -41,6 +42,11 @@
 	} = Search;
 
 	const modes = Object.entries(modeMapping);
+	const modeRoutes = Object.values(modeMapping).map((m) => m.route);
+	// Home shows horizontal sliders, not a results list: the grid/table
+	// toggle is meaningless there. It applies once a search/filters put us
+	// on a mode route (or we're already on one).
+	$: listShown = $isSearchActive || modeRoutes.includes($page.url.pathname.slice(1));
 	const drawerStore = getDrawerStore();
 	const onOpenDrawer = () => {
 		drawerStore?.open();
@@ -120,11 +126,16 @@
 		<!-- view toggle: results grid vs. data table. flex-shrink-0 throughout:
 		     the AppBar row squeezes flex items otherwise, and the container's
 		     overflow-hidden would clip the icons. -->
-		<div class="flex shrink-0 rounded-lg overflow-hidden border border-surface-400/30">
+		<div
+			class="flex shrink-0 rounded-lg overflow-hidden border border-surface-400/30"
+			class:opacity-30={!listShown}
+			title={listShown ? '' : 'Available once results are listed (search or pick a category)'}
+		>
 			<button
 				class="btn btn-sm rounded-none px-2.5 py-1 shrink-0"
 				class:variant-filled-primary={$viewMode === 'grid'}
 				on:click={() => viewMode.set('grid')}
+				disabled={!listShown}
 				title="Grid view"
 			>
 				<Fa icon={faTableCellsLarge} size="sm" class="shrink-0" />
@@ -133,6 +144,7 @@
 				class="btn btn-sm rounded-none px-2.5 py-1 shrink-0"
 				class:variant-filled-primary={$viewMode === 'table'}
 				on:click={() => viewMode.set('table')}
+				disabled={!listShown}
 				title="Table view"
 			>
 				<Fa icon={faTableList} size="sm" class="shrink-0" />
