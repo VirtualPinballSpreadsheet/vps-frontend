@@ -16,6 +16,7 @@
 
 <InfiniteScrollPage
 	component={data.component}
+	mode={data.mode}
 	title={data.name}
 	data={$finalResultsStore}
 	transformData={(t) => {

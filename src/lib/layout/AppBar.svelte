@@ -1,14 +1,44 @@
 <script lang="ts">
-	import { AppBar, getDrawerStore, popup, type PopupSettings } from '@skeletonlabs/skeleton';
+	import {
+		AppBar,
+		clipboard,
+		getDrawerStore,
+		getToastStore,
+		popup,
+		type PopupSettings
+	} from '@skeletonlabs/skeleton';
 	import Logo from '$lib/assets/img/vpsLogo.png';
 	import { User } from '$lib/stores/UserStore';
 	import Fa from 'svelte-fa';
-	import { faFilter, faSearch, faSort } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faArrowUpFromBracket,
+		faFilter,
+		faSearch,
+		faSort,
+		faTableCellsLarge,
+		faTableList
+	} from '@fortawesome/free-solid-svg-icons';
 	import { Search } from '$lib/stores/SearchStore';
+	import { viewMode } from '$lib/stores/ViewStore';
 	import { modeMapping } from '$lib/helper/modeMapping';
+	import { buildShareUrl } from '$lib/helper/shareSearch';
 	import Navigation from './Navigation.svelte';
 
-	const { query, mode, filterActive, resetFilters } = Search;
+	const {
+		query,
+		mode,
+		sortBy,
+		filterActive,
+		isSearchActive,
+		year,
+		players,
+		manufacturer,
+		features,
+		theme,
+		author,
+		designers,
+		resetFilters
+	} = Search;
 
 	const modes = Object.entries(modeMapping);
 	const drawerStore = getDrawerStore();
@@ -22,6 +52,28 @@
 		placement: 'bottom',
 		closeQuery: '.listbox-item'
 	};
+
+	// An active filter with no selected values is treated as inactive (null).
+	const listFilter = (f: { active: boolean; value: string[]; negate: boolean }) =>
+		f.active && f.value.length ? { values: f.value, negate: f.negate } : null;
+	// The share URL is a function of the whole search state. Referencing each
+	// reactive value here makes Svelte recompute it when any of them change.
+	$: shareState = {
+		query: $query,
+		mode: $mode,
+		sortBy: $sortBy,
+		year: $year.active ? $year.value : null,
+		players: $players.active ? $players.value : null,
+		manufacturer: listFilter($manufacturer),
+		features: listFilter($features),
+		theme: listFilter($theme),
+		author:
+			$author.active && $author.value.length
+				? { values: $author.value, negate: $author.negate, firstOnly: $author.firstOnly }
+				: null,
+		designers: $designers.active ? $designers.value : null
+	};
+	$: shareUrl = $isSearchActive ? buildShareUrl(shareState) : '';
 </script>
 
 <AppBar padding="py-2 md:py-4 px-0 pl-2">
@@ -65,10 +117,44 @@
 			<Fa icon={faFilter} />
 		</button>
 
+		<!-- view toggle: results grid vs. data table. flex-shrink-0 throughout:
+		     the AppBar row squeezes flex items otherwise, and the container's
+		     overflow-hidden would clip the icons. -->
+		<div class="flex shrink-0 rounded-lg overflow-hidden border border-surface-400/30">
+			<button
+				class="btn btn-sm rounded-none px-2.5 py-1 shrink-0"
+				class:variant-filled-primary={$viewMode === 'grid'}
+				on:click={() => viewMode.set('grid')}
+				title="Grid view"
+			>
+				<Fa icon={faTableCellsLarge} size="sm" class="shrink-0" />
+			</button>
+			<button
+				class="btn btn-sm rounded-none px-2.5 py-1 shrink-0"
+				class:variant-filled-primary={$viewMode === 'table'}
+				on:click={() => viewMode.set('table')}
+				title="Table view"
+			>
+				<Fa icon={faTableList} size="sm" class="shrink-0" />
+			</button>
+		</div>
+
 		<button class="btn btn-sm hover:variant-soft-primary" use:popup={popupSort}>
 			Sort <Fa icon={faSort} class="ml-2" size="xs" />
 		</button>
 
+		<button
+			class="flex btn hover:variant-soft-primary btn-icon"
+			class:opacity-30={!$isSearchActive}
+			disabled={!$isSearchActive}
+			use:clipboard={shareUrl}
+			on:click={() => {
+				getToastStore().trigger({ message: 'Share link copied to clipboard.' });
+			}}
+			title="Copy share link"
+		>
+			<Fa icon={faArrowUpFromBracket} />
+		</button>
 	</div>
 
 	<div slot="trail" class="hidden lg:flex mr-4 items-center gap-4">

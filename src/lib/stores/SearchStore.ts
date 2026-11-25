@@ -3,8 +3,10 @@ import MiniSearch from 'minisearch';
 import SPACE_OR_PUNCTUATION from 'minisearch';
 import { derived, get, writable, type Writable } from 'svelte/store';
 import { DB } from './DbStore';
-import type { SortBy, Mode } from '$lib/types/Filter';
+import type { SortBy, Mode, ChipFilterState } from '$lib/types/Filter';
 import { sortOptions } from '$lib/types/Filter';
+import { isUrlQuery, isIdQuery, urlLookup, idLookup } from '$lib/helper/directSearch';
+import { matchList, matchSingle, matchTableFeatures } from '$lib/helper/filterMatch';
 
 // -------- STORES -----------------------------------------------------------------------
 
@@ -75,26 +77,17 @@ const year = writable<{ value: [number, number]; active: boolean; range: [number
 	value: [1930, currentYear],
 	range: [1930, currentYear]
 });
-const manufacturer = writable<{
-	value: string[];
-	active: boolean;
-	options: { label: string; value: string }[];
-}>({ active: false, value: [], options: [] });
-const features = writable<{
-	value: string[];
-	active: boolean;
-	options: { label: string; value: string }[];
-}>({ active: false, value: [], options: [] });
-const theme = writable<{
-	value: string[];
-	active: boolean;
-	options: { label: string; value: string }[];
-}>({ active: false, value: [], options: [] });
-const author = writable<{
-	value: string[];
-	active: boolean;
-	options: { label: string; value: string }[];
-}>({ active: false, value: [], options: [] });
+const chipFilterState = (): ChipFilterState => ({
+	active: false,
+	value: [],
+	negate: false,
+	firstOnly: false,
+	options: []
+});
+const manufacturer = writable<ChipFilterState>(chipFilterState());
+const features = writable<ChipFilterState>(chipFilterState());
+const theme = writable<ChipFilterState>(chipFilterState());
+const author = writable<ChipFilterState>(chipFilterState());
 const designers = writable<{
 	value: string[];
 	active: boolean;
@@ -307,10 +300,29 @@ const minisearchResultsStore = derived([debouncedQuery, sortedDbStore, mode, min
 	return res;
 });
 
+// Direct lookup by URL or id. Returns undefined when the query is a normal
+// text search (so the minisearch pipeline runs), or the matching games/files
+// when the query is a URL or an id.
+const directSearchResults = derived([debouncedQuery, DB.dbStore, mode], ([$q, $db, $mode]) => {
+	if (!$q) return undefined;
+	const q = $q.trim();
+	if (isUrlQuery(q)) {
+		// a url that matches nothing yields an empty result (no fallback)
+		return urlLookup(q, $db, $mode);
+	}
+	if (isIdQuery(q)) {
+		const res = idLookup(q, $db, $mode);
+		if (res !== null) return res;
+		// id matched nothing -> fall through to text search
+	}
+	return undefined;
+});
+
 // Searchresults mapped by mode to objects
 const modeSearchResults = derived(
-	[mode, minisearchResultsStore, sortedDbStore, sortedFilesStore],
-	([$mode, $sr, $db, $fdb]) => {
+	[mode, minisearchResultsStore, sortedDbStore, sortedFilesStore, directSearchResults],
+	([$mode, $sr, $db, $fdb, $direct]) => {
+		if ($direct !== undefined) return $direct;
 		if (!$sr) {
 			// No Searchresult, return sorted dbs
 			if ($mode === 'game') return $db;
@@ -429,9 +441,10 @@ const playerFilterStore = derived(
 const manufacturerFilterStore = derived(
 	[filterActive, manufacturer, playerFilterStore],
 	([$filterActive, $filter, $db]) => {
-		console.log($filter);
 		if (!$filterActive || !$filter.active || !$db?.length || !$filter.value.length) return $db;
-		return genericFilter($db, (game) => $filter.value.includes(game.manufacturer));
+		return genericFilter($db, (game) =>
+			matchSingle(game.manufacturer, $filter.value, $filter.negate)
+		);
 	}
 );
 
@@ -439,9 +452,7 @@ const themeFilterStore = derived(
 	[filterActive, theme, manufacturerFilterStore],
 	([$filterActive, $filter, $db]) => {
 		if (!$filterActive || !$filter.active || !$db?.length) return $db;
-		return genericFilter($db, (game) =>
-			$filter.value.every((theme) => game.theme?.includes(theme))
-		);
+		return genericFilter($db, (game) => matchList(game.theme, $filter.value, $filter.negate));
 	}
 );
 const authorFilterStore = derived(
@@ -451,10 +462,15 @@ const authorFilterStore = derived(
 		return $db.filter((item: any) => {
 			if ((item as FileUpload).game) {
 				// FileMode
-				return $filter.value.every((a) => (item as FileUpload).authors?.includes(a));
+				return matchList(
+					(item as FileUpload).authors,
+					$filter.value,
+					$filter.negate,
+					$filter.firstOnly
+				);
 			} else {
 				return (item as Game).tableFiles?.some((t) =>
-					$filter.value.every((a) => t.authors?.includes(a))
+					matchList(t.authors, $filter.value, $filter.negate, $filter.firstOnly)
 				);
 			}
 		});
@@ -468,14 +484,10 @@ const featureFilterStore = derived(
 		return $db.filter((item: any) => {
 			if ((item as FileUpload).game) {
 				// FileMode
-				return $filter.value.every(
-					(f) => (item as TableFile).features?.includes(f) || item.tableFormat === f
-				);
+				return matchTableFeatures(item as TableFile, $filter.value, $filter.negate);
 			} else {
 				return (item as Game).tableFiles?.some((t) =>
-					$filter.value.every(
-						(f) => (t.features?.includes(f) || t.tableFormat == f)
-					)
+					matchTableFeatures(t, $filter.value, $filter.negate)
 				);
 			}
 		});

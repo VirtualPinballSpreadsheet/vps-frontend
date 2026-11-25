@@ -38,6 +38,20 @@ export interface FilterState {
 	noImages: boolean;
 }
 
+// State of a chip-style autocomplete filter (features, author, manufacturer,
+// theme). All four share this shape so FilterChips can bind generically.
+export interface ChipFilterState {
+	value: string[];
+	active: boolean;
+	// Keep results that match NONE of the selected values
+	negate: boolean;
+	// Author filter only: match against the first author of a file's chain
+	// (the one who did the latest work) instead of the full chain. Carried on
+	// all chip filters for the shared UI, but only exposed for Author.
+	firstOnly: boolean;
+	options: { label: string; value: string }[];
+}
+
 export const letters = [
 	'All',
 	'#',
