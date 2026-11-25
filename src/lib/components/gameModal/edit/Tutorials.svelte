@@ -12,7 +12,7 @@
 	export let paste: Paste | undefined = undefined;
 </script>
 
-<div class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col gap-8">
+<div id={file.id} class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col gap-8">
 	<div class="flex gap-4 flex-col md:flex-row">
 		<label class="label flex-1">
 			<span>Title</span>
