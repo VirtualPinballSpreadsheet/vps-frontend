@@ -3,6 +3,7 @@
 	import EditableAutoCompleteChips from '$lib/components/editableInputChip/EditableAutoCompleteChips.svelte';
 	import IdTag from '$lib/components/IdTag.svelte';
 	import ImageUpload from '$lib/components/ImageUpload.svelte';
+	import SeedImages from '$lib/components/scraper/SeedImages.svelte';
 	import { formatDateDashed } from '$lib/helper/formatDate';
 	import { Search } from '$lib/stores/SearchStore';
 	import { TableFeatureOptions, type TableFile } from '$lib/types/VPin';
@@ -47,6 +48,7 @@
 </script>
 
 <div
+	id={file.id}
 	class="card -mx-2 px-2 py-4 rounded-none md:rounded-md md:mx-0 md:p-4 flex flex-col md:flex-row gap-8"
 >
 	<div class="w-full md:w-96 flex flex-col gap-10">
@@ -59,6 +61,7 @@
 				file.updatedAt = new Date().getTime();
 			}}
 		/>
+		<SeedImages fileType="tableFiles" fileId={file.id} />
 		<div class="hidden md:flex gap-4 mt-auto">
 			<button class="btn btn-sm variant-filled-error" on:click={onDelete}>Delete</button>
 			<IdTag id={file.id} />

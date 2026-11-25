@@ -33,7 +33,7 @@
 				<Fa icon={faCodeMerge} /> Align authors
 			</li></a
 		>
-		<a href="https://davidkoski.github.io/vps-db-tool/" target="missing">
+		<a href="missing">
 			<li
 				class="select-none cursor-pointer p-4 hover:bg-surface-hover-token text-sm flex gap-2 items-center"
 			>

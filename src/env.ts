@@ -9,3 +9,4 @@ export const DB_IMG_PATH = 'img/';
 export const DB_GAME_PATH = 'games/';
 export const DB_PATH = 'vpsdb.json';
 export const DB_STAGING_BRANCH = 'staging';
+export const SCRAPER_REPORT_URL = 'https://davidkoski.github.io/vps-db-tool/index.json';
