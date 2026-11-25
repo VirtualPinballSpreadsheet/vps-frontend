@@ -11,7 +11,8 @@ import {
 	resolveDate,
 	sameFirstAuthor,
 	sortKinds,
-	vkey
+	vkey,
+	versionAlreadyApplied
 } from './scraperUtils';
 
 const action = (over: Partial<ReportAction> = {}): ReportAction => ({
@@ -180,5 +181,33 @@ describe('sameFirstAuthor', () => {
 	it('is empty without a seed author', () => {
 		const g = game({ tableFiles: [{ id: 'f1', authors: [], urls: [], updatedAt: 0 }] } as any);
 		expect(sameFirstAuthor(g, action())).toEqual([]);
+	});
+});
+
+describe('versionAlreadyApplied', () => {
+	const update = (version?: string) => {
+		const a = action();
+		return action({
+			action: 'update',
+			id: 'f1',
+			detail: { ...a.detail, version }
+		});
+	};
+	const withVersion = (v?: string) =>
+		game({ tableFiles: [{ id: 'f1', authors: [], urls: [], updatedAt: 0, version: v }] } as any);
+
+	it('omits updates whose version matches (case/space insensitive)', () => {
+		expect(versionAlreadyApplied(withVersion('7.0.1'), update('7.0.1'))).toBe(true);
+		expect(versionAlreadyApplied(withVersion(' 7.0.1 '), update('7.0.1'))).toBe(true);
+		expect(versionAlreadyApplied(withVersion('VP 1.0'), update('vp 1.0'))).toBe(true);
+	});
+	it('keeps rows for different or missing versions', () => {
+		expect(versionAlreadyApplied(withVersion('7.0'), update('7.0.1'))).toBe(false);
+		expect(versionAlreadyApplied(withVersion(undefined), update('7.0.1'))).toBe(false);
+		// nothing proposed → can't claim it's applied
+		expect(versionAlreadyApplied(withVersion(undefined), update(undefined))).toBe(false);
+	});
+	it('is false when the file cannot be found', () => {
+		expect(versionAlreadyApplied(game({ tableFiles: [] }), update('1.0'))).toBe(false);
 	});
 });

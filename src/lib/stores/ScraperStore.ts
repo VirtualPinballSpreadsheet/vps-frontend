@@ -1,4 +1,4 @@
-import { get, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 import { SCRAPER_REPORT_URL } from '../../env';
 import type { ReportAction, ReportIndex, ScraperKind } from '$lib/types/Scraper';
 import type { FileUpload, Game } from '$lib/types/VPin';
@@ -10,6 +10,7 @@ import {
 	findUpdateTarget,
 	kindToFileType,
 	makeSeedFile,
+	versionAlreadyApplied,
 	type FileTypeKey
 } from '$lib/helper/scraperUtils';
 
@@ -29,6 +30,22 @@ const loaded = writable(false);
 
 // The action currently being applied through the game edit modal.
 const pendingSeed = writable<PendingSeed | null>(null);
+
+// What the UI shows: the working copy minus update rows whose version is
+// already in the DB (applied earlier, or via the report itself going stale
+// between scrape runs).
+const pendingReport = derived([report, DB.dbStore], ([$report, $db]) => {
+	const out: ReportIndex = {};
+	for (const [kind, actions] of Object.entries($report)) {
+		out[kind as ScraperKind] = (actions ?? []).filter((action) => {
+			if (action.action !== 'update' || !action.gameId) return true;
+			const game = $db[action.gameId];
+			if (!game) return true;
+			return !versionAlreadyApplied(game, action);
+		});
+	}
+	return out;
+});
 
 const load = async (): Promise<string | undefined> => {
 	loading.set(true);
@@ -114,7 +131,8 @@ const beginSeed = (action: ReportAction, game: Game, mode: 'UPDATE' | 'CREATE' =
 const cancelSeed = () => pendingSeed.set(null);
 
 export const Scraper = {
-	report,
+	/** filtered report: rows already applied against the live DB are omitted */
+	report: pendingReport,
 	loading,
 	loaded,
 	pendingSeed,

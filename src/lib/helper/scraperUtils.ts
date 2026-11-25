@@ -85,6 +85,15 @@ export const findUpdateTarget = (game: Game, action: ReportAction): FileUpload |
 	);
 };
 
+/** true when the DB already carries the version an update action proposes */
+export const versionAlreadyApplied = (game: Game, action: ReportAction): boolean => {
+	const target = findUpdateTarget(game, action);
+	if (!target) return false;
+	const want = (action.detail.version ?? '').trim().toLowerCase();
+	const have = (target.version ?? '').trim().toLowerCase();
+	return !!want && want === have;
+};
+
 /** deep clone of Action.file, re-identified and pointed at the real game */
 export const makeSeedFile = (action: ReportAction, game: Game): FileUpload => {
 	const file = structuredClone(action.file) as FileUpload;
